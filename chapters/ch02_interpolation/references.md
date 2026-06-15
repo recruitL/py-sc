@@ -11,8 +11,17 @@
 * Lloyd N. Trefethen, *Spectral Methods in MATLAB*。
 * Carl de Boor, *A Practical Guide to Splines*。
 * M. J. D. Powell, *Approximation Theory and Methods*。
+* Jean-Paul Berrut and Lloyd N. Trefethen, *Barycentric Lagrange Interpolation*。
 
 Atkinson、Burden 和 Kincaid/Cheney 的教材适合作为本章多项式插值、误差公式和样条插值推导的基础参考。Trefethen 的书更适合理解切比雪夫节点、逼近论和后续谱方法之间的关系。de Boor 的书是学习样条理论的重要参考。
+
+## 拉格朗日插值的理论来源
+
+本章关于拉格朗日插值的推导采用数值分析教材中的标准讲法：先从两点直线插值出发，构造满足 \(\ell_j(x_i)=\delta_{ij}\) 的基函数，再用这些基函数拼出插值多项式。这个构造和唯一性证明可参考 Atkinson、Burden/Faires/Burden、Kincaid/Cheney 和 Quarteroni/Sacco/Saleri 的数值分析教材。
+
+本章只简要说明拉格朗日基函数与切比雪夫微分矩阵之间的关系。相关谱方法背景可参考 Trefethen 的 *Spectral Methods in MATLAB*。其中的核心思路是：先在切比雪夫节点上构造拉格朗日插值多项式，再对插值多项式求导，从而得到微分矩阵。
+
+Berrut 和 Trefethen 关于重心形式拉格朗日插值的文章适合作为后续扩展阅读。本轮仍保留普通拉格朗日形式，因为它更适合解释插值基函数和开关函数思想。
 
 ## Python 与科学计算资料
 
