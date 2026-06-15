@@ -44,6 +44,63 @@ def lagrange_interpolate(x: np.ndarray, y: np.ndarray, x_eval: np.ndarray) -> np
     return result
 
 
+def newton_divided_differences(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Compute Newton divided-difference coefficients.
+
+    Returns the sorted nodes and the coefficients in Newton form:
+
+    p(x) = c_0 + c_1(x-x_0) + c_2(x-x_0)(x-x_1) + ...
+    """
+
+    x, y = _as_sorted_points(x, y)
+    coefficients = y.copy()
+    n = x.size
+
+    for order in range(1, n):
+        coefficients[order:n] = (
+            coefficients[order:n] - coefficients[order - 1 : n - 1]
+        ) / (x[order:n] - x[: n - order])
+
+    return x, coefficients
+
+
+def newton_interpolate(
+    x: np.ndarray,
+    coefficients: np.ndarray,
+    x_eval: np.ndarray,
+) -> np.ndarray:
+    """Evaluate a Newton interpolation polynomial."""
+
+    x = np.asarray(x, dtype=float)
+    coefficients = np.asarray(coefficients, dtype=float)
+    x_eval = np.asarray(x_eval, dtype=float)
+
+    if x.ndim != 1 or coefficients.ndim != 1:
+        raise ValueError("x and coefficients must be one-dimensional arrays")
+    if x.size != coefficients.size:
+        raise ValueError("x and coefficients must have the same length")
+
+    result = np.full_like(x_eval, coefficients[-1], dtype=float)
+    for k in range(coefficients.size - 2, -1, -1):
+        result = coefficients[k] + (x_eval - x[k]) * result
+
+    return result
+
+
+def chebyshev_nodes(a: float, b: float, n: int) -> np.ndarray:
+    """Return n Chebyshev nodes on the interval [a, b]."""
+
+    if n < 1:
+        raise ValueError("n must be at least 1")
+    if b <= a:
+        raise ValueError("expected a < b")
+
+    k = np.arange(n)
+    nodes = np.cos((2 * k + 1) * np.pi / (2 * n))
+    mapped = 0.5 * (a + b) + 0.5 * (b - a) * nodes
+    return np.sort(mapped)
+
+
 def piecewise_linear_interpolate(
     x: np.ndarray,
     y: np.ndarray,
@@ -105,6 +162,19 @@ class NaturalCubicSpline:
         return self.a[indices] + self.b[indices] * dx + self.c[indices] * dx**2 + self.d[indices] * dx**3
 
 
+def cubic_spline_coefficients(x: np.ndarray, y: np.ndarray) -> dict[str, np.ndarray]:
+    """Return natural cubic spline coefficients for teaching inspection."""
+
+    spline = NaturalCubicSpline.fit(x, y)
+    return {
+        "x": spline.x,
+        "a": spline.a,
+        "b": spline.b,
+        "c": spline.c,
+        "d": spline.d,
+    }
+
+
 def _solve_tridiagonal(
     lower: np.ndarray,
     diag: np.ndarray,
@@ -131,4 +201,3 @@ def _solve_tridiagonal(
         solution[i] = d_prime[i] - c_prime[i] * solution[i + 1]
 
     return solution
-

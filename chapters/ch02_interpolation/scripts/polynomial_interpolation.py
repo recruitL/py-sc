@@ -5,12 +5,12 @@ import sys
 
 import numpy as np
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOT = pathlib.Path(__file__).resolve().parents[3]
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from py_sc import lagrange_interpolate
+from py_sc import lagrange_interpolate, newton_divided_differences, newton_interpolate
 
 
 def main() -> None:
@@ -18,11 +18,12 @@ def main() -> None:
     y = np.array([1.0, 2.0, 0.0, 4.0])
     x_eval = np.linspace(0.0, 3.0, 7)
     y_eval = lagrange_interpolate(x, y, x_eval)
+    nodes, coefficients = newton_divided_differences(x, y)
+    newton_eval = newton_interpolate(nodes, coefficients, x_eval)
 
-    for xi, yi in zip(x_eval, y_eval):
-        print(f"x={xi:.2f}, p(x)={yi:.6f}")
+    for xi, yi, ni in zip(x_eval, y_eval, newton_eval):
+        print(f"x={xi:.2f}, lagrange={yi:.6f}, newton={ni:.6f}")
 
 
 if __name__ == "__main__":
     main()
-

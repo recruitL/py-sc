@@ -1,36 +1,51 @@
 # py-sc
 
-Python numerical computing notes and code organized like a book.
+Python numerical computing notes and runnable lecture materials.
 
-This repository collects small, readable implementations for scientific
-computing topics. Each chapter has explanatory notes, runnable examples, and
-reusable code in `src/py_sc`.
+`py-sc` is a long-term course-style and book-style repository for numerical
+computing, scientific computing, and physics-oriented computation. It is meant
+to be read in order like an electronic lecture note: theory motivates the
+algorithm, the algorithm is implemented in Python, and notebooks provide
+experiments and figures.
 
 ## Structure
 
 ```text
 py-sc/
+  AGENTS.md                 # Maintenance and writing rules
   chapters/
-    ch02_interpolation/      # Chapter 2: interpolation examples
+    ch02_interpolation/     # Chapter 2: interpolation
+      notebooks/            # Main teaching notebooks
+      notes/                # Theory and reference notes
+      scripts/              # Runnable script versions of examples
+      references.md         # Chapter references
+  docs/                     # Course-level notes and roadmap
+  references/               # Shared bibliography notes
   src/
-    py_sc/                   # Reusable implementations
-  tests/                     # Lightweight regression tests
+    py_sc/                  # Reusable teaching implementations
+  tests/                    # Lightweight regression tests
 ```
 
 ## Current Chapters
 
-### Chapter 2: Data Interpolation
+| Chapter | Topic | Status |
+| --- | --- | --- |
+| Chapter 2 | Data Interpolation | Initial lecture structure and code scaffold |
 
-Implemented topics:
+## Reading Order
 
-* Polynomial interpolation
-* Piecewise linear interpolation
-* Natural cubic spline interpolation
+Start with the chapter README, then read notebooks in numerical order:
 
-Run the comparison example:
+1. `chapters/ch02_interpolation/README.md`
+2. `chapters/ch02_interpolation/notebooks/01_interpolation_overview.ipynb`
+3. `chapters/ch02_interpolation/notebooks/02_polynomial_interpolation.ipynb`
+4. `chapters/ch02_interpolation/notebooks/03_piecewise_and_spline.ipynb`
+5. `chapters/ch02_interpolation/notebooks/04_experiments.ipynb`
+
+Run the script comparison example:
 
 ```bash
-python chapters/ch02_interpolation/compare_interpolation.py
+python chapters/ch02_interpolation/scripts/compare_interpolation.py
 ```
 
 Run tests:
@@ -48,4 +63,3 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
 ```
-
