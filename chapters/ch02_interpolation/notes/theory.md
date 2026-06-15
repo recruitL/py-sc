@@ -1,59 +1,50 @@
-# Theory Notes: Data Interpolation
+# 理论笔记：数据插值
 
-Given data points
+给定数据点
 
 $$
 (x_0, y_0), (x_1, y_1), \dots, (x_n, y_n),
 $$
 
-interpolation constructs a function \(p(x)\) such that
+插值的目标是构造一个函数 \(p(x)\)，使得
 
 $$
 p(x_i) = y_i,\quad i = 0, 1, \dots, n.
 $$
 
-The central numerical question is not only whether such a function exists, but
-whether it is stable, accurate, and useful between the data points.
+核心问题不只是“这样的函数是否存在”，还包括它在节点之间是否稳定、是否准确、是否对实际计算有用。
 
-## Interpolation and Fitting
+## 插值与拟合
 
-Interpolation enforces every data point exactly. Fitting, such as least-squares
-approximation, usually allows residuals and asks for a simpler function that is
-close to the data. Interpolation is natural when data values are trusted table
-values or exact samples of a smooth function. Fitting is often safer for noisy
-measurements.
+插值要求曲线精确通过所有数据点。拟合则通常允许残差，例如最小二乘拟合会寻找一个较简单的函数，使它整体上尽量接近数据。若数据来自可信的函数采样、查表值或高精度模拟结果，插值是自然的选择；若数据包含测量噪声，拟合通常更稳妥。
 
-The ingredients of an interpolation problem are:
+一个插值问题通常包含：
 
-* interpolation nodes \(x_i\);
-* values \(y_i\), often \(y_i=f(x_i)\);
-* an interpolation space \(V\), such as polynomials of degree at most \(n\);
-* a basis for \(V\), used to compute or evaluate the interpolant.
+* 插值节点 \(x_i\)；
+* 节点值 \(y_i\)，常见情形是 \(y_i=f(x_i)\)；
+* 插值空间 \(V\)，例如不超过 \(n\) 次的多项式空间；
+* 用于计算和表示插值函数的基函数。
 
-For \(n+1\) distinct nodes, there is a unique polynomial \(p_n \in \mathcal P_n\)
-that interpolates the data. This follows from the fact that a nonzero
-polynomial of degree at most \(n\) cannot have \(n+1\) distinct roots.
+对 \(n+1\) 个互异节点，在 \(\mathcal P_n\) 中存在唯一的插值多项式。理由是：若两个不超过 \(n\) 次的多项式都满足插值条件，它们的差在 \(n+1\) 个互异节点处为零，而一个非零的 \(n\) 次多项式不可能有超过 \(n\) 个根。
 
-## Lagrange Polynomial Interpolation
+## 拉格朗日插值
 
-The Lagrange form writes the interpolation polynomial as
+拉格朗日插值（Lagrange interpolation）把插值多项式写成
 
 $$
 p_n(x) = \sum_{j=0}^{n} y_j L_j(x),
 $$
 
-where
+其中
 
 $$
 L_j(x) = \prod_{\substack{m=0 \\ m \ne j}}^n
 \frac{x - x_m}{x_j - x_m}.
 $$
 
-Each basis polynomial satisfies \(L_j(x_i)=\delta_{ij}\), so the interpolation
-condition follows immediately. This form is conceptually direct because it
-builds the interpolant from basis functions that each select one node value.
+每个基函数满足 \(L_j(x_i)=\delta_{ij}\)，因此它在第 \(j\) 个节点处取 1，在其他节点处取 0。这个形式的优点是概念直接：每个基函数负责“选出”一个节点值。
 
-The interpolation error has the form
+若 \(f\) 足够光滑，则插值误差可写成
 
 $$
 f(x) - p_n(x) =
@@ -61,78 +52,63 @@ f(x) - p_n(x) =
 \prod_{i=0}^{n}(x-x_i),
 $$
 
-for some \(\xi\) in the interpolation interval. This formula separates two
-sources of error: the smoothness and derivatives of \(f\), and the nodal product
-controlled by the node locations.
+其中 \(\xi\) 位于插值区间内。这个公式把误差来源分成两部分：一部分来自函数自身的高阶导数，另一部分来自节点分布决定的节点乘积。
 
-## Runge Behavior and Chebyshev Nodes
+## Runge 现象与切比雪夫节点
 
-Equally spaced nodes can cause severe endpoint oscillation for high-degree
-interpolation. The classical example is the Runge function
+等距节点上的高次多项式插值可能在区间端点附近出现明显振荡。经典例子是 Runge 函数
 
 $$
 f(x)=\frac{1}{1+25x^2},\qquad x\in[-1,1].
 $$
 
-Increasing the degree on equally spaced nodes does not necessarily improve the
-maximum error. Chebyshev nodes cluster near the interval endpoints and reduce
-the maximum size of the nodal product
+对这类函数，增加等距节点数量不一定会降低最大误差。切比雪夫节点（Chebyshev nodes）在端点附近更密集，可以减小节点乘积
 
 $$
-\prod_{i=0}^{n}(x-x_i).
+\prod_{i=0}^{n}(x-x_i)
 $$
 
-For \(N\) nodes on \([a,b]\), this repository uses
+的最大幅度。
+
+对区间 \([a,b]\) 上的 \(N\) 个节点，本仓库使用
 
 $$
-x_k=\frac{a+b}{2}+\frac{b-a}{2}
-\cos\left(\frac{2k+1}{2N}\pi\right),
+x_k=\frac{a+b}{2}+\frac{b-a}{2}\cos\left(\frac{2k+1}{2N}\pi\right),
 \qquad k=0,\dots,N-1,
 $$
 
-sorted into increasing order. Chebyshev nodes do not make polynomial
-interpolation universally safe, but they make node placement an explicit part
-of the numerical method.
+并将节点按升序排列。切比雪夫节点并不能保证所有插值问题都稳定，但它说明节点选择本身就是数值方法的一部分。
 
-## Newton Divided Differences
+## 牛顿差商
 
-Newton interpolation writes
+牛顿插值（Newton interpolation）把插值多项式写成
 
 $$
 p_n(x) = c_0 + c_1(x-x_0) + c_2(x-x_0)(x-x_1) + \cdots
 + c_n\prod_{j=0}^{n-1}(x-x_j).
 $$
 
-The coefficients are divided differences:
+系数 \(c_k\) 是牛顿差商（Newton divided differences）：
 
 $$
 c_k=f[x_0,x_1,\dots,x_k].
 $$
 
-This form is useful when new nodes are added because the previous coefficients
-can be reused. On equally spaced nodes, the divided-difference form is closely
-related to finite-difference interpolation formulas. Those formulas are useful
-for tables, but the divided-difference version is more general and works on
-nonuniform nodes.
+这种形式适合逐步增加节点，因为已有的低阶系数可以继续保留。对等距节点，差商形式与差分插值公式关系紧密；差分公式适合查表数据，而差商形式更加通用，可以处理非均匀节点。
 
-## Hermite Interpolation
+## Hermite 插值
 
-Hermite interpolation uses both function values and derivative values, for
-example
+Hermite 插值同时使用函数值和导数值，例如
 
 $$
 p(x_i)=y_i,\qquad p'(x_i)=m_i.
 $$
 
-It is a natural bridge from value-only interpolation to smooth piecewise
-methods. In this chapter it is kept as an extension topic. Later development
-should include cubic Hermite interpolation on one interval and then connect it
-to monotonicity-preserving PCHIP interpolation.
+它连接了只使用函数值的插值和更光滑的分段方法。本章暂时把它作为扩展主题，后续应先补充单区间三次 Hermite 插值，再进一步连接到保单调性的 PCHIP 方法。
 
-## Piecewise Linear Interpolation
+## 分段线性插值
 
-Piecewise linear interpolation connects neighboring data points with line
-segments. On an interval \([x_i,x_{i+1}]\),
+分段线性插值用相邻节点之间的直线段连接数据。对区间 \([x_i,x_{i+1}]\)，有
 
 $$
 p(x)=
@@ -140,63 +116,45 @@ p(x)=
 + \frac{x-x_i}{x_{i+1}-x_i}y_{i+1}.
 $$
 
-It is local, simple, and robust. Changing one data point only affects nearby
-intervals. The cost is that the derivative is discontinuous at the nodes, so it
-can be too rough for derivative-sensitive problems.
+它局部、简单、稳健。修改一个节点值只会影响相邻区间。代价是导数在节点处通常不连续，因此在需要平滑导数的场景中可能过于粗糙。
 
-## Natural Cubic Spline
+## 自然三次样条
 
-A cubic spline uses a cubic polynomial on each interval:
+三次样条插值（cubic spline interpolation）在每个小区间上使用一个三次多项式：
 
 $$
 S_i(x)=a_i+b_i(x-x_i)+c_i(x-x_i)^2+d_i(x-x_i)^3.
 $$
 
-The pieces are joined so that the function, first derivative, and second
-derivative are continuous at interior nodes. The natural spline adds
+相邻多项式在内部节点处需要满足函数值、一阶导数和二阶导数连续。自然三次样条进一步施加边界条件
 
 $$
 S''(x_0)=0,\qquad S''(x_n)=0.
 $$
 
-These conditions create a tridiagonal linear system for the spline coefficients.
-The implementation in `src/py_sc/interpolation.py` solves this system with the
-Thomas algorithm, which is the standard direct method for tridiagonal systems.
+这些条件会导出一个三对角线性方程组。本仓库在 `src/py_sc/interpolation.py` 中使用 Thomas 算法求解该方程组。Thomas 算法是求解三对角线性系统的标准直接方法。
 
-Other boundary conditions, such as clamped endpoint derivatives, should be
-added later as a contrast to the natural spline. Boundary conditions matter most
-near the endpoints.
+后续还应加入固定导数边界条件，也就是 clamped spline，用来比较端点导数已知时样条形状如何变化。样条边界条件的影响主要体现在区间两端附近。
 
-## B-Splines and Two-Dimensional Interpolation
+## B 样条与二维插值
 
-B-splines represent splines through local basis functions with compact support.
-For this chapter, the first extension target is the cubic uniform B-spline,
-which can be introduced through four translated basis functions. The full
-knot-vector formulation can be left for a later pass.
+B 样条（B-spline）用具有局部支撑的基函数表示样条。本章后续优先补充三次均匀 B 样条，可以先通过四个平移基函数理解局部支撑，再在后续版本中引入更完整的节点向量表述。
 
-Two-dimensional interpolation should begin with two simple settings:
+二维插值可以先从两个简单情形开始：
 
-* bilinear interpolation on a rectangular grid cell;
-* linear Lagrange interpolation on a triangular element using barycentric
-  coordinates.
+* 矩形网格单元上的双线性插值；
+* 三角形单元上基于重心坐标的二维一次 Lagrange 插值。
 
-These topics connect interpolation to finite elements, image resampling, and
-surface reconstruction.
+这些内容会把本章与有限元、图像重采样和曲面重建联系起来。
 
-## Failure Modes
+## 常见失效情形
 
-* High-degree polynomial interpolation can oscillate strongly.
-* Extrapolation outside the data interval is usually unreliable.
-* Piecewise linear interpolation may be too rough for derivative-sensitive
-  problems.
-* Spline boundary conditions can influence endpoint behavior.
-* Interpolation through noisy data can amplify measurement noise because it
-  forces the interpolant through every point.
+* 高次全局多项式插值可能出现强烈振荡。
+* 区间外推通常不可靠。
+* 分段线性插值在导数敏感问题中可能过于粗糙。
+* 样条边界条件会影响端点附近的行为。
+* 对噪声数据做精确插值可能放大测量噪声，因为插值函数被迫穿过每一个数据点。
 
-## Link to Later Chapters
+## 与后续章节的关系
 
-Interpolation appears again in numerical differentiation, numerical
-integration, finite differences, finite elements, spectral methods, and data
-approximation. Chebyshev differentiation matrices are mentioned here only as a
-future spectral-methods topic; they should not become the main line of this
-chapter.
+插值会在数值微分、数值积分、有限差分、有限元、谱方法和数据近似中反复出现。切比雪夫微分矩阵在这里仅作为后续谱方法章节的提示，不应成为本章主线。

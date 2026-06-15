@@ -1,9 +1,9 @@
-# Shared References
+# 共享参考文献
 
-Shared bibliography notes for the repository.
+本目录用于保存跨章节复用的参考文献说明。
 
-Chapter-specific references should live inside each chapter, for example:
+章节专属参考文献应优先放在对应章节目录中，例如：
 
 * `chapters/ch02_interpolation/references.md`
 
-Use this directory for references that are reused across many chapters.
+如果某本教材、论文或在线资料会在多个章节中反复使用，可以在本目录补充统一说明，再由各章引用。

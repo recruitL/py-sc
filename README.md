@@ -1,40 +1,36 @@
 # py-sc
 
-Python numerical computing notes and runnable lecture materials.
+`py-sc` 是一个面向 Python 数值计算的课程型 / 书籍型代码库。
 
-`py-sc` is a long-term course-style and book-style repository for numerical
-computing, scientific computing, and physics-oriented computation. It is meant
-to be read in order like an electronic lecture note: theory motivates the
-algorithm, the algorithm is implemented in Python, and notebooks provide
-experiments and figures.
+本仓库的目标不是只保存代码片段，而是形成一套可以长期更新的可运行电子讲义：先说明数学问题和算法动机，再给出 Python 实现，最后通过 Jupyter Notebook 中的数值实验和图像理解方法的适用范围。
 
-## Structure
+## 仓库结构
 
 ```text
 py-sc/
-  AGENTS.md                 # Maintenance and writing rules
+  AGENTS.md                 # 仓库维护和写作规则
   chapters/
-    ch02_interpolation/     # Chapter 2: interpolation
-      notebooks/            # Main teaching notebooks
-      notes/                # Theory and reference notes
-      scripts/              # Runnable script versions of examples
-      references.md         # Chapter references
-  docs/                     # Course-level notes and roadmap
-  references/               # Shared bibliography notes
+    ch02_interpolation/     # 第二章：数据插值
+      notebooks/            # 主要教学 Notebook
+      notes/                # 理论笔记和补充说明
+      scripts/              # 与 Notebook 对应的可运行脚本
+      references.md         # 本章参考文献
+  docs/                     # 课程层面的说明和路线图
+  references/               # 跨章节共享参考文献说明
   src/
-    py_sc/                  # Reusable teaching implementations
-  tests/                    # Lightweight regression tests
+    py_sc/                  # 可复用的教学实现
+  tests/                    # 轻量回归测试
 ```
 
-## Current Chapters
+## 当前章节
 
-| Chapter | Topic | Status |
+| 章节 | 主题 | 状态 |
 | --- | --- | --- |
-| Chapter 2 | Data Interpolation | First-round lecture build: overview, polynomial interpolation, Runge behavior, Chebyshev nodes, Newton form, piecewise linear interpolation, and natural cubic splines |
+| 第二章 | 数据插值 | 第一轮系统建设：插值基本形式、全局多项式插值、Runge 现象、切比雪夫节点、牛顿差商、分段线性插值和自然三次样条插值 |
 
-## Reading Order
+## 阅读顺序
 
-Start with the chapter README, then read notebooks in numerical order:
+建议先读章节入口，再按编号阅读 Notebook：
 
 1. `chapters/ch02_interpolation/README.md`
 2. `chapters/ch02_interpolation/notebooks/01_interpolation_overview.ipynb`
@@ -43,21 +39,21 @@ Start with the chapter README, then read notebooks in numerical order:
 5. `chapters/ch02_interpolation/notebooks/04_experiments.ipynb`
 6. `chapters/ch02_interpolation/notebooks/05_extensions_framework.ipynb`
 
-Run the script comparison example:
+运行脚本示例：
 
 ```bash
 python chapters/ch02_interpolation/scripts/compare_interpolation.py
 ```
 
-Run tests:
+运行测试：
 
 ```bash
 python -m pytest
 ```
 
-## Setup
+## 环境配置
 
-Create an environment and install the project in editable mode:
+建议创建独立环境，并以可编辑模式安装本项目：
 
 ```bash
 python -m venv .venv

@@ -1,44 +1,38 @@
-# Chapter 2: Data Interpolation
+# 第二章：数据插值
 
-Interpolation estimates unknown values from known discrete data points. This
-chapter introduces the mathematical motivation, basic algorithms, Python
-implementations, and numerical experiments for interpolation. It should be read
-as a runnable lecture chapter rather than a collection of isolated scripts.
+插值根据一组已知离散数据点估计未知位置的函数值。本章介绍插值问题的数学动机、基本算法、Python 实现和数值实验。阅读时应把它看作一章可运行的电子讲义，而不是若干彼此孤立的脚本。
 
-The first-round build focuses on the main one-dimensional path:
+第一轮建设的主线是：
 
 ```text
-interpolation problem
-  -> global polynomial interpolation
-  -> interpolation error and Runge behavior
-  -> Chebyshev nodes
-  -> Newton divided differences
-  -> piecewise linear interpolation
-  -> natural cubic splines
+插值问题的基本形式
+  -> 全局多项式插值
+  -> 插值误差与 Runge 现象
+  -> 切比雪夫节点
+  -> 牛顿差商
+  -> 分段线性插值
+  -> 自然三次样条插值
 ```
 
-Hermite interpolation, PCHIP, B-splines, and two-dimensional interpolation are
-kept as extension frameworks so that later rounds can expand them without
-changing the chapter layout.
+Hermite 插值、PCHIP、B 样条和二维插值暂时作为扩展框架保留，后续可以在不改变章节布局的前提下逐步补全。
 
-## Main Questions
+## 主要问题
 
-* How can a function be reconstructed from finitely many data points?
-* Why can high-degree polynomial interpolation become unstable?
-* What tradeoff is made by piecewise interpolation?
-* How does a cubic spline impose smoothness between neighboring intervals?
+* 如何由有限个数据点重构一个函数？
+* 为什么高次多项式插值可能变得不稳定？
+* 分段插值牺牲了什么，又换来了什么？
+* 三次样条如何在相邻区间之间施加光滑性？
 
-## Algorithms
+## 主要算法
 
-* Lagrange polynomial interpolation
-* Newton divided differences
-* Chebyshev nodes for reducing oscillation
-* Piecewise linear interpolation
-* Natural cubic spline interpolation
-* Extension roadmap: Hermite interpolation, PCHIP, cubic uniform B-splines,
-  bilinear interpolation, and triangular linear interpolation
+* 拉格朗日插值（Lagrange interpolation）
+* 牛顿差商（Newton divided differences）
+* 切比雪夫节点（Chebyshev nodes）
+* 分段线性插值
+* 自然三次样条插值
+* 扩展路线：Hermite 插值、PCHIP、三次均匀 B 样条、双线性插值和三角形单元上的二维一次插值
 
-## Reading Order
+## 阅读顺序
 
 1. `notebooks/01_interpolation_overview.ipynb`
 2. `notebooks/02_polynomial_interpolation.ipynb`
@@ -48,19 +42,19 @@ changing the chapter layout.
 6. `notes/theory.md`
 7. `references.md`
 
-## Notebook Map
+## Notebook 对照表
 
-| Notebook | Role |
+| Notebook | 作用 |
 | --- | --- |
-| `01_interpolation_overview.ipynb` | Defines interpolation, compares it with fitting, and introduces interpolation spaces. |
-| `02_polynomial_interpolation.ipynb` | Covers Lagrange form, Newton divided differences, Runge behavior, and Chebyshev nodes. |
-| `03_piecewise_and_spline.ipynb` | Compares local piecewise linear interpolation with natural cubic splines. |
-| `04_experiments.ipynb` | Measures error trends and illustrates method limitations with reproducible experiments. |
-| `05_extensions_framework.ipynb` | Stores runnable sketches for Hermite, PCHIP, B-spline, and two-dimensional interpolation topics. |
+| `01_interpolation_overview.ipynb` | 定义插值问题，比较插值与拟合，并引入插值空间。 |
+| `02_polynomial_interpolation.ipynb` | 讨论拉格朗日形式、牛顿差商、Runge 现象和切比雪夫节点。 |
+| `03_piecewise_and_spline.ipynb` | 比较局部分段线性插值和自然三次样条插值。 |
+| `04_experiments.ipynb` | 用可复现实验观察误差变化和方法局限。 |
+| `05_extensions_framework.ipynb` | 为 Hermite、PCHIP、B 样条和二维插值保留可运行扩展入口。 |
 
-## Runnable Scripts
+## 可运行脚本
 
-From the repository root:
+在仓库根目录运行：
 
 ```bash
 python chapters/ch02_interpolation/scripts/polynomial_interpolation.py
@@ -69,37 +63,36 @@ python chapters/ch02_interpolation/scripts/cubic_spline_interpolation.py
 python chapters/ch02_interpolation/scripts/compare_interpolation.py
 ```
 
-The scripts mirror the notebook examples and provide compact runnable versions
-for quick checks.
+这些脚本是 Notebook 示例的紧凑版本，适合快速检查算法是否能运行。
 
-## Implementation
+## 代码实现
 
-Reusable teaching implementations live in:
+可复用的教学实现位于：
 
 ```text
 src/py_sc/interpolation.py
 ```
 
-The functions are intentionally written for clarity before performance.
+这些函数优先服务于教学清晰度，不追求过度工程化。
 
-## Current Scope
+## 当前范围
 
-Completed in this round:
+本轮已经完成：
 
-* interpolation problem formulation;
-* interpolation versus least-squares fitting;
-* Lagrange interpolation and interpolation basis functions;
-* interpolation error and Runge behavior;
-* Chebyshev nodes and Chebyshev-node interpolation;
-* Newton divided differences;
-* piecewise linear interpolation;
-* natural cubic spline construction and tridiagonal solve;
-* experiment notebook with error comparisons.
+* 插值问题的基本形式；
+* 插值与最小二乘拟合的区别；
+* 拉格朗日插值与插值基函数；
+* 插值误差和 Runge 现象；
+* 切比雪夫节点与切比雪夫节点插值；
+* 牛顿差商；
+* 分段线性插值；
+* 自然三次样条的构造和三对角线性方程组求解；
+* 带误差比较的实验 Notebook。
 
-Framework only, to be expanded later:
+暂时只建立框架，后续继续扩展：
 
-* Hermite interpolation;
-* PCHIP and monotonicity-preserving interpolation;
-* cubic uniform B-splines;
-* bilinear and triangular two-dimensional interpolation;
-* Chebyshev differentiation matrices for a later spectral-methods chapter.
+* Hermite 插值；
+* PCHIP 和保形插值；
+* 三次均匀 B 样条；
+* 双线性插值和三角形单元上的二维插值；
+* 作为后续谱方法章节内容的切比雪夫微分矩阵。

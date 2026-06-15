@@ -6,6 +6,16 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 
+plt.rcParams["font.sans-serif"] = [
+    "Arial Unicode MS",
+    "PingFang SC",
+    "Heiti SC",
+    "SimHei",
+    "Noto Sans CJK SC",
+    "DejaVu Sans",
+]
+plt.rcParams["axes.unicode_minus"] = False
+
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:
@@ -32,14 +42,14 @@ def main() -> None:
     spline = NaturalCubicSpline.fit(x, y)(x_eval)
 
     plt.figure(figsize=(8, 5))
-    plt.plot(x_eval, polynomial, label="Lagrange polynomial")
-    plt.plot(x_eval, newton, "--", label="Newton polynomial")
-    plt.plot(x_eval, piecewise, label="Piecewise linear")
-    plt.plot(x_eval, spline, label="Natural cubic spline")
-    plt.scatter(x, y, color="black", zorder=3, label="Data")
+    plt.plot(x_eval, polynomial, label="拉格朗日多项式")
+    plt.plot(x_eval, newton, "--", label="牛顿插值多项式")
+    plt.plot(x_eval, piecewise, label="分段线性插值")
+    plt.plot(x_eval, spline, label="自然三次样条")
+    plt.scatter(x, y, color="black", zorder=3, label="数据点")
     plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Chapter 2: interpolation comparison")
+    plt.ylabel("函数值")
+    plt.title("第二章：插值方法对比")
     plt.legend()
     plt.tight_layout()
     plt.show()

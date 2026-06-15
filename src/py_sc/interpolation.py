@@ -1,4 +1,4 @@
-"""Interpolation algorithms used in Chapter 2 examples."""
+"""第二章示例中使用的插值算法。"""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ def _as_sorted_points(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndar
 
 
 def lagrange_interpolate(x: np.ndarray, y: np.ndarray, x_eval: np.ndarray) -> np.ndarray:
-    """Evaluate the Lagrange interpolation polynomial."""
+    """计算拉格朗日插值多项式在给定点上的取值。"""
 
     x, y = _as_sorted_points(x, y)
     x_eval = np.asarray(x_eval, dtype=float)
@@ -45,9 +45,9 @@ def lagrange_interpolate(x: np.ndarray, y: np.ndarray, x_eval: np.ndarray) -> np
 
 
 def newton_divided_differences(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute Newton divided-difference coefficients.
+    """计算牛顿差商插值系数。
 
-    Returns the sorted nodes and the coefficients in Newton form:
+    返回排序后的节点和牛顿形式下的系数：
 
     p(x) = c_0 + c_1(x-x_0) + c_2(x-x_0)(x-x_1) + ...
     """
@@ -65,7 +65,7 @@ def newton_divided_differences(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray
 
 
 def divided_difference_table(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Return the full Newton divided-difference table for inspection."""
+    """返回完整牛顿差商表，方便教学检查。"""
 
     x, y = _as_sorted_points(x, y)
     n = x.size
@@ -85,7 +85,7 @@ def newton_interpolate(
     coefficients: np.ndarray,
     x_eval: np.ndarray,
 ) -> np.ndarray:
-    """Evaluate a Newton interpolation polynomial."""
+    """计算牛顿插值多项式在给定点上的取值。"""
 
     x = np.asarray(x, dtype=float)
     coefficients = np.asarray(coefficients, dtype=float)
@@ -104,7 +104,7 @@ def newton_interpolate(
 
 
 def chebyshev_nodes(a: float, b: float, n: int) -> np.ndarray:
-    """Return n Chebyshev nodes on the interval [a, b]."""
+    """返回区间 [a, b] 上的 n 个切比雪夫节点。"""
 
     if n < 1:
         raise ValueError("n must be at least 1")
@@ -122,7 +122,7 @@ def piecewise_linear_interpolate(
     y: np.ndarray,
     x_eval: np.ndarray,
 ) -> np.ndarray:
-    """Evaluate piecewise linear interpolation."""
+    """计算分段线性插值在给定点上的取值。"""
 
     x, y = _as_sorted_points(x, y)
     return np.interp(np.asarray(x_eval, dtype=float), x, y)
@@ -130,7 +130,7 @@ def piecewise_linear_interpolate(
 
 @dataclass(frozen=True)
 class NaturalCubicSpline:
-    """Natural cubic spline interpolant with zero endpoint second derivatives."""
+    """自然三次样条插值函数，端点二阶导数为零。"""
 
     x: np.ndarray
     a: np.ndarray
@@ -179,7 +179,7 @@ class NaturalCubicSpline:
 
 
 def cubic_spline_coefficients(x: np.ndarray, y: np.ndarray) -> dict[str, np.ndarray]:
-    """Return natural cubic spline coefficients for teaching inspection."""
+    """返回自然三次样条系数，方便教学检查。"""
 
     spline = NaturalCubicSpline.fit(x, y)
     return {
@@ -197,7 +197,7 @@ def _solve_tridiagonal(
     upper: np.ndarray,
     rhs: np.ndarray,
 ) -> np.ndarray:
-    """Solve a tridiagonal linear system with the Thomas algorithm."""
+    """使用 Thomas 算法求解三对角线性系统。"""
 
     n = diag.size
     c_prime = np.zeros(n)

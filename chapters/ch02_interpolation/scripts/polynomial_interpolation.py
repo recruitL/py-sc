@@ -22,7 +22,7 @@ def main() -> None:
     newton_eval = newton_interpolate(nodes, coefficients, x_eval)
 
     for xi, yi, ni in zip(x_eval, y_eval, newton_eval):
-        print(f"x={xi:.2f}, lagrange={yi:.6f}, newton={ni:.6f}")
+        print(f"x={xi:.2f}, 拉格朗日={yi:.6f}, 牛顿={ni:.6f}")
 
 
 if __name__ == "__main__":

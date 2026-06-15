@@ -1,4 +1,4 @@
-"""Numerical computing utilities for chapter-based examples."""
+"""章节示例中使用的数值计算工具函数。"""
 
 from .interpolation import (
     NaturalCubicSpline,

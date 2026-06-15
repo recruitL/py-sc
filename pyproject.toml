@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "py-sc"
 version = "0.1.0"
-description = "Python numerical computing notes and chapter-based code examples."
+description = "面向 Python 数值计算的章节型讲义和代码示例。"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [

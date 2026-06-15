@@ -1,17 +1,15 @@
-# Course Notes
+# 课程说明
 
-This directory stores course-level planning notes for `py-sc`.
+本目录用于保存 `py-sc` 的课程层面规划、路线图和跨章节说明。
 
-## Current Roadmap
+## 当前路线图
 
-1. Data interpolation
-2. Numerical differentiation and integration
-3. Linear systems
-4. Nonlinear equations
-5. Ordinary differential equations
-6. Eigenvalue problems
-7. Spectral and Fourier methods
+1. 数据插值
+2. 数值微分与数值积分
+3. 线性方程组
+4. 非线性方程
+5. 常微分方程
+6. 特征值问题
+7. 谱方法与傅里叶方法
 
-The roadmap is intentionally flexible. Chapters should be added without
-breaking earlier notebooks, scripts, or public API functions in `src/py_sc`.
-
+路线图保持开放。新增章节时应尽量延续已有命名、Notebook 结构和代码风格，不破坏已经发布的章节材料、脚本和 `src/py_sc` 中的公共教学函数。

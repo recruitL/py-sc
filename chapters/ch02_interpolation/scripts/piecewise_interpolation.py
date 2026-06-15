@@ -20,7 +20,7 @@ def main() -> None:
     y_eval = piecewise_linear_interpolate(x, y, x_eval)
 
     for xi, yi in zip(x_eval, y_eval):
-        print(f"x={xi:.2f}, linear(x)={yi:.6f}")
+        print(f"x={xi:.2f}, 分段线性={yi:.6f}")
 
 
 if __name__ == "__main__":

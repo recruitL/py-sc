@@ -21,7 +21,7 @@ def main() -> None:
     y_eval = spline(x_eval)
 
     for xi, yi in zip(x_eval, y_eval):
-        print(f"x={xi:.2f}, spline(x)={yi:.6f}")
+        print(f"x={xi:.2f}, 自然三次样条={yi:.6f}")
 
 
 if __name__ == "__main__":
