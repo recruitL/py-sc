@@ -30,7 +30,7 @@ py-sc/
 
 | Chapter | Topic | Status |
 | --- | --- | --- |
-| Chapter 2 | Data Interpolation | Initial lecture structure and code scaffold |
+| Chapter 2 | Data Interpolation | First-round lecture build: overview, polynomial interpolation, Runge behavior, Chebyshev nodes, Newton form, piecewise linear interpolation, and natural cubic splines |
 
 ## Reading Order
 
@@ -41,6 +41,7 @@ Start with the chapter README, then read notebooks in numerical order:
 3. `chapters/ch02_interpolation/notebooks/02_polynomial_interpolation.ipynb`
 4. `chapters/ch02_interpolation/notebooks/03_piecewise_and_spline.ipynb`
 5. `chapters/ch02_interpolation/notebooks/04_experiments.ipynb`
+6. `chapters/ch02_interpolation/notebooks/05_extensions_framework.ipynb`
 
 Run the script comparison example:
 

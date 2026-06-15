@@ -64,6 +64,22 @@ def newton_divided_differences(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray
     return x, coefficients
 
 
+def divided_difference_table(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Return the full Newton divided-difference table for inspection."""
+
+    x, y = _as_sorted_points(x, y)
+    n = x.size
+    table = np.zeros((n, n), dtype=float)
+    table[:, 0] = y
+
+    for order in range(1, n):
+        numerator = table[1 : n - order + 1, order - 1] - table[: n - order, order - 1]
+        denominator = x[order:] - x[: n - order]
+        table[: n - order, order] = numerator / denominator
+
+    return x, table
+
+
 def newton_interpolate(
     x: np.ndarray,
     coefficients: np.ndarray,

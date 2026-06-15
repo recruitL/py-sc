@@ -6,6 +6,7 @@ from py_sc import (
     NaturalCubicSpline,
     chebyshev_nodes,
     cubic_spline_coefficients,
+    divided_difference_table,
     lagrange_interpolate,
     newton_divided_differences,
     newton_interpolate,
@@ -37,6 +38,17 @@ def test_newton_interpolation_matches_lagrange() -> None:
         newton_interpolate(nodes, coefficients, x_eval),
         lagrange_interpolate(x, y, x_eval),
     )
+
+
+def test_divided_difference_table_first_row_matches_coefficients() -> None:
+    x = np.array([0.0, 1.0, 2.0, 3.0])
+    y = np.array([1.0, 2.0, 0.0, 4.0])
+
+    nodes, coefficients = newton_divided_differences(x, y)
+    table_nodes, table = divided_difference_table(x, y)
+
+    np.testing.assert_allclose(table_nodes, nodes)
+    np.testing.assert_allclose(table[0], coefficients)
 
 
 def test_chebyshev_nodes_are_inside_interval() -> None:

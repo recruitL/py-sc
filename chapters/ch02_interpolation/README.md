@@ -2,7 +2,24 @@
 
 Interpolation estimates unknown values from known discrete data points. This
 chapter introduces the mathematical motivation, basic algorithms, Python
-implementations, and numerical experiments for one-dimensional interpolation.
+implementations, and numerical experiments for interpolation. It should be read
+as a runnable lecture chapter rather than a collection of isolated scripts.
+
+The first-round build focuses on the main one-dimensional path:
+
+```text
+interpolation problem
+  -> global polynomial interpolation
+  -> interpolation error and Runge behavior
+  -> Chebyshev nodes
+  -> Newton divided differences
+  -> piecewise linear interpolation
+  -> natural cubic splines
+```
+
+Hermite interpolation, PCHIP, B-splines, and two-dimensional interpolation are
+kept as extension frameworks so that later rounds can expand them without
+changing the chapter layout.
 
 ## Main Questions
 
@@ -18,6 +35,8 @@ implementations, and numerical experiments for one-dimensional interpolation.
 * Chebyshev nodes for reducing oscillation
 * Piecewise linear interpolation
 * Natural cubic spline interpolation
+* Extension roadmap: Hermite interpolation, PCHIP, cubic uniform B-splines,
+  bilinear interpolation, and triangular linear interpolation
 
 ## Reading Order
 
@@ -25,8 +44,19 @@ implementations, and numerical experiments for one-dimensional interpolation.
 2. `notebooks/02_polynomial_interpolation.ipynb`
 3. `notebooks/03_piecewise_and_spline.ipynb`
 4. `notebooks/04_experiments.ipynb`
-5. `notes/theory.md`
-6. `references.md`
+5. `notebooks/05_extensions_framework.ipynb`
+6. `notes/theory.md`
+7. `references.md`
+
+## Notebook Map
+
+| Notebook | Role |
+| --- | --- |
+| `01_interpolation_overview.ipynb` | Defines interpolation, compares it with fitting, and introduces interpolation spaces. |
+| `02_polynomial_interpolation.ipynb` | Covers Lagrange form, Newton divided differences, Runge behavior, and Chebyshev nodes. |
+| `03_piecewise_and_spline.ipynb` | Compares local piecewise linear interpolation with natural cubic splines. |
+| `04_experiments.ipynb` | Measures error trends and illustrates method limitations with reproducible experiments. |
+| `05_extensions_framework.ipynb` | Stores runnable sketches for Hermite, PCHIP, B-spline, and two-dimensional interpolation topics. |
 
 ## Runnable Scripts
 
@@ -52,3 +82,24 @@ src/py_sc/interpolation.py
 
 The functions are intentionally written for clarity before performance.
 
+## Current Scope
+
+Completed in this round:
+
+* interpolation problem formulation;
+* interpolation versus least-squares fitting;
+* Lagrange interpolation and interpolation basis functions;
+* interpolation error and Runge behavior;
+* Chebyshev nodes and Chebyshev-node interpolation;
+* Newton divided differences;
+* piecewise linear interpolation;
+* natural cubic spline construction and tridiagonal solve;
+* experiment notebook with error comparisons.
+
+Framework only, to be expanded later:
+
+* Hermite interpolation;
+* PCHIP and monotonicity-preserving interpolation;
+* cubic uniform B-splines;
+* bilinear and triangular two-dimensional interpolation;
+* Chebyshev differentiation matrices for a later spectral-methods chapter.
