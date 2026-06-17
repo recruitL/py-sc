@@ -4,14 +4,19 @@ import numpy as np
 
 from py_sc import (
     NaturalCubicSpline,
+    bilinear_interpolate_cell,
     chebyshev_nodes,
+    cubic_uniform_b_spline_basis,
     cubic_spline_coefficients,
     divided_difference_table,
     lagrange_interpolate,
     newton_divided_differences,
     newton_interpolate,
+    pchip_interpolate,
+    pchip_slopes,
     piecewise_cubic_hermite_interpolate,
     piecewise_linear_interpolate,
+    triangle_linear_interpolate,
 )
 
 
@@ -38,6 +43,55 @@ def test_piecewise_cubic_hermite_matches_cubic_with_exact_slopes() -> None:
     np.testing.assert_allclose(
         piecewise_cubic_hermite_interpolate(x, y, slopes, x_eval),
         x_eval**3 - 2 * x_eval + 1,
+    )
+
+
+def test_pchip_interpolates_nodes_and_preserves_monotone_range() -> None:
+    x = np.array([0.0, 1.0, 2.0, 4.0])
+    y = np.array([0.0, 0.4, 0.9, 1.2])
+    x_eval = np.linspace(0.0, 4.0, 41)
+    values = pchip_interpolate(x, y, x_eval)
+
+    np.testing.assert_allclose(pchip_interpolate(x, y, x), y)
+    assert np.all(values >= y.min() - 1e-12)
+    assert np.all(values <= y.max() + 1e-12)
+    assert np.all(np.diff(values) >= -1e-12)
+
+
+def test_pchip_sets_slope_zero_at_local_extremum() -> None:
+    x = np.array([0.0, 1.0, 2.0])
+    y = np.array([0.0, 1.0, 0.0])
+
+    _, _, slopes = pchip_slopes(x, y)
+
+    assert slopes[1] == 0.0
+
+
+def test_cubic_uniform_b_spline_basis_known_values() -> None:
+    x = np.array([0.0, 1.0, 2.0, 3.0, 4.0])
+
+    np.testing.assert_allclose(
+        cubic_uniform_b_spline_basis(x),
+        np.array([0.0, 1.0 / 6.0, 2.0 / 3.0, 1.0 / 6.0, 0.0]),
+    )
+
+
+def test_bilinear_interpolate_cell_matches_linear_function() -> None:
+    values = np.array([[1.0, 3.0], [4.0, 6.0]])
+
+    result = bilinear_interpolate_cell((0.0, 1.0), (0.0, 1.0), values, np.array([0.5]), np.array([0.5]))
+
+    np.testing.assert_allclose(result, np.array([3.5]))
+
+
+def test_triangle_linear_interpolate_matches_linear_function() -> None:
+    vertices = np.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0]])
+    values = 1.0 + 2.0 * vertices[:, 0] + 3.0 * vertices[:, 1]
+    points = np.array([[0.25, 0.5], [0.2, 0.3]])
+
+    np.testing.assert_allclose(
+        triangle_linear_interpolate(vertices, values, points),
+        1.0 + 2.0 * points[:, 0] + 3.0 * points[:, 1],
     )
 
 

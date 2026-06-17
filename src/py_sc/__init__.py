@@ -13,22 +13,29 @@ from .approximation import (
 )
 from .interpolation import (
     NaturalCubicSpline,
+    bilinear_interpolate_cell,
     chebyshev_nodes,
+    cubic_uniform_b_spline_basis,
     cubic_spline_coefficients,
     divided_difference_table,
     lagrange_interpolate,
     newton_divided_differences,
     newton_interpolate,
+    pchip_interpolate,
+    pchip_slopes,
     piecewise_cubic_hermite_interpolate,
     piecewise_linear_interpolate,
+    triangle_linear_interpolate,
 )
 
 __all__ = [
     "NaturalCubicSpline",
     "adaptive_piecewise_linear",
+    "bilinear_interpolate_cell",
     "chebyshev_fit_function",
     "chebyshev_nodes",
     "chebyshev_series_eval",
+    "cubic_uniform_b_spline_basis",
     "cubic_spline_coefficients",
     "divided_difference_table",
     "lagrange_interpolate",
@@ -38,8 +45,11 @@ __all__ = [
     "newton_interpolate",
     "pade_eval",
     "pade_from_taylor",
+    "pchip_interpolate",
+    "pchip_slopes",
     "piecewise_cubic_hermite_interpolate",
     "piecewise_linear_interpolate",
     "polynomial_eval",
     "polynomial_least_squares",
+    "triangle_linear_interpolate",
 ]

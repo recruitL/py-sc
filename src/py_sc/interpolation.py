@@ -186,6 +186,126 @@ def piecewise_cubic_hermite_interpolate(
     )
 
 
+def pchip_slopes(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """计算 PCHIP 使用的保形节点斜率。
+
+    返回排序后的节点、函数值和节点斜率。内部节点使用相邻割线斜率的加权
+    调和平均；当相邻割线斜率变号或有零值时，节点斜率取零以避免过冲。
+    """
+
+    x, y = _as_sorted_points(x, y)
+    h = np.diff(x)
+    delta = np.diff(y) / h
+    n = x.size
+
+    slopes = np.zeros(n, dtype=float)
+    if n == 2:
+        slopes[:] = delta[0]
+        return x, y, slopes
+
+    slopes[0] = _pchip_endpoint_slope(h[0], h[1], delta[0], delta[1])
+    slopes[-1] = _pchip_endpoint_slope(h[-1], h[-2], delta[-1], delta[-2])
+
+    for i in range(1, n - 1):
+        if delta[i - 1] == 0 or delta[i] == 0 or np.sign(delta[i - 1]) != np.sign(delta[i]):
+            slopes[i] = 0.0
+        else:
+            w1 = 2 * h[i] + h[i - 1]
+            w2 = h[i] + 2 * h[i - 1]
+            slopes[i] = (w1 + w2) / (w1 / delta[i - 1] + w2 / delta[i])
+
+    return x, y, slopes
+
+
+def pchip_interpolate(x: np.ndarray, y: np.ndarray, x_eval: np.ndarray) -> np.ndarray:
+    """计算保形分段三次 Hermite 插值（PCHIP）的取值。"""
+
+    x, y, slopes = pchip_slopes(x, y)
+    return piecewise_cubic_hermite_interpolate(x, y, slopes, x_eval)
+
+
+def cubic_uniform_b_spline_basis(x: np.ndarray) -> np.ndarray:
+    """三次均匀 B 样条基函数，支撑区间为 [0, 4]。"""
+
+    x = np.asarray(x, dtype=float)
+    return (
+        _truncated_power_3(x)
+        - 4 * _truncated_power_3(x - 1)
+        + 6 * _truncated_power_3(x - 2)
+        - 4 * _truncated_power_3(x - 3)
+        + _truncated_power_3(x - 4)
+    ) / 6.0
+
+
+def bilinear_interpolate_cell(
+    x_bounds: tuple[float, float],
+    y_bounds: tuple[float, float],
+    values: np.ndarray,
+    x_eval: np.ndarray,
+    y_eval: np.ndarray,
+) -> np.ndarray:
+    """在矩形单元上计算双线性插值。
+
+    ``values`` 采用形状 ``(2, 2)``，排列为 ``[[z00, z10], [z01, z11]]``。
+    """
+
+    x0, x1 = map(float, x_bounds)
+    y0, y1 = map(float, y_bounds)
+    if not x0 < x1 or not y0 < y1:
+        raise ValueError("expected increasing x_bounds and y_bounds")
+
+    values = np.asarray(values, dtype=float)
+    if values.shape != (2, 2):
+        raise ValueError("values must have shape (2, 2)")
+
+    x_eval = np.asarray(x_eval, dtype=float)
+    y_eval = np.asarray(y_eval, dtype=float)
+    u = (x_eval - x0) / (x1 - x0)
+    v = (y_eval - y0) / (y1 - y0)
+
+    z00, z10 = values[0, 0], values[0, 1]
+    z01, z11 = values[1, 0], values[1, 1]
+    return (
+        (1 - u) * (1 - v) * z00
+        + u * (1 - v) * z10
+        + (1 - u) * v * z01
+        + u * v * z11
+    )
+
+
+def triangle_linear_interpolate(
+    vertices: np.ndarray,
+    values: np.ndarray,
+    points: np.ndarray,
+) -> np.ndarray:
+    """在三角形单元上计算二维一次 Lagrange 插值。"""
+
+    vertices = np.asarray(vertices, dtype=float)
+    values = np.asarray(values, dtype=float)
+    points = np.asarray(points, dtype=float)
+    if vertices.shape != (3, 2):
+        raise ValueError("vertices must have shape (3, 2)")
+    if values.shape != (3,):
+        raise ValueError("values must have shape (3,)")
+    if points.shape[-1] != 2:
+        raise ValueError("points must have final dimension 2")
+
+    original_shape = points.shape[:-1]
+    flat_points = points.reshape(-1, 2)
+    matrix = np.array(
+        [
+            [vertices[0, 0], vertices[1, 0], vertices[2, 0]],
+            [vertices[0, 1], vertices[1, 1], vertices[2, 1]],
+            [1.0, 1.0, 1.0],
+        ],
+        dtype=float,
+    )
+    rhs = np.vstack([flat_points.T, np.ones(flat_points.shape[0])])
+    barycentric = np.linalg.solve(matrix, rhs)
+    interpolated = barycentric.T @ values
+    return interpolated.reshape(original_shape)
+
+
 @dataclass(frozen=True)
 class NaturalCubicSpline:
     """自然三次样条插值函数，端点二阶导数为零。"""
@@ -275,3 +395,16 @@ def _solve_tridiagonal(
         solution[i] = d_prime[i] - c_prime[i] * solution[i + 1]
 
     return solution
+
+
+def _pchip_endpoint_slope(h0: float, h1: float, delta0: float, delta1: float) -> float:
+    slope = ((2 * h0 + h1) * delta0 - h0 * delta1) / (h0 + h1)
+    if slope == 0 or np.sign(slope) != np.sign(delta0):
+        return 0.0
+    if np.sign(delta0) != np.sign(delta1) and abs(slope) > abs(3 * delta0):
+        return 3 * delta0
+    return slope
+
+
+def _truncated_power_3(x: np.ndarray) -> np.ndarray:
+    return np.maximum(np.asarray(x, dtype=float), 0.0) ** 3
