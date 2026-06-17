@@ -12,6 +12,7 @@
   -> 牛顿差商
   -> Hermite 插值
   -> 分段线性插值
+  -> 分段三次 Hermite 插值
   -> 自然三次样条插值
 ```
 
@@ -30,6 +31,7 @@ Hermite 插值已经在全局多项式插值部分给出基本入口；PCHIP、B
 * 牛顿差商（Newton divided differences）
 * 切比雪夫节点（Chebyshev nodes）
 * 分段线性插值
+* 分段三次 Hermite 插值
 * 自然三次样条插值
 * Hermite 插值的基本形式
 * 扩展路线：PCHIP、三次均匀 B 样条、双线性插值和三角形单元上的二维一次插值
@@ -50,7 +52,7 @@ Hermite 插值已经在全局多项式插值部分给出基本入口；PCHIP、B
 | --- | --- |
 | `01_interpolation_overview.ipynb` | 定义插值问题，比较插值与拟合，并引入插值空间。 |
 | `02_polynomial_interpolation.ipynb` | 讨论拉格朗日形式、牛顿差商、Hermite 插值、Runge 现象和切比雪夫节点。 |
-| `03_piecewise_and_spline.ipynb` | 比较局部分段线性插值和自然三次样条插值。 |
+| `03_piecewise_and_spline.ipynb` | 系统说明分段线性插值、分段三次 Hermite 插值和自然三次样条插值。 |
 | `04_experiments.ipynb` | 用可复现实验观察误差变化和方法局限。 |
 | `05_extensions_framework.ipynb` | 为 Hermite、PCHIP、B 样条和二维插值保留可运行扩展入口。 |
 
@@ -88,8 +90,9 @@ src/py_sc/interpolation.py
 * 切比雪夫节点与切比雪夫节点插值；
 * 牛顿差商；
 * Hermite 插值的基本条件和单区间三次 Hermite 示例；
-* 分段线性插值；
-* 自然三次样条的构造和三对角线性方程组求解；
+* 分段线性插值的局部基函数、光滑性和误差估计；
+* 分段三次 Hermite 插值的基函数、节点斜率和误差形式；
+* 自然三次样条的光滑性条件、边界条件和三对角线性方程组求解；
 * 带误差比较的实验 Notebook。
 
 暂时只建立框架，后续继续扩展：

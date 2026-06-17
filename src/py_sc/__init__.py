@@ -8,6 +8,7 @@ from .interpolation import (
     lagrange_interpolate,
     newton_divided_differences,
     newton_interpolate,
+    piecewise_cubic_hermite_interpolate,
     piecewise_linear_interpolate,
 )
 
@@ -19,5 +20,6 @@ __all__ = [
     "lagrange_interpolate",
     "newton_divided_differences",
     "newton_interpolate",
+    "piecewise_cubic_hermite_interpolate",
     "piecewise_linear_interpolate",
 ]

@@ -27,6 +27,30 @@ def _as_sorted_points(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndar
     return x_sorted, y_sorted
 
 
+def _as_sorted_points_with_slopes(
+    x: np.ndarray,
+    y: np.ndarray,
+    slopes: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    x = np.asarray(x, dtype=float)
+    y = np.asarray(y, dtype=float)
+    slopes = np.asarray(slopes, dtype=float)
+
+    if x.ndim != 1 or y.ndim != 1 or slopes.ndim != 1:
+        raise ValueError("x, y, and slopes must be one-dimensional arrays")
+    if x.size != y.size or x.size != slopes.size:
+        raise ValueError("x, y, and slopes must have the same length")
+    if x.size < 2:
+        raise ValueError("at least two data points are required")
+
+    order = np.argsort(x)
+    x_sorted = x[order]
+    if np.any(np.diff(x_sorted) == 0):
+        raise ValueError("x values must be distinct")
+
+    return x_sorted, y[order], slopes[order]
+
+
 def lagrange_interpolate(x: np.ndarray, y: np.ndarray, x_eval: np.ndarray) -> np.ndarray:
     """计算拉格朗日插值多项式在给定点上的取值。"""
 
@@ -126,6 +150,40 @@ def piecewise_linear_interpolate(
 
     x, y = _as_sorted_points(x, y)
     return np.interp(np.asarray(x_eval, dtype=float), x, y)
+
+
+def piecewise_cubic_hermite_interpolate(
+    x: np.ndarray,
+    y: np.ndarray,
+    slopes: np.ndarray,
+    x_eval: np.ndarray,
+) -> np.ndarray:
+    """计算分段三次 Hermite 插值在给定点上的取值。
+
+    ``slopes`` 表示每个节点处的一阶导数近似值。每个小区间使用两端的
+    函数值和导数值构造三次多项式。
+    """
+
+    x, y, slopes = _as_sorted_points_with_slopes(x, y, slopes)
+    x_eval = np.asarray(x_eval, dtype=float)
+
+    indices = np.searchsorted(x, x_eval, side="right") - 1
+    indices = np.clip(indices, 0, x.size - 2)
+
+    h = x[indices + 1] - x[indices]
+    t = (x_eval - x[indices]) / h
+
+    h00 = 2 * t**3 - 3 * t**2 + 1
+    h10 = t**3 - 2 * t**2 + t
+    h01 = -2 * t**3 + 3 * t**2
+    h11 = t**3 - t**2
+
+    return (
+        h00 * y[indices]
+        + h10 * h * slopes[indices]
+        + h01 * y[indices + 1]
+        + h11 * h * slopes[indices + 1]
+    )
 
 
 @dataclass(frozen=True)
