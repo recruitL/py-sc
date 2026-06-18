@@ -22,6 +22,28 @@ class ScalarRootResult:
     history: np.ndarray
 
 
+@dataclass(frozen=True)
+class QuadraticFactorResult:
+    """多项式二次因子迭代结果。"""
+
+    factor: np.ndarray
+    roots: np.ndarray
+    iterations: int
+    converged: bool
+    residual_norm: float
+    history: np.ndarray
+
+
+@dataclass(frozen=True)
+class PolynomialRootsResult:
+    """多项式全部根计算结果。"""
+
+    roots: np.ndarray
+    iterations: int
+    converged: bool
+    residual_norm: float
+
+
 def find_sign_change_brackets(
     func: ScalarFunction,
     a: float,
@@ -392,6 +414,149 @@ def muller_method(
     )
 
 
+def polynomial_value_and_derivative(
+    coefficients: np.ndarray | list[complex] | tuple[complex, ...],
+    x: complex,
+) -> tuple[complex, complex]:
+    """用 Horner 格式同时计算多项式及其导数。"""
+
+    coeffs = _validate_polynomial_coefficients(coefficients)
+    point = complex(x)
+    value = complex(coeffs[0])
+    derivative = 0.0j
+    for coefficient in coeffs[1:]:
+        derivative = derivative * point + value
+        value = value * point + complex(coefficient)
+    return value, derivative
+
+
+def synthetic_division(
+    coefficients: np.ndarray | list[complex] | tuple[complex, ...],
+    root: complex,
+) -> tuple[np.ndarray, complex]:
+    """用综合除法将多项式除以 ``x - root``。"""
+
+    coeffs = _validate_polynomial_coefficients(coefficients)
+    root = complex(root)
+    quotient = np.empty(coeffs.size - 1, dtype=complex)
+    quotient[0] = coeffs[0]
+    for i in range(1, quotient.size):
+        quotient[i] = coeffs[i] + root * quotient[i - 1]
+    remainder = coeffs[-1] + root * quotient[-1]
+    return quotient, complex(remainder)
+
+
+def newton_polynomial_roots(
+    coefficients: np.ndarray | list[complex] | tuple[complex, ...],
+    initial_guesses: np.ndarray | list[complex] | tuple[complex, ...] | None = None,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    derivative_tolerance: float = 1e-14,
+) -> PolynomialRootsResult:
+    """用 Newton 法和逐次压缩计算多项式全部根。"""
+
+    coeffs = _validate_polynomial_coefficients(coefficients)
+    tolerance = _validate_tolerance(tolerance)
+    derivative_tolerance = _validate_tolerance(derivative_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    degree = coeffs.size - 1
+    guesses = _initial_polynomial_guesses(coeffs, initial_guesses)
+    current = coeffs.astype(complex)
+    roots: list[complex] = []
+    total_iterations = 0
+    converged = True
+
+    for root_index in range(degree):
+        z = complex(guesses[root_index])
+        local_converged = False
+        for _ in range(max_iterations):
+            value, derivative = polynomial_value_and_derivative(current, z)
+            if abs(value) <= tolerance:
+                local_converged = True
+                break
+            if abs(derivative) <= derivative_tolerance:
+                raise ValueError("polynomial Newton derivative is too small")
+            z -= value / derivative
+            total_iterations += 1
+            if abs(value) <= tolerance:
+                local_converged = True
+                break
+        value, _ = polynomial_value_and_derivative(current, z)
+        if abs(value) <= tolerance:
+            local_converged = True
+        roots.append(z)
+        current, remainder = synthetic_division(current, z)
+        if abs(remainder) > tolerance * max(1.0, np.linalg.norm(coeffs)):
+            local_converged = False
+        converged = converged and local_converged
+
+    roots_array = np.array(roots, dtype=complex)
+    residual_norm = _polynomial_roots_residual_norm(coeffs, roots_array)
+    converged = converged and residual_norm <= tolerance * max(1.0, np.linalg.norm(coeffs))
+    return PolynomialRootsResult(
+        roots=roots_array,
+        iterations=total_iterations,
+        converged=bool(converged),
+        residual_norm=float(residual_norm),
+    )
+
+
+def bairstow_quadratic_factor(
+    coefficients: np.ndarray | list[complex] | tuple[complex, ...],
+    linear_coefficient: float,
+    constant_coefficient: float,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+) -> QuadraticFactorResult:
+    """用 Bairstow 型 Newton 迭代寻找实二次因子。"""
+
+    coeffs = _validate_polynomial_coefficients(coefficients)
+    if coeffs.size < 3:
+        raise ValueError("polynomial degree must be at least two")
+    tolerance = _validate_tolerance(tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    u = complex(linear_coefficient)
+    v = complex(constant_coefficient)
+    history: list[tuple[complex, complex, float]] = []
+    converged = False
+    residual_norm = float("inf")
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        residual = _quadratic_factor_remainder(coeffs, u, v)
+        residual_norm = float(np.linalg.norm(residual))
+        history.append((u, v, residual_norm))
+        if residual_norm <= tolerance * max(1.0, np.linalg.norm(coeffs)):
+            converged = True
+            iterations = k - 1
+            break
+        jacobian = _quadratic_remainder_jacobian(coeffs, u, v)
+        try:
+            delta = np.linalg.solve(jacobian, -residual)
+        except np.linalg.LinAlgError as exc:
+            raise ValueError("Bairstow Jacobian is singular") from exc
+        u += delta[0]
+        v += delta[1]
+        iterations = k
+        if np.linalg.norm(delta) <= tolerance * max(1.0, abs(u), abs(v)):
+            residual = _quadratic_factor_remainder(coeffs, u, v)
+            residual_norm = float(np.linalg.norm(residual))
+            history.append((u, v, residual_norm))
+            converged = residual_norm <= tolerance * max(1.0, np.linalg.norm(coeffs))
+            break
+
+    factor = np.array([1.0 + 0.0j, u, v], dtype=complex)
+    roots = np.roots(factor)
+    return QuadraticFactorResult(
+        factor=np.real_if_close(factor),
+        roots=np.real_if_close(roots),
+        iterations=iterations,
+        converged=bool(converged),
+        residual_norm=float(residual_norm),
+        history=np.array(history, dtype=object),
+    )
+
+
 def _validate_interval(a: float, b: float) -> tuple[float, float]:
     a = float(a)
     b = float(b)
@@ -539,3 +704,55 @@ def _muller_next(
     if abs(denominator) <= denominator_tolerance:
         raise ValueError("Muller denominator is too small")
     return float(x2 - 2.0 * c / denominator)
+
+
+def _validate_polynomial_coefficients(
+    coefficients: np.ndarray | list[complex] | tuple[complex, ...],
+) -> np.ndarray:
+    coeffs = np.asarray(coefficients, dtype=complex)
+    if coeffs.ndim != 1:
+        raise ValueError("coefficients must be one-dimensional")
+    if coeffs.size < 2:
+        raise ValueError("polynomial degree must be at least one")
+    if abs(coeffs[0]) == 0:
+        raise ValueError("leading coefficient must be nonzero")
+    return coeffs
+
+
+def _initial_polynomial_guesses(
+    coefficients: np.ndarray,
+    initial_guesses: np.ndarray | list[complex] | tuple[complex, ...] | None,
+) -> np.ndarray:
+    degree = coefficients.size - 1
+    if initial_guesses is not None:
+        guesses = np.asarray(initial_guesses, dtype=complex)
+        if guesses.ndim != 1 or guesses.size != degree:
+            raise ValueError("initial_guesses must contain one guess per root")
+        return guesses
+    radius = 1.0 + float(np.max(np.abs(coefficients[1:] / coefficients[0])))
+    angles = 2.0 * np.pi * np.arange(degree) / degree
+    return radius * np.exp(1j * angles)
+
+
+def _polynomial_roots_residual_norm(coefficients: np.ndarray, roots: np.ndarray) -> float:
+    residuals = [abs(polynomial_value_and_derivative(coefficients, root)[0]) for root in roots]
+    return float(max(residuals, default=0.0))
+
+
+def _quadratic_factor_remainder(coefficients: np.ndarray, u: complex, v: complex) -> np.ndarray:
+    _, remainder = np.polydiv(coefficients, np.array([1.0 + 0.0j, u, v], dtype=complex))
+    remainder = np.asarray(remainder, dtype=complex)
+    if remainder.size < 2:
+        remainder = np.pad(remainder, (2 - remainder.size, 0))
+    elif remainder.size > 2:
+        remainder = remainder[-2:]
+    return remainder
+
+
+def _quadratic_remainder_jacobian(coefficients: np.ndarray, u: complex, v: complex) -> np.ndarray:
+    residual = _quadratic_factor_remainder(coefficients, u, v)
+    step_u = np.sqrt(np.finfo(float).eps) * max(1.0, abs(u))
+    step_v = np.sqrt(np.finfo(float).eps) * max(1.0, abs(v))
+    residual_u = _quadratic_factor_remainder(coefficients, u + step_u, v)
+    residual_v = _quadratic_factor_remainder(coefficients, u, v + step_v)
+    return np.column_stack(((residual_u - residual) / step_u, (residual_v - residual) / step_v))

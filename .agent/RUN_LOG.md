@@ -389,6 +389,30 @@ Notebook 结构检查
 日志：`.agent/logs/command-2026-06-19T05-28-12-08-00-45679.log`、`.agent/logs/command-2026-06-19T05-28-12-08-00-45692.log`、`.agent/logs/command-2026-06-19T05-28-12-08-00-45681.log`、`.agent/logs/command-2026-06-19T05-28-12-08-00-45680.log`、`.agent/logs/command-2026-06-19T05-28-17-08-00-46155.log`、`.agent/logs/command-2026-06-19T05-28-26-08-00-46463.log`、`.agent/logs/command-2026-06-19T05-28-26-08-00-46465.log`。
 下一步：创建 8.4 checkpoint commit。
 
+[2026-06-19T05:30:14+08:00] [CH08] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch08): add secant and Muller methods"`
+退出码：0
+摘要：第8章 8.4 checkpoint `a5d764a` 已创建。
+下一步：开始 8.5/8.6 多项式根拓展。
+
+[2026-06-19T05:30:14+08:00] [CH08] [START]
+开始第8章 8.5/8.6“多项式根拓展”。当前原子工作单元为 Bairstow 型二次因子迭代、Newton 逐次压缩及配套 Notebook、脚本和测试。
+下一步：实现公共函数并补充教学 Notebook。
+
+[2026-06-19T05:34:23+08:00] [CH08] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import bairstow_quadratic_factor, newton_polynomial_roots, synthetic_division"`
+`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+`python -m pytest tests/test_nonlinear_roots.py`
+`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+`nbclient` 执行 `notebooks/05_polynomial_roots_extensions.ipynb`
+Notebook 结构检查
+`git diff --check`
+退出码：0
+摘要：8.5/8.6 多项式根拓展原子工作单元通过导入、脚本、20 个 ch08 测试、语法检查、Notebook 执行、Notebook 结构检查和 diff 空白检查。
+日志：`.agent/logs/command-2026-06-19T05-33-56-08-00-50044.log`、`.agent/logs/command-2026-06-19T05-33-56-08-00-50054.log`、`.agent/logs/command-2026-06-19T05-33-56-08-00-50063.log`、`.agent/logs/command-2026-06-19T05-33-56-08-00-50083.log`、`.agent/logs/command-2026-06-19T05-34-03-08-00-50678.log`、`.agent/logs/command-2026-06-19T05-34-14-08-00-50826.log`、`.agent/logs/command-2026-06-19T05-34-14-08-00-50828.log`。
+下一步：创建 8.5/8.6 checkpoint commit。
+
 [2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
 命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 退出码：0
@@ -537,4 +561,46 @@ Notebook 结构检查
 命令：`git diff --check`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-26-08-00-46465.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:33:56+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import bairstow_quadratic_factor, newton_polynomial_roots, synthetic_division; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-33-56-08-00-50044.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:33:56+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-33-56-08-00-50083.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:33:56+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-33-56-08-00-50054.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:33:56+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-33-56-08-00-50063.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:34:03+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-34-03-08-00-50678.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:34:14+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-34-14-08-00-50826.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:34:14+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-34-14-08-00-50828.log`
 摘要：命令执行成功。

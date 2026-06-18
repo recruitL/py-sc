@@ -7,6 +7,7 @@ import pytest
 
 from py_sc import (
     aitken_delta_squared,
+    bairstow_quadratic_factor,
     bisection_method,
     damped_newton_method,
     find_sign_change_brackets,
@@ -14,8 +15,11 @@ from py_sc import (
     modified_newton_method,
     muller_method,
     newton_method,
+    newton_polynomial_roots,
+    polynomial_value_and_derivative,
     secant_method,
     steffensen_method,
+    synthetic_division,
 )
 
 
@@ -142,3 +146,42 @@ def test_muller_method_solves_cubic_equation() -> None:
 def test_real_muller_rejects_negative_discriminant() -> None:
     with pytest.raises(ValueError):
         muller_method(lambda x: x**2 + 1.0, -1.0, 0.0, 1.0)
+
+
+def test_polynomial_value_and_derivative_use_horner_scheme() -> None:
+    value, derivative = polynomial_value_and_derivative([1.0, -6.0, 11.0, -6.0], 2.0)
+
+    assert abs(value) < 1e-14
+    assert abs(derivative + 1.0) < 1e-14
+
+
+def test_synthetic_division_deflates_known_root() -> None:
+    quotient, remainder = synthetic_division([1.0, -6.0, 11.0, -6.0], 1.0)
+
+    assert abs(remainder) < 1e-14
+    assert np.allclose(quotient.real, [1.0, -5.0, 6.0])
+
+
+def test_newton_polynomial_roots_with_deflation_finds_all_roots() -> None:
+    result = newton_polynomial_roots(
+        [1.0, -6.0, 11.0, -6.0],
+        initial_guesses=[0.8, 2.2, 3.2],
+        tolerance=1e-12,
+    )
+
+    roots = np.sort(result.roots.real)
+    assert result.converged
+    assert np.allclose(roots, [1.0, 2.0, 3.0], atol=1e-10)
+    assert result.residual_norm < 1e-10
+
+
+def test_bairstow_quadratic_factor_finds_real_factor() -> None:
+    coefficients = np.array([1.0, -3.0, 3.0, -3.0, 2.0])
+
+    result = bairstow_quadratic_factor(coefficients, linear_coefficient=-2.5, constant_coefficient=1.5)
+
+    roots = np.sort(np.asarray(result.roots, dtype=float))
+    assert result.converged
+    assert np.allclose(result.factor, [1.0, -3.0, 2.0], atol=1e-8)
+    assert np.allclose(roots, [1.0, 2.0], atol=1e-8)
+    assert result.residual_norm < 1e-8

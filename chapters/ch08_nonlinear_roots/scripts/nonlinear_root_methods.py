@@ -15,15 +15,18 @@ if str(SRC) not in sys.path:
 
 from py_sc import (  # noqa: E402
     aitken_delta_squared,
+    bairstow_quadratic_factor,
     bisection_method,
     damped_newton_method,
     find_sign_change_brackets,
     fixed_point_iteration,
     modified_newton_method,
     newton_method,
+    newton_polynomial_roots,
     muller_method,
     secant_method,
     steffensen_method,
+    synthetic_division,
 )
 
 
@@ -77,6 +80,22 @@ def main() -> None:
     muller = muller_method(lambda x: x**3 - x - 2.0, 0.0, 1.0, 2.0, tolerance=1e-12)
     print(f"secant cos fixed point: root={secant.root:.12f}, iterations={secant.iterations}")
     print(f"Muller cubic: root={muller.root:.12f}, iterations={muller.iterations}")
+
+    quotient, remainder = synthetic_division([1.0, -6.0, 11.0, -6.0], 1.0)
+    polynomial_roots = newton_polynomial_roots(
+        [1.0, -6.0, 11.0, -6.0],
+        initial_guesses=[0.8, 2.2, 3.2],
+        tolerance=1e-12,
+    )
+    quadratic_factor = bairstow_quadratic_factor(
+        [1.0, -3.0, 3.0, -3.0, 2.0],
+        linear_coefficient=-2.5,
+        constant_coefficient=1.5,
+        tolerance=1e-12,
+    )
+    print("synthetic division quotient:", np.array2string(quotient.real, precision=8), "remainder:", f"{abs(remainder):.3e}")
+    print("Newton deflation roots:", np.array2string(np.sort(polynomial_roots.roots.real), precision=8))
+    print("Bairstow factor:", np.array2string(np.asarray(quadratic_factor.factor, dtype=float), precision=8))
 
     polynomial = lambda x: (x - 1.0) * (x + 0.5) * (x - 2.0)
     print("polynomial brackets:", find_sign_change_brackets(polynomial, -1.0, 2.5, 35))
