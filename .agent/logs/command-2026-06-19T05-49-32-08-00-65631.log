@@ -1,0 +1,6 @@
+timestamp: 2026-06-19T05:49:32+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -
+---- output ----
+chapters/ch09_nonlinear_systems/notebooks/01_fixed_point_and_newton_systems.ipynb: missing_ids=[], outputs=0, execution_meta=0
+chapters/ch09_nonlinear_systems/notebooks/02_damped_and_chord_newton.ipynb: missing_ids=[], outputs=0, execution_meta=0

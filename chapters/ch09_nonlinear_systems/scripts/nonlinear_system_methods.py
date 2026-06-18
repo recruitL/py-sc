@@ -13,7 +13,13 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from py_sc import fixed_point_system_iteration, newton_system_method  # noqa: E402
+from py_sc import (  # noqa: E402
+    chord_newton_system_method,
+    damped_newton_system_method,
+    finite_difference_jacobian,
+    fixed_point_system_iteration,
+    newton_system_method,
+)
 
 
 def main() -> None:
@@ -43,11 +49,34 @@ def main() -> None:
         return np.array([[2.0 * x[0], 2.0 * x[1]], [1.0, -1.0]])
 
     newton = newton_system_method(func, jacobian, [0.8, 0.6], tolerance=1e-12)
+    chord = chord_newton_system_method(func, jacobian, [0.8, 0.6], tolerance=1e-10)
+    finite_diff = finite_difference_jacobian(func, np.array([0.8, 0.6]))
     print(
         "Newton system:",
         f"solution={np.array2string(newton.solution, precision=12)}",
         f"iterations={newton.iterations}",
         f"residual={newton.residual_norm:.3e}",
+    )
+    print("finite-difference Jacobian at [0.8, 0.6]:")
+    print(np.array2string(finite_diff, precision=8))
+    print(
+        "chord Newton:",
+        f"solution={np.array2string(chord.solution, precision=12)}",
+        f"iterations={chord.iterations}",
+        f"residual={chord.residual_norm:.3e}",
+    )
+
+    damped = damped_newton_system_method(
+        lambda x: np.array([x[0] ** 3 - 1.0, x[1]]),
+        lambda x: np.array([[3.0 * x[0] ** 2, 0.0], [0.0, 1.0]]),
+        [0.1, 0.5],
+        tolerance=1e-12,
+    )
+    print(
+        "damped Newton:",
+        f"solution={np.array2string(damped.solution, precision=12)}",
+        f"iterations={damped.iterations}",
+        f"residual={damped.residual_norm:.3e}",
     )
 
 

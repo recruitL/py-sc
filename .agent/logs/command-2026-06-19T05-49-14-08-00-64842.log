@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T05:49:14+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env PYTHONPATH=src python -c from py_sc import finite_difference_jacobian, damped_newton_system_method, chord_newton_system_method; print('import ok')
+---- output ----
+import ok

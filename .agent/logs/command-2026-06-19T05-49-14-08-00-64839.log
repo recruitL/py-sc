@@ -1,0 +1,11 @@
+timestamp: 2026-06-19T05:49:14+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py
+---- output ----
+fixed point system: solution=[0.486405154666 0.233725501959] iterations=18 residual=4.058e-13
+Newton system: solution=[0.707106781187 0.707106781187] iterations=4 residual=2.220e-16
+finite-difference Jacobian at [0.8, 0.6]:
+[[ 1.60000002  1.20000002]
+ [ 1.         -1.        ]]
+chord Newton: solution=[0.707106781185 0.707106781185] iterations=6 residual=3.271e-12
+damped Newton: solution=[1. 0.] iterations=5 residual=1.599e-14

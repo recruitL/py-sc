@@ -463,6 +463,30 @@ Notebook 结构检查
 日志：`.agent/logs/command-2026-06-19T05-44-00-08-00-60886.log`、`.agent/logs/command-2026-06-19T05-44-00-08-00-60887.log`、`.agent/logs/command-2026-06-19T05-44-00-08-00-60893.log`、`.agent/logs/command-2026-06-19T05-44-00-08-00-60898.log`、`.agent/logs/command-2026-06-19T05-44-57-08-00-61637.log`、`.agent/logs/command-2026-06-19T05-45-05-08-00-61686.log`、`.agent/logs/command-2026-06-19T05-45-05-08-00-61692.log`。
 下一步：创建 9.1 checkpoint commit。
 
+[2026-06-19T05:46:49+08:00] [CH09] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch09): add system fixed point and Newton methods"`
+退出码：0
+摘要：第9章 9.1 checkpoint `8e933c7` 已创建。
+下一步：开始 9.2 阻尼 Newton、弦 Newton 和有限差分 Jacobian。
+
+[2026-06-19T05:46:49+08:00] [CH09] [START]
+开始第9章 9.2“阻尼 Newton、弦 Newton 和有限差分 Jacobian”。当前原子工作单元为 Newton 稳健化和 Jacobian 近似。
+下一步：实现公共函数并补充教学 Notebook。
+
+[2026-06-19T05:49:40+08:00] [CH09] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import finite_difference_jacobian, damped_newton_system_method, chord_newton_system_method"`
+`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+`python -m pytest tests/test_nonlinear_systems.py`
+`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+`nbclient` 执行 `notebooks/02_damped_and_chord_newton.ipynb`
+Notebook 结构检查
+`git diff --check`
+退出码：0
+摘要：9.2 阻尼 Newton、弦 Newton、有限差分 Jacobian 原子工作单元通过导入、脚本、6 个 ch09 测试、语法检查、Notebook 执行、Notebook 结构检查和 diff 空白检查。
+日志：`.agent/logs/command-2026-06-19T05-49-14-08-00-64842.log`、`.agent/logs/command-2026-06-19T05-49-14-08-00-64839.log`、`.agent/logs/command-2026-06-19T05-49-14-08-00-64838.log`、`.agent/logs/command-2026-06-19T05-49-14-08-00-64850.log`、`.agent/logs/command-2026-06-19T05-49-21-08-00-65413.log`、`.agent/logs/command-2026-06-19T05-49-32-08-00-65631.log`、`.agent/logs/command-2026-06-19T05-49-32-08-00-65637.log`。
+下一步：创建 9.2 checkpoint commit。
+
 [2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
 命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 退出码：0
@@ -761,4 +785,46 @@ Notebook 结构检查
 命令：`git diff --check`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-45-05-08-00-61692.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:49:14+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-14-08-00-64850.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:49:14+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-14-08-00-64839.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:49:14+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import finite_difference_jacobian, damped_newton_system_method, chord_newton_system_method; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-14-08-00-64842.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:49:14+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-14-08-00-64838.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:49:21+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-21-08-00-65413.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:49:32+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-32-08-00-65631.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:49:32+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-32-08-00-65637.log`
 摘要：命令执行成功。

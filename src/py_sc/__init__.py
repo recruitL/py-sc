@@ -94,6 +94,9 @@ from .nonlinear_roots import (
 )
 from .nonlinear_systems import (
     NonlinearSystemResult,
+    chord_newton_system_method,
+    damped_newton_system_method,
+    finite_difference_jacobian,
     fixed_point_system_iteration,
     newton_system_method,
 )
@@ -154,6 +157,7 @@ __all__ = [
     "chebyshev_fit_function",
     "chebyshev_nodes",
     "chebyshev_series_eval",
+    "chord_newton_system_method",
     "closed_newton_cotes_weights",
     "compact_first_derivative_periodic",
     "composite_midpoint",
@@ -165,11 +169,13 @@ __all__ = [
     "cubic_uniform_b_spline_basis",
     "cubic_spline_coefficients",
     "damped_newton_method",
+    "damped_newton_system_method",
     "differentiate_discrete",
     "discrete_simpson",
     "discrete_trapezoid",
     "divided_difference_table",
     "finite_difference_weights",
+    "finite_difference_jacobian",
     "find_sign_change_brackets",
     "fixed_point_iteration",
     "fixed_point_system_iteration",
