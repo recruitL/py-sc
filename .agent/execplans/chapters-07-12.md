@@ -1,14 +1,14 @@
 # ExecPlan：第 7—12 章连续建设
 
 状态：in_progress
-最后更新时间：2026-06-19T06:10:01+08:00
+最后更新时间：2026-06-19T06:11:59+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：51ebedc
+最后安全 commit：a75d0b2
 当前章节：第10章
-当前小节：10.2 Jacobi 旋转与 QR 特征值迭代
-当前原子任务：10.2 自检通过，准备创建 checkpoint commit。
-下一项具体动作：过滤暂存第10章 10.2 文件、命令日志和 README/包入口更新，创建 `checkpoint(ch10): add Jacobi and QR eigenvalue methods`。
+当前小节：章节级自检
+当前原子任务：第10章自检通过，准备最终提交。
+下一项具体动作：过滤暂存第10章最终状态、章节级自检日志和 README 状态更新，创建 `Add chapter 10 eigenvalue methods`。
 阻塞问题：无
 
 ## 总体进度
@@ -18,7 +18,7 @@
 | 第7章 | done | 章节自检完成 | 通过 | a3d823a |
 | 第8章 | done | 章节级自检完成 | 通过 | 5cf5e10 |
 | 第9章 | done | 章节级自检完成 | 通过 | 4d85607 |
-| 第10章 | verifying | 10.2 Jacobi 旋转与 QR 特征值迭代 | 10.1/10.2 通过 | 51ebedc |
+| 第10章 | verifying | 章节级自检 | 通过 | a75d0b2 |
 | 第11章 | pending | - | 未开始 | - |
 | 第12章 | pending | - | 未开始 | - |
 
@@ -64,10 +64,12 @@
 * 完成第10章 README 初稿、10.1 Notebook、章节脚本、`src/py_sc/eigenvalues.py` 中的 Rayleigh 商、特征残差、幂法、反幂法、Rayleigh 商迭代和 `tests/test_eigenvalues.py` 中的 10.1 测试。
 * 创建第10章 10.1 checkpoint commit `51ebedc`。
 * 完成第10章 10.2 Notebook、脚本更新、`JacobiEigenResult`、`QREigenResult`、非对角 Frobenius 范数、对称 Jacobi 特征值法、无位移 QR 特征值迭代和对应测试。
+* 创建第10章 10.2 checkpoint commit `a75d0b2`。
+* 第10章章节级自检通过：脚本、12 个 ch10 测试、两个 Notebook、Notebook 结构、全仓库 pytest、diff 空白检查均通过。
 
 ### 正在处理
 
-* 第10章 10.2 checkpoint 提交。
+* 第10章章节级自检。
 
 ### 已修改但尚未验证
 
@@ -190,6 +192,14 @@
 * Notebook 结构检查：第10章两个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
 * `git diff --check`：通过。
 * `git status --short` 已记录；显示外部第6章工作树修改和 `docs/README.md` 仍未提交，本任务提交继续过滤。
+* 第10章章节级 `python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py`：通过。
+* 第10章章节级 `python -m pytest tests/test_eigenvalues.py`：12 passed。
+* 第10章章节级 `python -m py_compile src/py_sc/eigenvalues.py chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py tests/test_eigenvalues.py`：通过。
+* 第10章章节级 `python -m pytest`：97 passed；其中包含外部第6章工作树中的 `tests/test_direct_linear.py`，仅作为环境状态验证，不纳入本任务提交。
+* 第10章两个 Notebook 全量执行并清空输出：通过。
+* Notebook 结构检查：第10章两个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
+* `git diff --check`：通过。
+* `git status --short` 和 `git diff --stat` 已记录；显示外部第6章工作树修改和 `docs/README.md` 仍未提交，本任务提交继续过滤。
 
 ### 失败或未执行的检查
 
@@ -203,10 +213,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第10章 10.2 文件、命令日志和过滤后的 README/`src/py_sc/__init__.py`。
-2. 创建 `checkpoint(ch10): add Jacobi and QR eigenvalue methods`。
+1. 暂存第10章最终状态、命令日志和过滤后的 README。
+2. 创建第10章最终提交 `Add chapter 10 eigenvalue methods`。
 3. 记录 commit hash。
-4. 继续第10章章节级自检或后续扩展。
+4. 开始第11章。
 
 ### 恢复时应首先执行的命令
 

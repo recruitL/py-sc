@@ -1094,3 +1094,66 @@ Notebook 结构检查
 
 [2026-06-19T06:10:01+08:00] [CH10] [VERIFY]
 10.2 Jacobi 旋转与 QR 特征值迭代已完成并通过自检：编译、章节脚本、`tests/test_eigenvalues.py` 12 passed、第10章两个 Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。
+
+[2026-06-19T06:11:06+08:00] [CH10] [CHECKPOINT]
+第10章 10.2 checkpoint 提交完成：`a75d0b2a80c8e8caae3b352a0959ff04d7491a04`（`checkpoint(ch10): add Jacobi and QR eigenvalue methods`）。
+
+[2026-06-19T06:11:06+08:00] [CH10] [VERIFY]
+开始第10章章节级自检：将运行章节脚本、专项测试、编译检查、全仓库测试、全部第10章 Notebook 执行/清空、Notebook 结构检查、`git diff --check` 和状态记录。
+
+[2026-06-19T06:11:33+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-33-08-00-89912.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:33+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/eigenvalues.py chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py tests/test_eigenvalues.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-33-08-00-89960.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:33+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_eigenvalues.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-33-08-00-89950.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:33+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-33-08-00-89986.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:40+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-40-08-00-90471.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:51+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --stat`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-51-08-00-90708.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:51+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-51-08-00-90713.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:51+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-51-08-00-90726.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:51+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-11-51-08-00-90706.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:11:59+08:00] [CH10] [VERIFY]
+第10章章节级自检通过：章节脚本通过，`tests/test_eigenvalues.py` 12 passed，`python -m py_compile` 通过，`python -m pytest` 97 passed，两个第10章 Notebook 已执行并清空输出，Notebook 结构检查通过，`git diff --check` 通过。全仓库测试包含外部第6章工作树测试，仅作为环境状态验证；最终提交继续过滤第6章和 `docs/README.md`。

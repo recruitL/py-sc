@@ -60,7 +60,7 @@ py-sc/
 | 第七章 | 解线性方程组的迭代法 | 建设中：Jacobi、Gauss-Seidel、SOR、块迭代、最速下降、CG、PCG、二维 Poisson 五点差分、矩阵分裂、谱半径和残差停止准则 |
 | 第八章 | 非线性方程求根 | 新增建设：区间扫描、二分法、不动点迭代、Aitken 加速、Steffensen 方法、Newton、阻尼 Newton、重根修正、弦截法、Müller 法、多项式根和局部收敛条件 |
 | 第九章 | 非线性方程组解法 | 新增建设：向量不动点迭代、多元 Newton 法、阻尼 Newton、弦 Newton、有限差分 Jacobian、Broyden、参数延拓、残差范数和奇异 Jacobian 失败情形 |
-| 第十章 | 特征值计算 | 建设中：Rayleigh 商、特征残差、幂法、带位移反幂法和 Rayleigh 商迭代 |
+| 第十章 | 特征值计算 | 新增建设：Rayleigh 商、特征残差、幂法、带位移反幂法、Rayleigh 商迭代、对称 Jacobi 旋转和 QR 特征值迭代 |
 
 ## 阅读顺序
 
