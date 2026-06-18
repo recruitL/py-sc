@@ -25,6 +25,11 @@ py-sc/
       notes/                # 理论笔记和补充说明
       scripts/              # 与 Notebook 对应的可运行脚本
       references.md         # 本章参考文献
+    ch05_numerical_differentiation/ # 第五章：数值微分
+      notebooks/            # 主要教学 Notebook
+      notes/                # 理论笔记和补充说明
+      scripts/              # 与 Notebook 对应的可运行脚本
+      references.md         # 本章参考文献
   docs/                     # 课程层面的说明和路线图
   references/               # 跨章节共享参考文献说明
   src/
@@ -39,6 +44,7 @@ py-sc/
 | 第二章 | 数据插值 | 系统建设：插值基本形式、全局多项式插值、Runge 现象、切比雪夫节点、牛顿差商、分段线性插值、分段三次 Hermite、自然三次样条、PCHIP、三次均匀 B 样条、二维插值和切比雪夫微分矩阵入口 |
 | 第三章 | 函数逼近与曲线拟合 | 理论扩充：逼近空间、误差范数、投影观点，Chebyshev/Legendre 级数，最小二乘、正则化、Padé、Fourier/FFT 与自适应逼近框架 |
 | 第四章 | 数值积分 | 新增建设：求积基本原理、Newton-Cotes、复合求积、Romberg、自适应 Simpson、Gauss-Legendre、带权高斯公式、离散数据积分、多重积分和高维 Monte Carlo 框架 |
+| 第五章 | 数值微分 | 新增建设：有限差分、函数型和离散数据微分、非等距权重、Richardson 外推、隐式紧致格式入口、样条微分、B 样条微分框架、二阶微分和误差实验 |
 
 ## 阅读顺序
 
@@ -64,6 +70,14 @@ py-sc/
 18. `chapters/ch04_numerical_integration/notebooks/05_discrete_data_integration.ipynb`
 19. `chapters/ch04_numerical_integration/notebooks/06_multiple_and_monte_carlo_framework.ipynb`
 20. `chapters/ch04_numerical_integration/notebooks/07_experiments.ipynb`
+21. `chapters/ch05_numerical_differentiation/README.md`
+22. `chapters/ch05_numerical_differentiation/notebooks/01_differentiation_overview.ipynb`
+23. `chapters/ch05_numerical_differentiation/notebooks/02_finite_difference_formulas.ipynb`
+24. `chapters/ch05_numerical_differentiation/notebooks/03_discrete_data_differentiation.ipynb`
+25. `chapters/ch05_numerical_differentiation/notebooks/04_spline_differentiation.ipynb`
+26. `chapters/ch05_numerical_differentiation/notebooks/05_richardson_and_implicit.ipynb`
+27. `chapters/ch05_numerical_differentiation/notebooks/06_second_derivatives.ipynb`
+28. `chapters/ch05_numerical_differentiation/notebooks/07_experiments.ipynb`
 
 运行脚本示例：
 
@@ -71,6 +85,7 @@ py-sc/
 python chapters/ch02_interpolation/scripts/compare_interpolation.py
 python chapters/ch03_approximation/scripts/orthogonal_approximation.py
 python chapters/ch04_numerical_integration/scripts/integration_methods.py
+python chapters/ch05_numerical_differentiation/scripts/differentiation_methods.py
 ```
 
 运行测试：
