@@ -39,6 +39,9 @@ py-sc/
     ch09_nonlinear_systems/  # 第九章：非线性方程组解法
       notebooks/            # 主要教学 Notebook
       scripts/              # 与 Notebook 对应的可运行脚本
+    ch10_eigenvalue_methods/ # 第十章：特征值计算
+      notebooks/            # 主要教学 Notebook
+      scripts/              # 与 Notebook 对应的可运行脚本
   docs/                     # 课程层面的说明和路线图
   references/               # 跨章节共享参考文献说明
   src/
@@ -57,6 +60,7 @@ py-sc/
 | 第七章 | 解线性方程组的迭代法 | 建设中：Jacobi、Gauss-Seidel、SOR、块迭代、最速下降、CG、PCG、二维 Poisson 五点差分、矩阵分裂、谱半径和残差停止准则 |
 | 第八章 | 非线性方程求根 | 新增建设：区间扫描、二分法、不动点迭代、Aitken 加速、Steffensen 方法、Newton、阻尼 Newton、重根修正、弦截法、Müller 法、多项式根和局部收敛条件 |
 | 第九章 | 非线性方程组解法 | 新增建设：向量不动点迭代、多元 Newton 法、阻尼 Newton、弦 Newton、有限差分 Jacobian、Broyden、参数延拓、残差范数和奇异 Jacobian 失败情形 |
+| 第十章 | 特征值计算 | 建设中：Rayleigh 商、特征残差、幂法、带位移反幂法和 Rayleigh 商迭代 |
 
 ## 阅读顺序
 
@@ -105,6 +109,8 @@ py-sc/
 41. `chapters/ch09_nonlinear_systems/notebooks/01_fixed_point_and_newton_systems.ipynb`
 42. `chapters/ch09_nonlinear_systems/notebooks/02_damped_and_chord_newton.ipynb`
 43. `chapters/ch09_nonlinear_systems/notebooks/03_broyden_and_continuation.ipynb`
+44. `chapters/ch10_eigenvalue_methods/README.md`
+45. `chapters/ch10_eigenvalue_methods/notebooks/01_power_and_inverse_iteration.ipynb`
 
 运行脚本示例：
 
@@ -116,6 +122,7 @@ python chapters/ch05_numerical_differentiation/scripts/differentiation_methods.p
 python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py
 python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py
 python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py
+python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py
 ```
 
 运行测试：

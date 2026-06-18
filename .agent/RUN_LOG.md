@@ -974,3 +974,72 @@ Notebook 结构检查
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-56-11-08-00-72983.log`
 摘要：命令执行成功。
+
+[2026-06-19T05:58:47+08:00] [CH09] [CHECKPOINT]
+第9章最终提交完成：`4d85607cefd8d80448db7e4f9e0d851e33b44bc0`（`Add chapter 09 nonlinear systems methods`）。
+
+[2026-06-19T05:58:47+08:00] [CH10] [START]
+开始第10章“特征值计算”。当前小节：10.1 幂法与反幂法。计划先实现特征值基础迭代的公共函数、脚本、测试和首个 Notebook，并在自检通过后创建 10.1 checkpoint。
+
+[2026-06-19T06:03:58+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/eigenvalues.py chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py tests/test_eigenvalues.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-03-58-08-00-79920.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:03:58+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-03-58-08-00-79921.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:03:58+08:00] [COMMAND] [EXIT 1]
+命令：`python -m pytest tests/test_eigenvalues.py`
+退出码：1
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-03-58-08-00-79976.log`
+摘要：命令执行失败，需查看日志并修复。
+
+[2026-06-19T06:04:54+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/eigenvalues.py chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py tests/test_eigenvalues.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-04-54-08-00-81300.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:04:54+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-04-54-08-00-81302.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:04:54+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_eigenvalues.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-04-54-08-00-81307.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:05:04+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-05-04-08-00-81857.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:05:31+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-05-31-08-00-82456.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:05:31+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-05-31-08-00-82462.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:05:31+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-05-31-08-00-82457.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:05:51+08:00] [CH10] [VERIFY]
+10.1 幂法与反幂法已完成并通过自检：编译、章节脚本、`tests/test_eigenvalues.py`、Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。首次专项测试失败由过早判停和 Rayleigh 精确位移奇异导致，已改为残差主导判停，并在奇异位移时用最小奇异向量锁定特征向量。

@@ -1,0 +1,10 @@
+timestamp: 2026-06-19T06:04:54+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py
+---- output ----
+Rayleigh quotient: 4.500000000000
+power method: lambda=4.732050807569 iterations=54 residual=4.536e-12
+inverse power near shift 2.8: lambda=3.000000000000 iterations=13 residual=4.122e-12
+Rayleigh quotient iteration: lambda=4.732050807569 iterations=6 residual=6.280e-16
+numpy eigvalsh: [1.267949192431 3.             4.732050807569]
+dominant residual recomputed: 4.536e-12

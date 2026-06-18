@@ -33,6 +33,15 @@ from .differentiation import (
     three_point_endpoint_derivative,
     uniform_b_spline_curve_derivative,
 )
+from .eigenvalues import (
+    EigenIterationResult,
+    eigen_residual_norm,
+    inverse_power_method,
+    normalize_vector,
+    power_method,
+    rayleigh_quotient,
+    rayleigh_quotient_iteration,
+)
 from .interpolation import (
     NaturalCubicSpline,
     bilinear_interpolate_cell,
@@ -138,6 +147,7 @@ from .integration import (
 __all__ = [
     "AdaptiveSimpsonResult",
     "ContinuationResult",
+    "EigenIterationResult",
     "MonteCarloResult",
     "NaturalCubicSpline",
     "LinearIterationResult",
@@ -179,6 +189,7 @@ __all__ = [
     "discrete_simpson",
     "discrete_trapezoid",
     "divided_difference_table",
+    "eigen_residual_norm",
     "finite_difference_weights",
     "finite_difference_jacobian",
     "find_sign_change_brackets",
@@ -194,6 +205,7 @@ __all__ = [
     "gauss_legendre_nodes_weights",
     "gauss_seidel_iteration",
     "gauss_seidel_iteration_matrix",
+    "inverse_power_method",
     "is_strictly_diagonally_dominant",
     "is_symmetric_positive_definite",
     "jacobi_preconditioner",
@@ -209,6 +221,7 @@ __all__ = [
     "muller_method",
     "natural_cubic_spline_integral",
     "natural_cubic_spline_derivative",
+    "normalize_vector",
     "newton_divided_differences",
     "newton_method",
     "newton_polynomial_roots",
@@ -231,6 +244,9 @@ __all__ = [
     "polynomial_eval",
     "polynomial_least_squares",
     "preconditioned_conjugate_gradient",
+    "power_method",
+    "rayleigh_quotient",
+    "rayleigh_quotient_iteration",
     "rejection_monte_carlo_integrate",
     "relative_residual",
     "reshape_poisson_solution",

@@ -1,0 +1,143 @@
+timestamp: 2026-06-19T06:03:58+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m pytest tests/test_eigenvalues.py
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+plugins: anyio-4.2.0
+collected 8 items
+
+tests/test_eigenvalues.py .F.F.F..                                       [100%]
+
+=================================== FAILURES ===================================
+_____________ test_power_method_finds_dominant_symmetric_eigenpair _____________
+
+    def test_power_method_finds_dominant_symmetric_eigenpair() -> None:
+        matrix = np.array([[4.0, 1.0], [1.0, 3.0]])
+
+        result = power_method(matrix, initial=[1.0, 0.5], tolerance=1e-12)
+        expected = max(np.linalg.eigvalsh(matrix))
+
+        assert result.converged
+        assert result.eigenvalue == pytest.approx(expected, rel=1e-10, abs=1e-10)
+>       assert result.residual_norm < 1e-10
+E       assert 1.346352042839804e-06 < 1e-10
+E        +  where 1.346352042839804e-06 = EigenIterationResult(eigenvalue=4.618033988749084, eigenvector=array([0.85065112, 0.5257306 ]), iterations=18, converg....14970334e-05, 3.68779234e-05, 1.90215058e-05, 9.81122710e-06,\n       5.06059711e-06, 2.61023854e-06, 1.34635204e-06])).residual_norm
+
+tests/test_eigenvalues.py:31: AssertionError
+____________ test_inverse_power_method_finds_eigenvalue_near_shift _____________
+
+    def test_inverse_power_method_finds_eigenvalue_near_shift() -> None:
+        matrix = np.diag([5.0, 2.0, -1.0])
+
+        result = inverse_power_method(matrix, shift=1.7, initial=[1.0, 1.0, 1.0], tolerance=1e-12)
+
+        assert result.converged
+        assert result.eigenvalue == pytest.approx(2.0, abs=1e-10)
+>       assert result.residual_norm < 1e-10
+E       assert 7.108306388887578e-08 < 1e-10
+E        +  where 7.108306388887578e-08 = EigenIterationResult(eigenvalue=1.9999999999999987, eigenvector=array([4.66507380e-09, 1.00000000e+00, 2.32305731e-08]...39e-02, 4.69204473e-03,\n       5.01059689e-04, 5.41125101e-05, 5.89355859e-06, 6.45841783e-07,\n       7.10830639e-08])).residual_norm
+
+tests/test_eigenvalues.py:48: AssertionError
+___ test_rayleigh_quotient_iteration_converges_quickly_for_symmetric_matrix ____
+
+matrix = array([[2., 1.],
+       [1., 2.]]), initial = [0.9, 1.0]
+tolerance = 1e-13, max_iterations = 30
+
+    def rayleigh_quotient_iteration(
+        matrix: np.ndarray | list[list[float]] | tuple[tuple[float, ...], ...],
+        initial: np.ndarray | list[float] | tuple[float, ...] | None = None,
+        tolerance: float = 1e-12,
+        max_iterations: int = 30,
+    ) -> EigenIterationResult:
+        """Rayleigh 商迭代，用动态位移快速逼近对称矩阵的特征对。"""
+
+        a = _as_square_matrix(matrix)
+        tolerance = _validate_tolerance(tolerance)
+        max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+        x = _initial_vector(a.shape[0], initial)
+        matrix_scale = max(1.0, float(np.linalg.norm(a, ord=2)))
+        eigenvalue = rayleigh_quotient(a, x)
+        residual = eigen_residual_norm(a, eigenvalue, x)
+        eigenvalue_history = [eigenvalue]
+        residual_history = [residual]
+        converged = residual <= tolerance * matrix_scale
+        iterations = 0
+
+        for k in range(1, max_iterations + 1):
+            if converged:
+                break
+            shifted = a - eigenvalue * np.eye(a.shape[0])
+            try:
+>               y = np.linalg.solve(shifted, x)
+
+src/py_sc/eigenvalues.py:183:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/opt/anaconda3/lib/python3.12/site-packages/numpy/linalg/_linalg.py:452: in solve
+    r = gufunc(a, b, signature=signature)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+err = 'invalid value', flag = 8
+
+    def _raise_linalgerror_singular(err, flag):
+>       raise LinAlgError("Singular matrix")
+E       numpy.linalg.LinAlgError: Singular matrix
+
+/opt/anaconda3/lib/python3.12/site-packages/numpy/linalg/_linalg.py:145: LinAlgError
+
+The above exception was the direct cause of the following exception:
+
+    def test_rayleigh_quotient_iteration_converges_quickly_for_symmetric_matrix() -> None:
+        matrix = np.array([[2.0, 1.0], [1.0, 2.0]])
+
+>       result = rayleigh_quotient_iteration(matrix, initial=[0.9, 1.0], tolerance=1e-13)
+
+tests/test_eigenvalues.py:59:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+matrix = array([[2., 1.],
+       [1., 2.]]), initial = [0.9, 1.0]
+tolerance = 1e-13, max_iterations = 30
+
+    def rayleigh_quotient_iteration(
+        matrix: np.ndarray | list[list[float]] | tuple[tuple[float, ...], ...],
+        initial: np.ndarray | list[float] | tuple[float, ...] | None = None,
+        tolerance: float = 1e-12,
+        max_iterations: int = 30,
+    ) -> EigenIterationResult:
+        """Rayleigh 商迭代，用动态位移快速逼近对称矩阵的特征对。"""
+
+        a = _as_square_matrix(matrix)
+        tolerance = _validate_tolerance(tolerance)
+        max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+        x = _initial_vector(a.shape[0], initial)
+        matrix_scale = max(1.0, float(np.linalg.norm(a, ord=2)))
+        eigenvalue = rayleigh_quotient(a, x)
+        residual = eigen_residual_norm(a, eigenvalue, x)
+        eigenvalue_history = [eigenvalue]
+        residual_history = [residual]
+        converged = residual <= tolerance * matrix_scale
+        iterations = 0
+
+        for k in range(1, max_iterations + 1):
+            if converged:
+                break
+            shifted = a - eigenvalue * np.eye(a.shape[0])
+            try:
+                y = np.linalg.solve(shifted, x)
+            except np.linalg.LinAlgError as exc:
+                if residual <= tolerance * matrix_scale:
+                    converged = True
+                    break
+>               raise ValueError("Rayleigh shifted matrix is singular") from exc
+E               ValueError: Rayleigh shifted matrix is singular
+
+src/py_sc/eigenvalues.py:188: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_eigenvalues.py::test_power_method_finds_dominant_symmetric_eigenpair
+FAILED tests/test_eigenvalues.py::test_inverse_power_method_finds_eigenvalue_near_shift
+FAILED tests/test_eigenvalues.py::test_rayleigh_quotient_iteration_converges_quickly_for_symmetric_matrix
+========================= 3 failed, 5 passed in 0.09s ==========================

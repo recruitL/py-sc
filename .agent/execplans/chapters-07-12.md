@@ -1,14 +1,14 @@
 # ExecPlan：第 7—12 章连续建设
 
 状态：in_progress
-最后更新时间：2026-06-19T05:56:20+08:00
+最后更新时间：2026-06-19T06:05:51+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：a85a000
-当前章节：第9章
-当前小节：章节级自检
-当前原子任务：第9章自检通过，准备最终提交
-下一项具体动作：显式暂存第9章最终状态和章节级自检日志，创建 `Add chapter 09 nonlinear systems methods`。
+最后安全 commit：4d85607
+当前章节：第10章
+当前小节：10.1 幂法与反幂法
+当前原子任务：10.1 自检通过，准备创建 checkpoint commit。
+下一项具体动作：过滤暂存第10章 10.1 文件、`.agent` 计划/日志和根 README/包入口的第10章更新，创建 `checkpoint(ch10): add power and inverse iteration`。
 阻塞问题：无
 
 ## 总体进度
@@ -17,8 +17,8 @@
 |---|---|---|---|---|
 | 第7章 | done | 章节自检完成 | 通过 | a3d823a |
 | 第8章 | done | 章节级自检完成 | 通过 | 5cf5e10 |
-| 第9章 | verifying | 章节级自检 | 通过 | a85a000 |
-| 第10章 | pending | - | 未开始 | - |
+| 第9章 | done | 章节级自检完成 | 通过 | 4d85607 |
+| 第10章 | verifying | 10.1 幂法与反幂法 | 通过 | - |
 | 第11章 | pending | - | 未开始 | - |
 | 第12章 | pending | - | 未开始 | - |
 
@@ -60,10 +60,12 @@
 * 完成 9.3 Notebook、脚本更新、Broyden 拟 Newton、参数延拓和对应测试。
 * 创建第9章 9.3 checkpoint commit `a85a000`。
 * 第9章章节级自检通过：脚本、8 个 ch09 测试、三个 Notebook、Notebook 结构、全仓库 pytest、diff 空白检查均通过。
+* 创建第9章最终提交 `4d85607`。
+* 完成第10章 README 初稿、10.1 Notebook、章节脚本、`src/py_sc/eigenvalues.py` 中的 Rayleigh 商、特征残差、幂法、反幂法、Rayleigh 商迭代和 `tests/test_eigenvalues.py` 中的 10.1 测试。
 
 ### 正在处理
 
-* 第9章最终提交。
+* 第10章 10.1 checkpoint 提交。
 
 ### 已修改但尚未验证
 
@@ -172,6 +174,13 @@
 * Notebook 结构检查：第9章三个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
 * `git diff --check`：通过。
 * `git status --short` 和 `git diff --stat` 已记录；显示外部第6章工作树修改仍未提交，本任务提交继续过滤。
+* `python -m py_compile src/py_sc/eigenvalues.py chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py tests/test_eigenvalues.py`：通过。
+* `python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py`：通过。
+* `python -m pytest tests/test_eigenvalues.py`：首次因幂法/反幂法过早使用特征值差判停、Rayleigh 商迭代精确位移奇异失败；修正为残差主导判停，并在奇异位移时用最小奇异向量锁定特征向量后重跑 8 passed。
+* `nbclient` 执行 `chapters/ch10_eigenvalue_methods/notebooks/01_power_and_inverse_iteration.ipynb` 并清空输出：通过。
+* Notebook 结构检查：`01_power_and_inverse_iteration.ipynb` 无缺失 cell id、无输出、无执行 metadata。
+* `git diff --check`：通过。
+* `git status --short` 已记录；显示外部第6章工作树修改和 `docs/README.md` 仍未提交，本任务提交继续过滤。
 
 ### 失败或未执行的检查
 
@@ -185,10 +194,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第9章最终状态和章节级自检日志，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
-2. 创建 `Add chapter 09 nonlinear systems methods`。
+1. 暂存第10章 10.1 文件、命令日志和过滤后的 README/`src/py_sc/__init__.py`。
+2. 创建 `checkpoint(ch10): add power and inverse iteration`。
 3. 记录 commit hash。
-4. 开始第10章“特征值计算”。
+4. 继续第10章 10.2 对称 Jacobi 旋转或 QR 特征值迭代。
 
 ### 恢复时应首先执行的命令
 

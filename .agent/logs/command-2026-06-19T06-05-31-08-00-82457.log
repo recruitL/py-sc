@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T06:05:31+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -
+---- output ----
+notebook structure clean: chapters/ch10_eigenvalue_methods/notebooks/01_power_and_inverse_iteration.ipynb
