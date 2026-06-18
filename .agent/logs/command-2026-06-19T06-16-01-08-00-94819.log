@@ -1,0 +1,4 @@
+timestamp: 2026-06-19T06:16:01+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: git diff --check
+---- output ----

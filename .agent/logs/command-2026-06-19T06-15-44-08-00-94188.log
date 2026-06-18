@@ -1,0 +1,21 @@
+timestamp: 2026-06-19T06:15:44+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py
+---- output ----
+one-step comparison for y'=y, y(0)=1:
+  Euler    value=1.100000000000 error=5.171e-03
+  Heun     value=1.105000000000 error=1.709e-04
+  Midpoint value=1.105000000000 error=1.709e-04
+  RK4      value=1.105170833333 error=8.474e-08
+
+fixed-step solve on [0, 1]:
+  euler    y(1)=2.593742460100 error=1.245e-01
+  heun     y(1)=2.714080846608 error=4.201e-03
+  midpoint y(1)=2.714080846608 error=4.201e-03
+  rk4      y(1)=2.718279744135 error=2.084e-06
+
+observed order:
+  Euler: 0.912
+  RK4:   3.910
+
+oscillator at pi/2: [ 7.968559839755e-10 -9.999999999896e-01]

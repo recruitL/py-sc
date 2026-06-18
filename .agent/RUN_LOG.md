@@ -1157,3 +1157,54 @@ Notebook 结构检查
 
 [2026-06-19T06:11:59+08:00] [CH10] [VERIFY]
 第10章章节级自检通过：章节脚本通过，`tests/test_eigenvalues.py` 12 passed，`python -m py_compile` 通过，`python -m pytest` 97 passed，两个第10章 Notebook 已执行并清空输出，Notebook 结构检查通过，`git diff --check` 通过。全仓库测试包含外部第6章工作树测试，仅作为环境状态验证；最终提交继续过滤第6章和 `docs/README.md`。
+
+[2026-06-19T06:13:11+08:00] [CH10] [CHECKPOINT]
+第10章最终提交完成：`6532e3c657c4567c23224674caad39e296763771`（`Add chapter 10 eigenvalue methods`）。
+
+[2026-06-19T06:13:11+08:00] [CH11] [START]
+开始第11章“常微分方程初值问题”。当前小节：11.1 Euler 方法与 Runge-Kutta 方法。计划先实现基础 IVP 步进器、脚本、测试和首个 Notebook，并在自检通过后创建 11.1 checkpoint。
+
+[2026-06-19T06:15:44+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/ode_ivp.py chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py tests/test_ode_ivp.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-15-44-08-00-94186.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:15:44+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-15-44-08-00-94188.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:15:44+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_ode_ivp.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-15-44-08-00-94193.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:15:51+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-15-51-08-00-94743.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:16:01+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-16-01-08-00-94801.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:16:01+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-16-01-08-00-94819.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:16:01+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-16-01-08-00-94820.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:16:08+08:00] [CH11] [VERIFY]
+11.1 Euler 方法与 Runge-Kutta 方法已完成并通过自检：编译、章节脚本、`tests/test_ode_ivp.py` 9 passed、Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。
