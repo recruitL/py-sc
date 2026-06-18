@@ -1,0 +1,14 @@
+timestamp: 2026-06-19T06:19:34+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m pytest tests/test_ode_ivp.py
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+plugins: anyio-4.2.0
+collected 13 items
+
+tests/test_ode_ivp.py .............                                      [100%]
+
+============================== 13 passed in 0.09s ==============================

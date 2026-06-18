@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T06:19:56+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -
+---- output ----
+notebook structure clean: chapters/ch11_ode_initial_value/notebooks/01_euler_and_runge_kutta.ipynb, chapters/ch11_ode_initial_value/notebooks/02_adaptive_step_control.ipynb

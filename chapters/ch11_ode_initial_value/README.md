@@ -16,6 +16,7 @@ $$
 * 区分 Heun 法、中点法和经典四阶 Runge-Kutta 法的采样方式；
 * 用统一的固定步长求解器比较不同时间步进方法；
 * 通过精确解误差估计观察全局收敛阶；
+* 用嵌入式方法估计局部误差并自动调整步长；
 * 为后续自适应步长、多步法和刚性问题建立基础。
 
 ## 与前面章节的联系
@@ -31,12 +32,14 @@ $$
 ## 阅读顺序
 
 1. `notebooks/01_euler_and_runge_kutta.ipynb`
+2. `notebooks/02_adaptive_step_control.ipynb`
 
 ## Notebook 对照表
 
 | Notebook | 作用 | 状态 |
 | --- | --- | --- |
 | `01_euler_and_runge_kutta.ipynb` | Euler、Heun、中点法、RK4、固定步长求解和收敛阶估计。 | 已建设 |
+| `02_adaptive_step_control.ipynb` | Heun-Euler 嵌入式误差估计、自适应步长接受/拒绝和容差控制。 | 已建设 |
 
 ## 可运行脚本
 
@@ -60,10 +63,12 @@ src/py_sc/ode_ivp.py
 * `heun_step`
 * `midpoint_step`
 * `rk4_step`
+* `heun_euler_embedded_step`
 * `solve_ivp_fixed_step`
+* `solve_ivp_adaptive_heun`
 * `global_error`
 * `estimate_convergence_order`
 
 ## 本章小结
 
-Euler 方法只使用区间左端斜率，结构简单但误差较大。Heun 法和中点法通过额外采样达到二阶精度，经典 RK4 用四个阶段在成本和精度之间取得很好的平衡。固定步长实验可以清楚展示全局误差随步长缩小而下降的速度，也为后续讨论自适应步长和稳定性限制提供基准。
+Euler 方法只使用区间左端斜率，结构简单但误差较大。Heun 法和中点法通过额外采样达到二阶精度，经典 RK4 用四个阶段在成本和精度之间取得很好的平衡。固定步长实验可以清楚展示全局误差随步长缩小而下降的速度；自适应 Heun-Euler 方法进一步把低阶和高阶估计之差转化为局部误差指标，根据容差自动接受、拒绝和放大/缩小步长，为后续讨论稳定性限制和刚性问题提供基准。

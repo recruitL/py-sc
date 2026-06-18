@@ -118,13 +118,16 @@ from .nonlinear_systems import (
     parameter_continuation,
 )
 from .ode_ivp import (
+    AdaptiveODEResult,
     ODEResult,
     estimate_convergence_order,
     euler_step,
     global_error,
+    heun_euler_embedded_step,
     heun_step,
     midpoint_step,
     rk4_step,
+    solve_ivp_adaptive_heun,
     solve_ivp_fixed_step,
 )
 from .integration import (
@@ -161,6 +164,7 @@ from .integration import (
 
 __all__ = [
     "AdaptiveSimpsonResult",
+    "AdaptiveODEResult",
     "ContinuationResult",
     "EigenIterationResult",
     "JacobiEigenResult",
@@ -226,6 +230,7 @@ __all__ = [
     "gauss_seidel_iteration",
     "gauss_seidel_iteration_matrix",
     "global_error",
+    "heun_euler_embedded_step",
     "heun_step",
     "inverse_power_method",
     "is_strictly_diagonally_dominant",
@@ -287,6 +292,7 @@ __all__ = [
     "second_derivative_three_point",
     "simpson_rule",
     "simpson_three_eighths_rule",
+    "solve_ivp_adaptive_heun",
     "solve_ivp_fixed_step",
     "sor_iteration",
     "sor_iteration_matrix",

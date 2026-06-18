@@ -1,0 +1,25 @@
+timestamp: 2026-06-19T06:19:56+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: git status --short
+---- output ----
+ M .agent/RUN_LOG.md
+ M .agent/execplans/chapters-07-12.md
+ M README.md
+ M chapters/ch11_ode_initial_value/README.md
+ M chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py
+ M docs/README.md
+ M src/py_sc/__init__.py
+ M src/py_sc/ode_ivp.py
+ M tests/test_ode_ivp.py
+?? .agent/execplans/chapter-06-direct-methods.md
+?? .agent/logs/command-2026-06-19T06-19-34-08-00-98244.log
+?? .agent/logs/command-2026-06-19T06-19-34-08-00-98246.log
+?? .agent/logs/command-2026-06-19T06-19-34-08-00-98280.log
+?? .agent/logs/command-2026-06-19T06-19-41-08-00-98802.log
+?? .agent/logs/command-2026-06-19T06-19-56-08-00-98864.log
+?? .agent/logs/command-2026-06-19T06-19-56-08-00-98882.log
+?? .agent/logs/command-2026-06-19T06-19-56-08-00-98883.log
+?? chapters/ch06_direct_linear_systems/
+?? chapters/ch11_ode_initial_value/notebooks/02_adaptive_step_control.ipynb
+?? src/py_sc/direct_linear.py
+?? tests/test_direct_linear.py

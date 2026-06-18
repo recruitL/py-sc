@@ -64,7 +64,7 @@ py-sc/
 | 第八章 | 非线性方程求根 | 新增建设：区间扫描、二分法、不动点迭代、Aitken 加速、Steffensen 方法、Newton、阻尼 Newton、重根修正、弦截法、Müller 法、多项式根和局部收敛条件 |
 | 第九章 | 非线性方程组解法 | 新增建设：向量不动点迭代、多元 Newton 法、阻尼 Newton、弦 Newton、有限差分 Jacobian、Broyden、参数延拓、残差范数和奇异 Jacobian 失败情形 |
 | 第十章 | 特征值计算 | 新增建设：Rayleigh 商、特征残差、幂法、带位移反幂法、Rayleigh 商迭代、对称 Jacobi 旋转和 QR 特征值迭代 |
-| 第十一章 | 常微分方程初值问题 | 建设中：显式 Euler、Heun、中点法、经典 RK4、固定步长求解、全局误差和观测收敛阶 |
+| 第十一章 | 常微分方程初值问题 | 建设中：显式 Euler、Heun、中点法、经典 RK4、固定步长求解、全局误差、观测收敛阶、自适应 Heun-Euler 和嵌入式误差控制 |
 
 ## 阅读顺序
 
@@ -118,6 +118,7 @@ py-sc/
 46. `chapters/ch10_eigenvalue_methods/notebooks/02_jacobi_and_qr_eigenvalues.ipynb`
 47. `chapters/ch11_ode_initial_value/README.md`
 48. `chapters/ch11_ode_initial_value/notebooks/01_euler_and_runge_kutta.ipynb`
+49. `chapters/ch11_ode_initial_value/notebooks/02_adaptive_step_control.ipynb`
 
 运行脚本示例：
 

@@ -1208,3 +1208,54 @@ Notebook 结构检查
 
 [2026-06-19T06:16:08+08:00] [CH11] [VERIFY]
 11.1 Euler 方法与 Runge-Kutta 方法已完成并通过自检：编译、章节脚本、`tests/test_ode_ivp.py` 9 passed、Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。
+
+[2026-06-19T06:17:26+08:00] [CH11] [CHECKPOINT]
+第11章 11.1 checkpoint 提交完成：`915b68c50a492ea7ff7a9592db05e13cb378399f`（`checkpoint(ch11): add Euler and Runge-Kutta IVP methods`）。
+
+[2026-06-19T06:17:26+08:00] [CH11] [START]
+开始第11章 11.2 自适应步长与误差控制。计划扩展 IVP 公共模块、脚本、测试和 Notebook，并在自检通过后创建 11.2 checkpoint。
+
+[2026-06-19T06:19:34+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/ode_ivp.py chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py tests/test_ode_ivp.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-19-34-08-00-98244.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:19:34+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-19-34-08-00-98246.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:19:34+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_ode_ivp.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-19-34-08-00-98280.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:19:41+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-19-41-08-00-98802.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:19:56+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-19-56-08-00-98883.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:19:56+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-19-56-08-00-98882.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:19:56+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T06-19-56-08-00-98864.log`
+摘要：命令执行成功。
+
+[2026-06-19T06:20:03+08:00] [CH11] [VERIFY]
+11.2 自适应步长与误差控制已完成并通过自检：编译、章节脚本、`tests/test_ode_ivp.py` 13 passed、第11章两个 Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。

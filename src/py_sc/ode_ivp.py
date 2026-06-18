@@ -23,6 +23,21 @@ class ODEResult:
     step_size: float
 
 
+@dataclass(frozen=True)
+class AdaptiveODEResult:
+    """自适应步长初值问题求解结果。"""
+
+    times: np.ndarray
+    values: np.ndarray
+    method: str
+    accepted_steps: int
+    rejected_steps: int
+    step_sizes: np.ndarray
+    error_estimates: np.ndarray
+    absolute_tolerance: float
+    relative_tolerance: float
+
+
 def euler_step(rhs: RHSFunction, time: float, state: np.ndarray | list[float] | tuple[float, ...] | float, step_size: float) -> np.ndarray:
     """显式 Euler 单步。"""
 
@@ -67,6 +82,23 @@ def rk4_step(rhs: RHSFunction, time: float, state: np.ndarray | list[float] | tu
     return y + h * (k1 + 2.0 * k2 + 2.0 * k3 + k4) / 6.0
 
 
+def heun_euler_embedded_step(
+    rhs: RHSFunction,
+    time: float,
+    state: np.ndarray | list[float] | tuple[float, ...] | float,
+    step_size: float,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """返回 Heun 高阶值、Euler 低阶值和二者差值。"""
+
+    y = _as_state(state)
+    h = _validate_step_size(step_size)
+    f0 = _as_rhs_value(rhs(float(time), y), y.size)
+    euler = y + h * f0
+    f1 = _as_rhs_value(rhs(float(time) + h, euler), y.size)
+    heun = y + 0.5 * h * (f0 + f1)
+    return heun, euler, heun - euler
+
+
 def solve_ivp_fixed_step(
     rhs: RHSFunction,
     t_span: tuple[float, float],
@@ -96,6 +128,83 @@ def solve_ivp_fixed_step(
         values=np.vstack(values),
         method=method_name,
         step_size=h,
+    )
+
+
+def solve_ivp_adaptive_heun(
+    rhs: RHSFunction,
+    t_span: tuple[float, float],
+    initial: np.ndarray | list[float] | tuple[float, ...] | float,
+    initial_step: float,
+    absolute_tolerance: float = 1e-6,
+    relative_tolerance: float = 1e-3,
+    min_step: float = 1e-12,
+    max_step: float | None = None,
+    safety: float = 0.9,
+    max_steps: int = 100000,
+) -> AdaptiveODEResult:
+    """用 Heun-Euler 嵌入式误差估计自适应求解初值问题。"""
+
+    t0, t_end = _validate_time_span(t_span)
+    step = _validate_step_size(initial_step)
+    min_step = _validate_step_size(min_step)
+    if max_step is None:
+        max_step = t_end - t0
+    max_step = _validate_step_size(max_step)
+    if min_step > max_step:
+        raise ValueError("min_step must be no larger than max_step")
+    absolute_tolerance = _validate_tolerance(absolute_tolerance, "absolute_tolerance")
+    relative_tolerance = _validate_tolerance(relative_tolerance, "relative_tolerance")
+    safety = float(safety)
+    if not 0.0 < safety < 1.0:
+        raise ValueError("safety must be between 0 and 1")
+    max_steps = _validate_positive_int(max_steps, "max_steps")
+
+    y = _as_state(initial)
+    time = t0
+    step = min(step, max_step, t_end - time)
+    times = [time]
+    values = [y.copy()]
+    accepted_steps = 0
+    rejected_steps = 0
+    accepted_step_sizes = []
+    accepted_errors = []
+    attempts = 0
+
+    while time < t_end - 10.0 * np.finfo(float).eps * max(1.0, abs(t_end)):
+        if attempts >= max_steps:
+            raise RuntimeError("maximum number of adaptive steps exceeded")
+        attempts += 1
+        step = min(step, max_step, t_end - time)
+        if step < min_step:
+            raise RuntimeError("adaptive step size fell below min_step")
+
+        high, low, error = heun_euler_embedded_step(rhs, time, y, step)
+        error_norm = _scaled_error_norm(error, y, high, absolute_tolerance, relative_tolerance)
+        if error_norm <= 1.0:
+            time = min(t_end, time + step)
+            y = high
+            times.append(time)
+            values.append(y.copy())
+            accepted_steps += 1
+            accepted_step_sizes.append(step)
+            accepted_errors.append(error_norm)
+            step = min(max_step, step * _step_factor(error_norm, safety, order=2))
+        else:
+            rejected_steps += 1
+            step *= _step_factor(error_norm, safety, order=2)
+            step = max(min_step, min(step, max_step))
+
+    return AdaptiveODEResult(
+        times=np.array(times, dtype=float),
+        values=np.vstack(values),
+        method="adaptive_heun",
+        accepted_steps=accepted_steps,
+        rejected_steps=rejected_steps,
+        step_sizes=np.array(accepted_step_sizes, dtype=float),
+        error_estimates=np.array(accepted_errors, dtype=float),
+        absolute_tolerance=absolute_tolerance,
+        relative_tolerance=relative_tolerance,
     )
 
 
@@ -165,6 +274,20 @@ def _validate_step_size(step_size: float) -> float:
     return h
 
 
+def _validate_tolerance(value: float, name: str) -> float:
+    tolerance = float(value)
+    if tolerance <= 0.0:
+        raise ValueError(f"{name} must be positive")
+    return tolerance
+
+
+def _validate_positive_int(value: int, name: str) -> int:
+    value = int(value)
+    if value <= 0:
+        raise ValueError(f"{name} must be positive")
+    return value
+
+
 def _validate_time_span(t_span: tuple[float, float]) -> tuple[float, float]:
     if len(t_span) != 2:
         raise ValueError("t_span must contain exactly two values")
@@ -187,3 +310,21 @@ def _resolve_step_method(method: str | StepFunction) -> tuple[StepFunction, str]
     if key not in methods:
         raise ValueError(f"unknown method: {method}")
     return methods[key], key
+
+
+def _scaled_error_norm(
+    error: np.ndarray,
+    previous: np.ndarray,
+    candidate: np.ndarray,
+    absolute_tolerance: float,
+    relative_tolerance: float,
+) -> float:
+    scale = absolute_tolerance + relative_tolerance * np.maximum(np.abs(previous), np.abs(candidate))
+    return float(np.sqrt(np.mean((error / scale) ** 2)))
+
+
+def _step_factor(error_norm: float, safety: float, order: int) -> float:
+    if error_norm == 0.0:
+        return 5.0
+    exponent = 1.0 / (order + 1.0)
+    return float(np.clip(safety * error_norm ** (-exponent), 0.2, 5.0))
