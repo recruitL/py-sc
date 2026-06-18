@@ -365,6 +365,30 @@ Notebook 结构检查
 日志：`.agent/logs/command-2026-06-19T05-23-42-08-00-41197.log`、`.agent/logs/command-2026-06-19T05-23-42-08-00-41198.log`、`.agent/logs/command-2026-06-19T05-23-42-08-00-41201.log`、`.agent/logs/command-2026-06-19T05-23-42-08-00-41211.log`、`.agent/logs/command-2026-06-19T05-23-48-08-00-41676.log`、`.agent/logs/command-2026-06-19T05-23-56-08-00-41985.log`、`.agent/logs/command-2026-06-19T05-23-56-08-00-41986.log`。
 下一步：创建 8.3 checkpoint commit。
 
+[2026-06-19T05:25:36+08:00] [CH08] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch08): add Newton root methods"`
+退出码：0
+摘要：第8章 8.3 checkpoint `845c5df` 已创建。
+下一步：开始 8.4 弦截法与 Müller 抛物线法。
+
+[2026-06-19T05:25:36+08:00] [CH08] [START]
+开始第8章 8.4“弦截法与 Müller 抛物线法”。当前原子工作单元为无导数开方法及配套 Notebook、脚本和测试。
+下一步：实现公共函数并补充教学 Notebook。
+
+[2026-06-19T05:28:32+08:00] [CH08] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import secant_method, muller_method"`
+`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+`python -m pytest tests/test_nonlinear_roots.py`
+`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+`nbclient` 执行 `notebooks/04_secant_and_parabolic_methods.ipynb`
+Notebook 结构检查
+`git diff --check`
+退出码：0
+摘要：8.4 弦截法/Müller 法原子工作单元通过导入、脚本、16 个 ch08 测试、语法检查、Notebook 执行、Notebook 结构检查和 diff 空白检查。Müller 公共实现保持实数标量根范围，负判别式显式失败。
+日志：`.agent/logs/command-2026-06-19T05-28-12-08-00-45679.log`、`.agent/logs/command-2026-06-19T05-28-12-08-00-45692.log`、`.agent/logs/command-2026-06-19T05-28-12-08-00-45681.log`、`.agent/logs/command-2026-06-19T05-28-12-08-00-45680.log`、`.agent/logs/command-2026-06-19T05-28-17-08-00-46155.log`、`.agent/logs/command-2026-06-19T05-28-26-08-00-46463.log`、`.agent/logs/command-2026-06-19T05-28-26-08-00-46465.log`。
+下一步：创建 8.4 checkpoint commit。
+
 [2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
 命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 退出码：0
@@ -471,4 +495,46 @@ Notebook 结构检查
 命令：`python -`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-56-08-00-41985.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:28:12+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-12-08-00-45680.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:28:12+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import secant_method, muller_method; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-12-08-00-45679.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:28:12+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-12-08-00-45692.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:28:12+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-12-08-00-45681.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:28:17+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-17-08-00-46155.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:28:26+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-26-08-00-46463.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:28:26+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-28-26-08-00-46465.log`
 摘要：命令执行成功。

@@ -21,6 +21,8 @@ from py_sc import (  # noqa: E402
     fixed_point_iteration,
     modified_newton_method,
     newton_method,
+    muller_method,
+    secant_method,
     steffensen_method,
 )
 
@@ -71,6 +73,10 @@ def main() -> None:
         f"plain_iterations={multiple_plain.iterations}",
         f"modified_iterations={multiple_modified.iterations}",
     )
+    secant = secant_method(func, 0.0, 1.0, tolerance=1e-12)
+    muller = muller_method(lambda x: x**3 - x - 2.0, 0.0, 1.0, 2.0, tolerance=1e-12)
+    print(f"secant cos fixed point: root={secant.root:.12f}, iterations={secant.iterations}")
+    print(f"Muller cubic: root={muller.root:.12f}, iterations={muller.iterations}")
 
     polynomial = lambda x: (x - 1.0) * (x + 0.5) * (x - 2.0)
     print("polynomial brackets:", find_sign_change_brackets(polynomial, -1.0, 2.5, 35))

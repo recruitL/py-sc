@@ -81,7 +81,9 @@ from .nonlinear_roots import (
     find_sign_change_brackets,
     fixed_point_iteration,
     modified_newton_method,
+    muller_method,
     newton_method,
+    secant_method,
     steffensen_method,
 )
 from .integration import (
@@ -177,6 +179,7 @@ __all__ = [
     "midpoint_difference",
     "modified_newton_method",
     "monte_carlo_integrate",
+    "muller_method",
     "natural_cubic_spline_integral",
     "natural_cubic_spline_derivative",
     "newton_divided_differences",
@@ -203,6 +206,7 @@ __all__ = [
     "richardson_derivative",
     "richardson_extrapolate",
     "scan_sor_omega",
+    "secant_method",
     "romberg_integrate",
     "second_derivative_endpoint_three_point",
     "second_derivative_five_point",

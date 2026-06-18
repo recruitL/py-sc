@@ -12,7 +12,9 @@ from py_sc import (
     find_sign_change_brackets,
     fixed_point_iteration,
     modified_newton_method,
+    muller_method,
     newton_method,
+    secant_method,
     steffensen_method,
 )
 
@@ -114,3 +116,29 @@ def test_modified_newton_handles_known_multiple_root() -> None:
 def test_newton_rejects_zero_derivative() -> None:
     with pytest.raises(ValueError):
         newton_method(lambda x: x**3 + 1.0, lambda x: 3.0 * x**2, 0.0)
+
+
+def test_secant_method_solves_cos_fixed_point_equation() -> None:
+    result = secant_method(lambda x: math.cos(x) - x, 0.0, 1.0, tolerance=1e-12)
+
+    assert result.converged
+    assert abs(result.root - 0.7390851332151607) < 1e-12
+    assert result.iterations < 10
+
+
+def test_secant_rejects_repeated_function_values() -> None:
+    with pytest.raises(ValueError):
+        secant_method(lambda x: x**2 + 1.0, -1.0, 1.0)
+
+
+def test_muller_method_solves_cubic_equation() -> None:
+    result = muller_method(lambda x: x**3 - x - 2.0, 0.0, 1.0, 2.0, tolerance=1e-12)
+
+    assert result.converged
+    assert abs(result.root - 1.5213797068045676) < 1e-11
+    assert result.residual < 1e-11
+
+
+def test_real_muller_rejects_negative_discriminant() -> None:
+    with pytest.raises(ValueError):
+        muller_method(lambda x: x**2 + 1.0, -1.0, 0.0, 1.0)

@@ -292,6 +292,106 @@ def modified_newton_method(
     )
 
 
+def secant_method(
+    func: ScalarFunction,
+    x0: float,
+    x1: float,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    denominator_tolerance: float = 1e-14,
+) -> ScalarRootResult:
+    """弦截法求解标量非线性方程。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    denominator_tolerance = _validate_tolerance(denominator_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x_prev = float(x0)
+    x_curr = float(x1)
+    f_prev = _call_scalar(func, x_prev)
+    f_curr = _call_scalar(func, x_curr)
+    history = [x_prev, x_curr]
+    converged = abs(f_curr) <= tolerance
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        if converged:
+            break
+        denominator = f_curr - f_prev
+        if abs(denominator) <= denominator_tolerance:
+            raise ValueError("secant denominator is too small")
+        x_next = x_curr - f_curr * (x_curr - x_prev) / denominator
+        f_next = _call_scalar(func, x_next)
+        history.append(x_next)
+        iterations = k
+        step = abs(x_next - x_curr)
+        if abs(f_next) <= tolerance or step <= tolerance * max(1.0, abs(x_next)):
+            converged = True
+            x_curr = x_next
+            f_curr = f_next
+            break
+        x_prev, f_prev = x_curr, f_curr
+        x_curr, f_curr = x_next, f_next
+
+    return ScalarRootResult(
+        root=float(x_curr),
+        iterations=iterations,
+        converged=converged,
+        residual=float(abs(f_curr)),
+        history=np.array(history, dtype=float),
+    )
+
+
+def muller_method(
+    func: ScalarFunction,
+    x0: float,
+    x1: float,
+    x2: float,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    denominator_tolerance: float = 1e-14,
+) -> ScalarRootResult:
+    """实数 Müller 抛物线法求解标量非线性方程。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    denominator_tolerance = _validate_tolerance(denominator_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    history = [float(x0), float(x1), float(x2)]
+    x_prev2, x_prev1, x_curr = history
+    f_curr = _call_scalar(func, x_curr)
+    converged = abs(f_curr) <= tolerance
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        if converged:
+            break
+        x_next = _muller_next(
+            func,
+            x_prev2,
+            x_prev1,
+            x_curr,
+            denominator_tolerance,
+        )
+        f_next = _call_scalar(func, x_next)
+        history.append(x_next)
+        iterations = k
+        step = abs(x_next - x_curr)
+        if abs(f_next) <= tolerance or step <= tolerance * max(1.0, abs(x_next)):
+            converged = True
+            x_curr = x_next
+            f_curr = f_next
+            break
+        x_prev2, x_prev1, x_curr = x_prev1, x_curr, x_next
+        f_curr = f_next
+
+    return ScalarRootResult(
+        root=float(x_curr),
+        iterations=iterations,
+        converged=converged,
+        residual=float(abs(f_curr)),
+        history=np.array(history, dtype=float),
+    )
+
+
 def _validate_interval(a: float, b: float) -> tuple[float, float]:
     a = float(a)
     b = float(b)
@@ -403,3 +503,39 @@ def _backtracking_newton_step(
             return x_trial
         damping *= damping_factor
     raise ValueError("damped Newton failed to reduce residual")
+
+
+def _muller_next(
+    func: ScalarFunction,
+    x0: float,
+    x1: float,
+    x2: float,
+    denominator_tolerance: float,
+) -> float:
+    f0 = _call_scalar(func, x0)
+    f1 = _call_scalar(func, x1)
+    f2 = _call_scalar(func, x2)
+    h0 = x1 - x0
+    h1 = x2 - x1
+    if abs(h0) <= denominator_tolerance or abs(h1) <= denominator_tolerance:
+        raise ValueError("Muller nodes must be distinct")
+    delta0 = (f1 - f0) / h0
+    delta1 = (f2 - f1) / h1
+    a = (delta1 - delta0) / (h1 + h0)
+    b = a * h1 + delta1
+    c = f2
+    if abs(a) <= denominator_tolerance:
+        if abs(b) <= denominator_tolerance:
+            raise ValueError("Muller linear denominator is too small")
+        return float(x2 - c / b)
+    discriminant = b * b - 4.0 * a * c
+    if discriminant < 0.0:
+        raise ValueError("real Muller method encountered a negative discriminant")
+    sqrt_discriminant = float(np.sqrt(discriminant))
+    denominator = b + np.copysign(sqrt_discriminant, b if b != 0.0 else 1.0)
+    alternate = b - np.copysign(sqrt_discriminant, b if b != 0.0 else 1.0)
+    if abs(denominator) <= denominator_tolerance:
+        denominator = alternate
+    if abs(denominator) <= denominator_tolerance:
+        raise ValueError("Muller denominator is too small")
+    return float(x2 - 2.0 * c / denominator)
