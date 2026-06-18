@@ -6,7 +6,9 @@ import numpy as np
 import pytest
 
 from py_sc import (
+    broyden_system_method,
     chord_newton_system_method,
+    parameter_continuation,
     damped_newton_system_method,
     finite_difference_jacobian,
     fixed_point_system_iteration,
@@ -96,3 +98,28 @@ def test_chord_newton_system_method_uses_fixed_jacobian() -> None:
     assert result.converged
     assert np.allclose(result.solution, expected, atol=1e-8)
     assert result.iterations >= 2
+
+
+def test_broyden_system_method_solves_circle_line_system() -> None:
+    def func(x: np.ndarray) -> np.ndarray:
+        return np.array([x[0] ** 2 + x[1] ** 2 - 1.0, x[0] - x[1]])
+
+    result = broyden_system_method(func, [0.8, 0.6], tolerance=1e-10, max_iterations=30)
+    expected = np.array([1.0 / math.sqrt(2.0), 1.0 / math.sqrt(2.0)])
+
+    assert result.converged
+    assert np.allclose(result.solution, expected, atol=1e-8)
+    assert result.residual_norm < 1e-8
+
+
+def test_parameter_continuation_tracks_solution_branch() -> None:
+    def system(parameter: float, x: np.ndarray) -> np.ndarray:
+        return np.array([x[0] ** 2 - parameter, x[1] - parameter])
+
+    parameters = np.array([1.0, 1.5, 2.0, 2.5])
+    result = parameter_continuation(system, parameters, initial=[1.0, 1.0], tolerance=1e-10)
+
+    assert result.converged
+    assert np.allclose(result.solutions[:, 0], np.sqrt(parameters), atol=1e-8)
+    assert np.allclose(result.solutions[:, 1], parameters, atol=1e-8)
+    assert np.max(result.residual_norms) < 1e-8

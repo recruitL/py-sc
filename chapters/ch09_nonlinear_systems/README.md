@@ -26,7 +26,7 @@ $$
 
 1. `notebooks/01_fixed_point_and_newton_systems.ipynb`
 2. `notebooks/02_damped_and_chord_newton.ipynb`
-3. 后续将继续补充 Broyden 与延拓思想。
+3. `notebooks/03_broyden_and_continuation.ipynb`
 
 ## Notebook 对照表
 
@@ -34,7 +34,7 @@ $$
 | --- | --- | --- |
 | `01_fixed_point_and_newton_systems.ipynb` | 向量不动点迭代、多元 Newton 法、残差和奇异 Jacobian。 | 已建设 |
 | `02_damped_and_chord_newton.ipynb` | 阻尼 Newton、弦 Newton、有限差分 Jacobian。 | 已建设 |
-| `03_broyden_and_continuation.ipynb` | Broyden 拟 Newton、参数延拓和路径跟踪入口。 | 待建设 |
+| `03_broyden_and_continuation.ipynb` | Broyden 拟 Newton、参数延拓和路径跟踪入口。 | 已建设 |
 
 ## 可运行脚本
 
@@ -59,7 +59,9 @@ src/py_sc/nonlinear_systems.py
 * `finite_difference_jacobian`
 * `damped_newton_system_method`
 * `chord_newton_system_method`
+* `broyden_system_method`
+* `parameter_continuation`
 
 ## 本章小结
 
-非线性方程组方法把标量求根的“导数”推广为 Jacobian 矩阵。向量不动点迭代形式简单，但依赖映射的局部压缩性；Newton 法通常收敛更快，但每步都需要组装并求解线性化方程。阻尼 Newton 用回溯增强远离根时的稳健性；弦 Newton 固定 Jacobian 以减少分解成本；有限差分 Jacobian 则在解析导数不可得时提供近似入口。第九章后续内容将继续讨论 Broyden 拟 Newton 和延拓策略。
+非线性方程组方法把标量求根的“导数”推广为 Jacobian 矩阵。向量不动点迭代形式简单，但依赖映射的局部压缩性；Newton 法通常收敛更快，但每步都需要组装并求解线性化方程。阻尼 Newton 用回溯增强远离根时的稳健性；弦 Newton 固定 Jacobian 以减少分解成本；有限差分 Jacobian 则在解析导数不可得时提供近似入口。Broyden 方法用迭代信息更新 Jacobian 近似，参数延拓用上一参数的解作为下一参数初值，二者都服务于“少算 Jacobian、用好已有路径信息”的目标。

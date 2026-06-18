@@ -93,12 +93,15 @@ from .nonlinear_roots import (
     synthetic_division,
 )
 from .nonlinear_systems import (
+    ContinuationResult,
     NonlinearSystemResult,
+    broyden_system_method,
     chord_newton_system_method,
     damped_newton_system_method,
     finite_difference_jacobian,
     fixed_point_system_iteration,
     newton_system_method,
+    parameter_continuation,
 )
 from .integration import (
     AdaptiveSimpsonResult,
@@ -134,6 +137,7 @@ from .integration import (
 
 __all__ = [
     "AdaptiveSimpsonResult",
+    "ContinuationResult",
     "MonteCarloResult",
     "NaturalCubicSpline",
     "LinearIterationResult",
@@ -153,6 +157,7 @@ __all__ = [
     "bisection_method",
     "block_gauss_seidel_iteration",
     "block_jacobi_iteration",
+    "broyden_system_method",
     "central_difference",
     "chebyshev_fit_function",
     "chebyshev_nodes",
@@ -214,6 +219,7 @@ __all__ = [
     "open_newton_cotes_weights",
     "pade_eval",
     "pade_from_taylor",
+    "parameter_continuation",
     "pchip_interpolate",
     "pchip_slopes",
     "piecewise_cubic_hermite_interpolate",

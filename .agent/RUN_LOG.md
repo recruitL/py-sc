@@ -487,6 +487,30 @@ Notebook 结构检查
 日志：`.agent/logs/command-2026-06-19T05-49-14-08-00-64842.log`、`.agent/logs/command-2026-06-19T05-49-14-08-00-64839.log`、`.agent/logs/command-2026-06-19T05-49-14-08-00-64838.log`、`.agent/logs/command-2026-06-19T05-49-14-08-00-64850.log`、`.agent/logs/command-2026-06-19T05-49-21-08-00-65413.log`、`.agent/logs/command-2026-06-19T05-49-32-08-00-65631.log`、`.agent/logs/command-2026-06-19T05-49-32-08-00-65637.log`。
 下一步：创建 9.2 checkpoint commit。
 
+[2026-06-19T05:51:06+08:00] [CH09] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch09): add damped and chord Newton methods"`
+退出码：0
+摘要：第9章 9.2 checkpoint `cbabc3d` 已创建。
+下一步：开始 9.3 Broyden 拟 Newton 和参数延拓入口。
+
+[2026-06-19T05:51:06+08:00] [CH09] [START]
+开始第9章 9.3“Broyden 拟 Newton 和延拓入口”。当前原子工作单元为 Broyden 方法、参数延拓及配套 Notebook、脚本和测试。
+下一步：实现公共函数并补充教学 Notebook。
+
+[2026-06-19T05:53:49+08:00] [CH09] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import broyden_system_method, parameter_continuation"`
+`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+`python -m pytest tests/test_nonlinear_systems.py`
+`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+`nbclient` 执行 `notebooks/03_broyden_and_continuation.ipynb`
+Notebook 结构检查
+`git diff --check`
+退出码：0
+摘要：9.3 Broyden 拟 Newton和参数延拓原子工作单元通过导入、脚本、8 个 ch09 测试、语法检查、Notebook 执行、Notebook 结构检查和 diff 空白检查。
+日志：`.agent/logs/command-2026-06-19T05-53-20-08-00-68776.log`、`.agent/logs/command-2026-06-19T05-53-20-08-00-68787.log`、`.agent/logs/command-2026-06-19T05-53-20-08-00-68795.log`、`.agent/logs/command-2026-06-19T05-53-20-08-00-68826.log`、`.agent/logs/command-2026-06-19T05-53-29-08-00-69508.log`、`.agent/logs/command-2026-06-19T05-53-39-08-00-69556.log`、`.agent/logs/command-2026-06-19T05-53-39-08-00-69558.log`。
+下一步：创建 9.3 checkpoint commit。
+
 [2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
 命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 退出码：0
@@ -827,4 +851,46 @@ Notebook 结构检查
 命令：`git diff --check`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-49-32-08-00-65637.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:53:20+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import broyden_system_method, parameter_continuation; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-20-08-00-68776.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:53:20+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-20-08-00-68787.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:53:20+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-20-08-00-68826.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:53:20+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-20-08-00-68795.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:53:29+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-29-08-00-69508.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:53:39+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-39-08-00-69556.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:53:39+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-39-08-00-69558.log`
 摘要：命令执行成功。

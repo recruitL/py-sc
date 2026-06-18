@@ -10,6 +10,7 @@ import numpy as np
 
 VectorFunction = Callable[[np.ndarray], np.ndarray]
 MatrixFunction = Callable[[np.ndarray], np.ndarray]
+ParameterizedSystem = Callable[[float, np.ndarray], np.ndarray]
 
 
 @dataclass(frozen=True)
@@ -22,6 +23,16 @@ class NonlinearSystemResult:
     residual_norm: float
     history: np.ndarray
     residual_history: np.ndarray
+
+
+@dataclass(frozen=True)
+class ContinuationResult:
+    """参数延拓路径结果。"""
+
+    parameters: np.ndarray
+    solutions: np.ndarray
+    residual_norms: np.ndarray
+    converged: bool
 
 
 def fixed_point_system_iteration(
@@ -250,6 +261,113 @@ def chord_newton_system_method(
         residual_norm=float(residual_history[-1]),
         history=np.vstack(history),
         residual_history=np.array(residual_history, dtype=float),
+    )
+
+
+def broyden_system_method(
+    func: VectorFunction,
+    initial: np.ndarray | list[float] | tuple[float, ...],
+    initial_jacobian: np.ndarray | None = None,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    update_tolerance: float = 1e-14,
+) -> NonlinearSystemResult:
+    """Broyden 拟 Newton 法求解非线性方程组。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    update_tolerance = _validate_tolerance(update_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x_old = _as_vector(initial, "initial")
+    residual = _as_vector(func(x_old), "function value")
+    _validate_system_dimension(x_old, residual)
+    if initial_jacobian is None:
+        approximate_jacobian = finite_difference_jacobian(func, x_old)
+    else:
+        approximate_jacobian = _as_matrix(initial_jacobian, "initial_jacobian")
+    if approximate_jacobian.shape != (x_old.size, x_old.size):
+        raise ValueError("initial_jacobian must be square with shape (n, n)")
+
+    history = [x_old.copy()]
+    residual_history = [float(np.linalg.norm(residual, ord=2))]
+    converged = residual_history[-1] <= tolerance
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        if converged:
+            break
+        try:
+            step = np.linalg.solve(approximate_jacobian, -residual)
+        except np.linalg.LinAlgError as exc:
+            raise ValueError("Broyden linear system is singular") from exc
+        x_new = x_old + step
+        new_residual = _as_vector(func(x_new), "function value")
+        _validate_system_dimension(x_new, new_residual)
+        residual_norm = float(np.linalg.norm(new_residual, ord=2))
+        history.append(x_new.copy())
+        residual_history.append(residual_norm)
+        iterations = k
+        if residual_norm <= tolerance or np.linalg.norm(step, ord=2) <= tolerance * max(1.0, np.linalg.norm(x_new, ord=2)):
+            converged = True
+            x_old = x_new
+            residual = new_residual
+            break
+        y = new_residual - residual
+        denominator = float(np.dot(step, step))
+        if denominator <= update_tolerance:
+            raise ValueError("Broyden update step is too small")
+        approximate_jacobian = approximate_jacobian + np.outer(y - approximate_jacobian @ step, step) / denominator
+        x_old = x_new
+        residual = new_residual
+
+    return NonlinearSystemResult(
+        solution=x_old.copy(),
+        iterations=iterations,
+        converged=bool(converged),
+        residual_norm=float(residual_history[-1]),
+        history=np.vstack(history),
+        residual_history=np.array(residual_history, dtype=float),
+    )
+
+
+def parameter_continuation(
+    system: ParameterizedSystem,
+    parameters: np.ndarray | list[float] | tuple[float, ...],
+    initial: np.ndarray | list[float] | tuple[float, ...],
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+) -> ContinuationResult:
+    """用前一参数的解作为下一参数初值进行简单延拓。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    parameter_values = np.asarray(parameters, dtype=float)
+    if parameter_values.ndim != 1 or parameter_values.size == 0:
+        raise ValueError("parameters must be a non-empty one-dimensional array")
+    current = _as_vector(initial, "initial")
+    solutions: list[np.ndarray] = []
+    residual_norms: list[float] = []
+    converged = True
+
+    for parameter in parameter_values:
+        func = lambda x, p=parameter: system(float(p), x)
+        jacobian = lambda x, f=func: finite_difference_jacobian(f, x)
+        result = damped_newton_system_method(
+            func,
+            jacobian,
+            current,
+            tolerance=tolerance,
+            max_iterations=max_iterations,
+        )
+        solutions.append(result.solution.copy())
+        residual_norms.append(result.residual_norm)
+        converged = converged and result.converged
+        current = result.solution
+
+    return ContinuationResult(
+        parameters=parameter_values,
+        solutions=np.vstack(solutions),
+        residual_norms=np.array(residual_norms, dtype=float),
+        converged=bool(converged),
     )
 
 

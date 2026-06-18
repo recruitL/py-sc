@@ -14,11 +14,13 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from py_sc import (  # noqa: E402
+    broyden_system_method,
     chord_newton_system_method,
     damped_newton_system_method,
     finite_difference_jacobian,
     fixed_point_system_iteration,
     newton_system_method,
+    parameter_continuation,
 )
 
 
@@ -78,6 +80,24 @@ def main() -> None:
         f"iterations={damped.iterations}",
         f"residual={damped.residual_norm:.3e}",
     )
+
+    broyden = broyden_system_method(func, [0.8, 0.6], tolerance=1e-10)
+    print(
+        "Broyden:",
+        f"solution={np.array2string(broyden.solution, precision=12)}",
+        f"iterations={broyden.iterations}",
+        f"residual={broyden.residual_norm:.3e}",
+    )
+
+    continuation = parameter_continuation(
+        lambda parameter, x: np.array([x[0] ** 2 - parameter, x[1] - parameter]),
+        parameters=[1.0, 1.5, 2.0],
+        initial=[1.0, 1.0],
+        tolerance=1e-10,
+    )
+    print("continuation parameters:", continuation.parameters)
+    print("continuation solutions:")
+    print(np.array2string(continuation.solutions, precision=8))
 
 
 if __name__ == "__main__":

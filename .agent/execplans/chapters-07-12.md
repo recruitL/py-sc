@@ -1,14 +1,14 @@
 # ExecPlan：第 7—12 章连续建设
 
 状态：in_progress
-最后更新时间：2026-06-19T05:49:40+08:00
+最后更新时间：2026-06-19T05:53:49+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：8e933c7
+最后安全 commit：cbabc3d
 当前章节：第9章
-当前小节：9.2 阻尼 Newton、弦 Newton 和有限差分 Jacobian
-当前原子任务：9.2 自检完成，准备 checkpoint
-下一项具体动作：显式暂存第9章 9.2 相关文件并创建 `checkpoint(ch09): add damped and chord Newton methods`，继续排除第6章外部未提交文件。
+当前小节：9.3 Broyden 拟 Newton 和延拓入口
+当前原子任务：9.3 自检完成，准备 checkpoint
+下一项具体动作：显式暂存第9章 9.3 相关文件并创建 `checkpoint(ch09): add Broyden and continuation methods`，继续排除第6章外部未提交文件。
 阻塞问题：无
 
 ## 总体进度
@@ -17,7 +17,7 @@
 |---|---|---|---|---|
 | 第7章 | done | 章节自检完成 | 通过 | a3d823a |
 | 第8章 | done | 章节级自检完成 | 通过 | 5cf5e10 |
-| 第9章 | in_progress | 9.2 阻尼 Newton、弦 Newton 和有限差分 Jacobian | 9.2 通过最小自检 | 8e933c7 |
+| 第9章 | in_progress | 9.3 Broyden 拟 Newton 和延拓入口 | 9.3 通过最小自检 | cbabc3d |
 | 第10章 | pending | - | 未开始 | - |
 | 第11章 | pending | - | 未开始 | - |
 | 第12章 | pending | - | 未开始 | - |
@@ -56,14 +56,16 @@
 * 完成第9章 README 初稿、9.1 Notebook、章节脚本、`src/py_sc/nonlinear_systems.py` 中的向量不动点迭代和 Newton 法、`tests/test_nonlinear_systems.py` 中的 9.1 测试。
 * 创建第9章 9.1 checkpoint commit `8e933c7`。
 * 完成 9.2 Notebook、脚本更新、有限差分 Jacobian、阻尼 Newton、弦 Newton 和对应测试。
+* 创建第9章 9.2 checkpoint commit `cbabc3d`。
+* 完成 9.3 Notebook、脚本更新、Broyden 拟 Newton、参数延拓和对应测试。
 
 ### 正在处理
 
-* 第9章 9.2 checkpoint。
+* 第9章 9.3 checkpoint。
 
 ### 已修改但尚未验证
 
-* 无第9章 9.2 未验证修改。
+* 无第9章 9.3 未验证修改。
 
 ### 已通过的检查
 
@@ -153,6 +155,13 @@
 * `nbclient` 执行 `chapters/ch09_nonlinear_systems/notebooks/02_damped_and_chord_newton.ipynb`：通过。
 * Notebook 结构检查：第9章前两个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
 * `git diff --check`：通过。
+* `PYTHONPATH=src python -c "from py_sc import broyden_system_method, parameter_continuation"`：通过。
+* `python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`：通过。
+* `python -m pytest tests/test_nonlinear_systems.py`：8 passed。
+* `python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`：通过。
+* `nbclient` 执行 `chapters/ch09_nonlinear_systems/notebooks/03_broyden_and_continuation.ipynb`：通过。
+* Notebook 结构检查：第9章三个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
+* `git diff --check`：通过。
 
 ### 失败或未执行的检查
 
@@ -166,10 +175,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第9章 9.2 相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
-2. 创建 `checkpoint(ch09): add damped and chord Newton methods`。
+1. 暂存第9章 9.3 相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
+2. 创建 `checkpoint(ch09): add Broyden and continuation methods`。
 3. 记录 commit hash。
-4. 开始第9章 9.3 Broyden 拟 Newton 和延拓入口。
+4. 执行第9章章节级自检和修复。
 
 ### 恢复时应首先执行的命令
 
@@ -253,6 +262,13 @@ tail -80 .agent/RUN_LOG.md
 * `.agent/logs/command-2026-06-19T05-49-21-08-00-65413.log`
 * `.agent/logs/command-2026-06-19T05-49-32-08-00-65631.log`
 * `.agent/logs/command-2026-06-19T05-49-32-08-00-65637.log`
+* `.agent/logs/command-2026-06-19T05-53-20-08-00-68776.log`
+* `.agent/logs/command-2026-06-19T05-53-20-08-00-68787.log`
+* `.agent/logs/command-2026-06-19T05-53-20-08-00-68795.log`
+* `.agent/logs/command-2026-06-19T05-53-20-08-00-68826.log`
+* `.agent/logs/command-2026-06-19T05-53-29-08-00-69508.log`
+* `.agent/logs/command-2026-06-19T05-53-39-08-00-69556.log`
+* `.agent/logs/command-2026-06-19T05-53-39-08-00-69558.log`
 * `src/py_sc/iterative_linear.py`
 * `tests/test_iterative_linear.py`
 * `chapters/ch07_iterative_linear_systems/README.md`
@@ -274,6 +290,7 @@ tail -80 .agent/RUN_LOG.md
 * `chapters/ch09_nonlinear_systems/README.md`
 * `chapters/ch09_nonlinear_systems/notebooks/01_fixed_point_and_newton_systems.ipynb`
 * `chapters/ch09_nonlinear_systems/notebooks/02_damped_and_chord_newton.ipynb`
+* `chapters/ch09_nonlinear_systems/notebooks/03_broyden_and_continuation.ipynb`
 * `chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
 
 ## 第8章记录
