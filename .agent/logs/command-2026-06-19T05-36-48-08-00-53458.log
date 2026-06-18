@@ -1,0 +1,4 @@
+timestamp: 2026-06-19T05:36:48+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py
+---- output ----

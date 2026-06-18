@@ -1,0 +1,28 @@
+timestamp: 2026-06-19T05:39:01+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: git status --short
+---- output ----
+ M .agent/RUN_LOG.md
+ M .agent/execplans/chapters-07-12.md
+ M README.md
+ M chapters/ch08_nonlinear_roots/notebooks/02_fixed_point_acceleration.ipynb
+ M chapters/ch08_nonlinear_roots/notebooks/03_newton_methods.ipynb
+ M chapters/ch08_nonlinear_roots/notebooks/04_secant_and_parabolic_methods.ipynb
+ M chapters/ch08_nonlinear_roots/notebooks/05_polynomial_roots_extensions.ipynb
+ M docs/README.md
+ M src/py_sc/__init__.py
+?? .agent/execplans/chapter-06-direct-methods.md
+?? .agent/logs/command-2026-06-19T05-36-48-08-00-53440.log
+?? .agent/logs/command-2026-06-19T05-36-48-08-00-53458.log
+?? .agent/logs/command-2026-06-19T05-36-48-08-00-53461.log
+?? .agent/logs/command-2026-06-19T05-36-48-08-00-53473.log
+?? .agent/logs/command-2026-06-19T05-36-57-08-00-54136.log
+?? .agent/logs/command-2026-06-19T05-37-43-08-00-54291.log
+?? .agent/logs/command-2026-06-19T05-37-44-08-00-54309.log
+?? .agent/logs/command-2026-06-19T05-38-18-08-00-55426.log
+?? .agent/logs/command-2026-06-19T05-38-18-08-00-55427.log
+?? .agent/logs/command-2026-06-19T05-39-01-08-00-57299.log
+?? .agent/logs/command-2026-06-19T05-39-01-08-00-57301.log
+?? chapters/ch06_direct_linear_systems/
+?? src/py_sc/direct_linear.py
+?? tests/test_direct_linear.py

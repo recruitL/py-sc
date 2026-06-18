@@ -1,0 +1,14 @@
+timestamp: 2026-06-19T05:39:01+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: git diff --stat
+---- output ----
+ .agent/RUN_LOG.md                                  | 109 +++++++++++++++++++++
+ .agent/execplans/chapters-07-12.md                 |  23 ++---
+ README.md                                          |  41 +++++---
+ .../notebooks/02_fixed_point_acceleration.ipynb    |  55 ++---------
+ .../notebooks/03_newton_methods.ipynb              |  55 ++---------
+ .../04_secant_and_parabolic_methods.ipynb          |  46 +--------
+ .../notebooks/05_polynomial_roots_extensions.ipynb |  55 ++---------
+ docs/README.md                                     |  11 ++-
+ src/py_sc/__init__.py                              |  42 ++++++++
+ 9 files changed, 220 insertions(+), 217 deletions(-)

@@ -1,14 +1,14 @@
 # ExecPlan：第 7—12 章连续建设
 
 状态：in_progress
-最后更新时间：2026-06-19T05:34:23+08:00
+最后更新时间：2026-06-19T05:39:08+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：a5d764a
+最后安全 commit：73e93a1
 当前章节：第8章
-当前小节：8.5/8.6 多项式根拓展
-当前原子任务：8.5/8.6 自检完成，准备 checkpoint
-下一项具体动作：显式暂存第8章 8.5/8.6 相关文件并创建 `checkpoint(ch08): add polynomial root extensions`，继续排除第6章外部未提交文件。
+当前小节：章节级自检
+当前原子任务：第8章自检通过，准备最终提交
+下一项具体动作：显式暂存第8章最终状态、章节级自检日志和 Notebook metadata 清理，创建 `Add chapter 08 nonlinear root-finding methods`。
 阻塞问题：无
 
 ## 总体进度
@@ -16,7 +16,7 @@
 | 章节 | 状态 | 当前里程碑 | 自检状态 | 最后 commit |
 |---|---|---|---|---|
 | 第7章 | done | 章节自检完成 | 通过 | a3d823a |
-| 第8章 | in_progress | 8.5/8.6 多项式根拓展 | 8.5/8.6 通过最小自检 | a5d764a |
+| 第8章 | verifying | 章节级自检 | 通过 | 73e93a1 |
 | 第9章 | pending | - | 未开始 | - |
 | 第10章 | pending | - | 未开始 | - |
 | 第11章 | pending | - | 未开始 | - |
@@ -50,14 +50,16 @@
 * 完成 8.4 Notebook、脚本更新、`secant_method`、`muller_method` 和对应测试。
 * 创建第8章 8.4 checkpoint commit `a5d764a`。
 * 完成 8.5/8.6 Notebook、脚本更新、Horner/综合除法、Bairstow 型二次因子迭代、Newton 逐次压缩和对应测试。
+* 创建第8章 8.5/8.6 checkpoint commit `73e93a1`。
+* 第8章章节级自检通过：脚本、20 个 ch08 测试、五个 Notebook、Notebook 结构、全仓库 pytest、diff 空白检查均通过。
 
 ### 正在处理
 
-* 第8章 8.5/8.6 checkpoint。
+* 第8章最终提交。
 
 ### 已修改但尚未验证
 
-* 无第8章 8.5/8.6 未验证修改。
+* 无第8章未验证修改。
 
 ### 已通过的检查
 
@@ -125,6 +127,14 @@
 * `nbclient` 执行 `chapters/ch08_nonlinear_roots/notebooks/05_polynomial_roots_extensions.ipynb`：通过。
 * Notebook 结构检查：第8章五个 Notebook 均无缺失 cell id，无提交输出。
 * `git diff --check`：通过。
+* 第8章章节级 `python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`：通过。
+* 第8章章节级 `python -m pytest tests/test_nonlinear_roots.py`：20 passed。
+* 第8章章节级 `python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`：通过。
+* 第8章章节级 `python -m pytest`：77 passed；其中包含外部第6章工作树中的 `tests/test_direct_linear.py`，仅作为环境状态验证，不纳入本任务提交。
+* 第8章五个 Notebook 全量执行并清空输出：通过。
+* Notebook 结构检查：第8章五个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
+* `git diff --check`：通过。
+* `git status --short` 和 `git diff --stat` 已记录；显示外部第6章工作树修改仍未提交，本任务提交继续过滤。
 
 ### 失败或未执行的检查
 
@@ -138,10 +148,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第8章 8.5/8.6 相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
-2. 创建 `checkpoint(ch08): add polynomial root extensions`。
+1. 暂存第8章最终状态、章节级自检日志和 Notebook metadata 清理，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
+2. 创建 `Add chapter 08 nonlinear root-finding methods`。
 3. 记录 commit hash。
-4. 执行第8章章节级自检和修复。
+4. 开始第9章“非线性方程组解法”。
 
 ### 恢复时应首先执行的命令
 
@@ -200,6 +210,17 @@ tail -80 .agent/RUN_LOG.md
 * `.agent/logs/command-2026-06-19T05-34-03-08-00-50678.log`
 * `.agent/logs/command-2026-06-19T05-34-14-08-00-50826.log`
 * `.agent/logs/command-2026-06-19T05-34-14-08-00-50828.log`
+* `.agent/logs/command-2026-06-19T05-36-48-08-00-53440.log`
+* `.agent/logs/command-2026-06-19T05-36-48-08-00-53458.log`
+* `.agent/logs/command-2026-06-19T05-36-48-08-00-53461.log`
+* `.agent/logs/command-2026-06-19T05-36-48-08-00-53473.log`
+* `.agent/logs/command-2026-06-19T05-36-57-08-00-54136.log`
+* `.agent/logs/command-2026-06-19T05-37-43-08-00-54291.log`
+* `.agent/logs/command-2026-06-19T05-37-44-08-00-54309.log`
+* `.agent/logs/command-2026-06-19T05-38-18-08-00-55426.log`
+* `.agent/logs/command-2026-06-19T05-38-18-08-00-55427.log`
+* `.agent/logs/command-2026-06-19T05-39-01-08-00-57299.log`
+* `.agent/logs/command-2026-06-19T05-39-01-08-00-57301.log`
 * `src/py_sc/iterative_linear.py`
 * `tests/test_iterative_linear.py`
 * `chapters/ch07_iterative_linear_systems/README.md`
