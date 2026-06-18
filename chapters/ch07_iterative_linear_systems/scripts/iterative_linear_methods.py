@@ -15,12 +15,16 @@ if str(SRC) not in sys.path:
 from py_sc import (  # noqa: E402
     block_gauss_seidel_iteration,
     block_jacobi_iteration,
+    conjugate_gradient,
     gauss_seidel_iteration,
     gauss_seidel_iteration_matrix,
+    jacobi_preconditioner,
     jacobi_iteration,
     jacobi_iteration_matrix,
+    preconditioned_conjugate_gradient,
     scan_sor_omega,
     sor_iteration,
+    steepest_descent,
     spectral_radius,
 )
 
@@ -68,6 +72,25 @@ def main() -> None:
     block_gs = block_gauss_seidel_iteration(A4, b4, [2, 2], tolerance=1e-10, max_iterations=200)
     sor = sor_iteration(A4, b4, omega=1.1, tolerance=1e-10, max_iterations=200)
     print(f"block_jacobi_iterations={block_j.iterations}, block_gs_iterations={block_gs.iterations}, sor_iterations={sor.iterations}")
+
+    print("\nCG and PCG:")
+    A_spd = np.array(
+        [
+            [6.0, 2.0, 0.0],
+            [2.0, 5.0, 1.0],
+            [0.0, 1.0, 4.0],
+        ]
+    )
+    b_spd = np.array([1.0, 2.0, 3.0])
+    sd = steepest_descent(A_spd, b_spd, tolerance=1e-10, max_iterations=200)
+    cg = conjugate_gradient(A_spd, b_spd, tolerance=1e-12)
+    pcg = preconditioned_conjugate_gradient(
+        A_spd,
+        b_spd,
+        preconditioner=jacobi_preconditioner(A_spd),
+        tolerance=1e-12,
+    )
+    print(f"steepest_descent_iterations={sd.iterations}, cg_iterations={cg.iterations}, pcg_iterations={pcg.iterations}")
 
 
 if __name__ == "__main__":

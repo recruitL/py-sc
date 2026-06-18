@@ -292,6 +292,161 @@ def block_gauss_seidel_iteration(
     )
 
 
+def steepest_descent(
+    A: np.ndarray,
+    b: np.ndarray,
+    x0: np.ndarray | None = None,
+    tolerance: float = 1e-8,
+    max_iterations: int = 500,
+) -> LinearIterationResult:
+    """最速下降法求解 SPD 线性系统。"""
+
+    A, b = _as_linear_system(A, b)
+    _require_spd(A)
+    tolerance = _validate_tolerance(tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x = _initial_guess(b, x0)
+    r = b - A @ x
+    residuals = [relative_residual(A, x, b)]
+    converged = residuals[-1] <= tolerance
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        Ar = A @ r
+        alpha = float((r @ r) / (r @ Ar))
+        x = x + alpha * r
+        r = b - A @ x
+        residuals.append(relative_residual(A, x, b))
+        iterations = k
+        if residuals[-1] <= tolerance:
+            converged = True
+            break
+
+    return LinearIterationResult(
+        value=x,
+        iterations=iterations,
+        converged=converged,
+        residual_norms=np.array(residuals, dtype=float),
+    )
+
+
+def conjugate_gradient(
+    A: np.ndarray,
+    b: np.ndarray,
+    x0: np.ndarray | None = None,
+    tolerance: float = 1e-8,
+    max_iterations: int | None = None,
+) -> LinearIterationResult:
+    """共轭梯度法求解 SPD 线性系统。"""
+
+    A, b = _as_linear_system(A, b)
+    _require_spd(A)
+    tolerance = _validate_tolerance(tolerance)
+    if max_iterations is None:
+        max_iterations = b.size
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x = _initial_guess(b, x0)
+    r = b - A @ x
+    p = r.copy()
+    rr_old = float(r @ r)
+
+    residuals = [relative_residual(A, x, b)]
+    converged = residuals[-1] <= tolerance
+    iterations = 0
+    for k in range(1, max_iterations + 1):
+        Ap = A @ p
+        denom = float(p @ Ap)
+        if denom <= 0:
+            raise ValueError("conjugate gradient requires a positive curvature direction")
+        alpha = rr_old / denom
+        x = x + alpha * p
+        r = r - alpha * Ap
+        residuals.append(relative_residual(A, x, b))
+        iterations = k
+        if residuals[-1] <= tolerance:
+            converged = True
+            break
+        rr_new = float(r @ r)
+        beta = rr_new / rr_old
+        p = r + beta * p
+        rr_old = rr_new
+
+    return LinearIterationResult(
+        value=x,
+        iterations=iterations,
+        converged=converged,
+        residual_norms=np.array(residuals, dtype=float),
+    )
+
+
+def jacobi_preconditioner(A: np.ndarray) -> np.ndarray:
+    """返回 Jacobi 对角预处理器的逆对角向量。"""
+
+    A = _as_square_matrix(A)
+    diagonal = np.diag(A)
+    if np.any(diagonal == 0):
+        raise ValueError("Jacobi preconditioner requires nonzero diagonal entries")
+    return 1.0 / diagonal
+
+
+def preconditioned_conjugate_gradient(
+    A: np.ndarray,
+    b: np.ndarray,
+    preconditioner: np.ndarray | Callable[[np.ndarray], np.ndarray] | None = None,
+    x0: np.ndarray | None = None,
+    tolerance: float = 1e-8,
+    max_iterations: int | None = None,
+) -> LinearIterationResult:
+    """预处理共轭梯度法。
+
+    ``preconditioner`` 可以是逆对角向量，也可以是执行 ``z=M^{-1}r`` 的函数。
+    若为 ``None``，使用 Jacobi 对角预处理。
+    """
+
+    A, b = _as_linear_system(A, b)
+    _require_spd(A)
+    tolerance = _validate_tolerance(tolerance)
+    if max_iterations is None:
+        max_iterations = b.size
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    apply_preconditioner = _preconditioner_solver(A, preconditioner)
+
+    x = _initial_guess(b, x0)
+    r = b - A @ x
+    z = apply_preconditioner(r)
+    p = z.copy()
+    rz_old = float(r @ z)
+
+    residuals = [relative_residual(A, x, b)]
+    converged = residuals[-1] <= tolerance
+    iterations = 0
+    for k in range(1, max_iterations + 1):
+        Ap = A @ p
+        denom = float(p @ Ap)
+        if denom <= 0:
+            raise ValueError("PCG requires a positive curvature direction")
+        alpha = rz_old / denom
+        x = x + alpha * p
+        r = r - alpha * Ap
+        residuals.append(relative_residual(A, x, b))
+        iterations = k
+        if residuals[-1] <= tolerance:
+            converged = True
+            break
+        z = apply_preconditioner(r)
+        rz_new = float(r @ z)
+        beta = rz_new / rz_old
+        p = z + beta * p
+        rz_old = rz_new
+
+    return LinearIterationResult(
+        value=x,
+        iterations=iterations,
+        converged=converged,
+        residual_norms=np.array(residuals, dtype=float),
+    )
+
+
 def is_strictly_diagonally_dominant(A: np.ndarray) -> bool:
     """判断矩阵是否严格行对角占优。"""
 
@@ -410,3 +565,23 @@ def _block_slices(block_sizes: list[int] | tuple[int, ...], n: int) -> list[slic
         blocks.append(slice(start, stop))
         start = stop
     return blocks
+
+
+def _require_spd(A: np.ndarray) -> None:
+    if not is_symmetric_positive_definite(A):
+        raise ValueError("method requires a symmetric positive definite matrix")
+
+
+def _preconditioner_solver(
+    A: np.ndarray,
+    preconditioner: np.ndarray | Callable[[np.ndarray], np.ndarray] | None,
+) -> Callable[[np.ndarray], np.ndarray]:
+    if preconditioner is None:
+        inverse_diagonal = jacobi_preconditioner(A)
+        return lambda r: inverse_diagonal * r
+    if callable(preconditioner):
+        return lambda r: np.asarray(preconditioner(r), dtype=float)
+    inverse_diagonal = _as_vector(preconditioner, "preconditioner")
+    if inverse_diagonal.size != A.shape[0]:
+        raise ValueError("preconditioner vector length must match A")
+    return lambda r: inverse_diagonal * r

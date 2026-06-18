@@ -93,6 +93,12 @@
 摘要：7.2 SOR/块迭代原子工作单元通过导入、脚本、9 个测试、Notebook 执行和 diff 空白检查。
 下一步：创建 7.2 checkpoint commit。
 
+[2026-06-19T04:43:10+08:00] [CH07] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch07): add SOR and block iterations"`
+退出码：0
+摘要：创建第7章 7.2 checkpoint commit `7a3cd91`。提交时继续排除了第6章外部未提交文件和 direct-linear 导出。
+下一步：开始 7.3 最速下降、CG 与 PCG。
+
 [2026-06-19T04:38:32+08:00] [COMMAND] [EXIT 0]
 命令：`env PYTHONPATH=src python -c from py_sc import jacobi_iteration, gauss_seidel_iteration, spectral_radius; print('import ok')`
 退出码：0
@@ -152,3 +158,44 @@
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-42-33-08-00-17424.log`
 摘要：命令执行成功。
+
+[2026-06-19T04:46:19+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import steepest_descent, conjugate_gradient, preconditioned_conjugate_gradient; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-46-19-08-00-21963.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:46:19+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-46-19-08-00-21971.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:46:19+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_iterative_linear.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-46-19-08-00-21979.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:46:20+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-46-20-08-00-21987.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:46:21+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-46-21-08-00-21952.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:46:21+08:00] [CH07] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import steepest_descent, conjugate_gradient, preconditioned_conjugate_gradient"`
+`python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
+`python -m pytest tests/test_iterative_linear.py`
+`nbclient` 执行 `notebooks/03_cg_and_pcg.ipynb`
+`git diff --check`
+退出码：0
+摘要：7.3 CG/PCG 原子工作单元通过导入、脚本、11 个测试、Notebook 执行和 diff 空白检查。
+下一步：创建 7.3 checkpoint commit。

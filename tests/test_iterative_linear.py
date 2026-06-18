@@ -6,16 +6,20 @@ import pytest
 from py_sc import (
     block_gauss_seidel_iteration,
     block_jacobi_iteration,
+    conjugate_gradient,
     gauss_seidel_iteration,
     gauss_seidel_iteration_matrix,
     is_strictly_diagonally_dominant,
     is_symmetric_positive_definite,
+    jacobi_preconditioner,
     jacobi_iteration,
     jacobi_iteration_matrix,
+    preconditioned_conjugate_gradient,
     relative_residual,
     scan_sor_omega,
     sor_iteration,
     sor_iteration_matrix,
+    steepest_descent,
     spectral_radius,
 )
 
@@ -131,3 +135,41 @@ def test_sor_rejects_invalid_omega() -> None:
 
     with pytest.raises(ValueError):
         sor_iteration(A, b, omega=2.0)
+
+
+def test_steepest_descent_cg_and_pcg_solve_spd_system() -> None:
+    A = np.array(
+        [
+            [6.0, 2.0, 0.0],
+            [2.0, 5.0, 1.0],
+            [0.0, 1.0, 4.0],
+        ]
+    )
+    b = np.array([1.0, 2.0, 3.0])
+    exact = np.linalg.solve(A, b)
+
+    sd = steepest_descent(A, b, tolerance=1e-10, max_iterations=200)
+    cg = conjugate_gradient(A, b, tolerance=1e-12, max_iterations=10)
+    pcg = preconditioned_conjugate_gradient(A, b, tolerance=1e-12, max_iterations=10)
+
+    assert sd.converged
+    assert cg.converged
+    assert pcg.converged
+    np.testing.assert_allclose(sd.value, exact, atol=1e-9)
+    np.testing.assert_allclose(cg.value, exact, atol=1e-11)
+    np.testing.assert_allclose(pcg.value, exact, atol=1e-11)
+    assert cg.iterations <= A.shape[0]
+
+
+def test_jacobi_preconditioner_returns_inverse_diagonal() -> None:
+    A = np.diag([2.0, 4.0, 5.0])
+
+    np.testing.assert_allclose(jacobi_preconditioner(A), np.array([0.5, 0.25, 0.2]))
+
+
+def test_cg_rejects_non_spd_matrix() -> None:
+    A = np.array([[1.0, 2.0], [3.0, 1.0]])
+    b = np.ones(2)
+
+    with pytest.raises(ValueError):
+        conjugate_gradient(A, b)

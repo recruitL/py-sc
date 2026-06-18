@@ -4,18 +4,18 @@
 最后更新时间：2026-06-19T04:33:21+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：adb5267
+最后安全 commit：7a3cd91
 当前章节：第7章
-当前小节：7.2 超松弛迭代法
-当前原子任务：7.2 自检完成，准备 checkpoint
-下一项具体动作：显式暂存第7章 7.2 相关文件并创建 `checkpoint(ch07): add SOR and block iterations`，继续排除第6章外部未提交文件。
+当前小节：7.3 共轭梯度法
+当前原子任务：7.3 自检完成，准备 checkpoint
+下一项具体动作：显式暂存第7章 7.3 相关文件并创建 `checkpoint(ch07): add CG and PCG methods`，继续排除第6章外部未提交文件。
 阻塞问题：无
 
 ## 总体进度
 
 | 章节 | 状态 | 当前里程碑 | 自检状态 | 最后 commit |
 |---|---|---|---|---|
-| 第7章 | in_progress | 7.2 SOR 与块迭代 | 7.1 和 7.2 通过 | adb5267 |
+| 第7章 | in_progress | 7.3 CG 与 PCG | 7.1-7.3 通过 | 7a3cd91 |
 | 第8章 | pending | - | 未开始 | - |
 | 第9章 | pending | - | 未开始 | - |
 | 第10章 | pending | - | 未开始 | - |
@@ -34,10 +34,12 @@
 * 完成第7章 README 初稿、7.1 Notebook、章节脚本、`src/py_sc/iterative_linear.py` 中的 Jacobi/Gauss-Seidel 基础实现、`tests/test_iterative_linear.py` 中的 7.1 测试。
 * 创建 7.1 checkpoint commit `adb5267`。
 * 完成 SOR、松弛因子扫描、块 Jacobi、块 Gauss-Seidel 公共实现、Notebook、脚本更新和测试扩展。
+* 创建 7.2 checkpoint commit `7a3cd91`。
+* 完成最速下降、CG、Jacobi 预处理、PCG 公共实现、Notebook、脚本更新和测试扩展。
 
 ### 正在处理
 
-* 第7章 7.2 checkpoint。
+* 第7章 7.3 checkpoint。
 
 ### 已修改但尚未验证
 
@@ -72,6 +74,12 @@
 * `nbclient` 执行 `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`：通过。
 * `git diff --check`：通过。
 * Notebook 结构检查：第7章两个 Notebook 均无缺失 cell id，无提交输出。
+* `PYTHONPATH=src python -c "from py_sc import steepest_descent, conjugate_gradient, preconditioned_conjugate_gradient"`：通过。
+* `python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`：通过。
+* `python -m pytest tests/test_iterative_linear.py`：11 passed。
+* `nbclient` 执行 `chapters/ch07_iterative_linear_systems/notebooks/03_cg_and_pcg.ipynb`：通过。
+* `git diff --check`：通过。
+* Notebook 结构检查：第7章三个 Notebook 均无缺失 cell id，无提交输出。
 
 ### 失败或未执行的检查
 
@@ -85,10 +93,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第7章 7.2 相关文件，排除第6章外部未提交文件和 direct-linear hunks。
-2. 创建 `checkpoint(ch07): add SOR and block iterations`。
+1. 暂存第7章 7.3 相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
+2. 创建 `checkpoint(ch07): add CG and PCG methods`。
 3. 记录 commit hash。
-4. 开始第7章 7.3 最速下降、CG 与 PCG。
+4. 开始第7章 7.4 二维 Poisson 稀疏迭代。
 
 ### 恢复时应首先执行的命令
 
@@ -120,6 +128,7 @@ tail -80 .agent/RUN_LOG.md
 * `chapters/ch07_iterative_linear_systems/README.md`
 * `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
 * `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`
+* `chapters/ch07_iterative_linear_systems/notebooks/03_cg_and_pcg.ipynb`
 * `chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
 
 ### 已修改文件
@@ -138,6 +147,7 @@ tail -80 .agent/RUN_LOG.md
 * `tests/test_direct_linear.py`
 * `.agent/RUN_LOG.md` 中 CH06 日志块
 * `src/py_sc/__init__.py` 中 direct-linear 导入和 `__all__` 条目
+* `docs/README.md` 中第6章外部路线图调整
 
 ## 决策日志
 

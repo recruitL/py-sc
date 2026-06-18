@@ -1,0 +1,14 @@
+timestamp: 2026-06-19T04:46:19+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m pytest tests/test_iterative_linear.py
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+plugins: anyio-4.2.0
+collected 11 items
+
+tests/test_iterative_linear.py ...........                               [100%]
+
+============================== 11 passed in 0.04s ==============================
