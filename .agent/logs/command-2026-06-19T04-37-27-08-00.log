@@ -1,0 +1,24 @@
+timestamp: 2026-06-19T04:37:27+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env PYTHONPATH=src python -c from py_sc import jacobi_iteration, gauss_seidel_iteration, spectral_radius; print('import ok')
+---- output ----
+Jacobi:
+iterations=23, residual=3.811e-11
+error=1.091e-10
+spectral_radius=0.353553
+
+Gauss-Seidel:
+iterations=12, residual=6.615e-11
+error=1.544e-10
+spectral_radius=0.125000
+import ok
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+plugins: anyio-4.2.0
+collected 4 items
+
+tests/test_iterative_linear.py ....                                      [100%]
+
+============================== 4 passed in 0.05s ===============================

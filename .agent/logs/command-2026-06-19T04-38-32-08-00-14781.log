@@ -1,0 +1,13 @@
+timestamp: 2026-06-19T04:38:32+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py
+---- output ----
+Jacobi:
+iterations=23, residual=3.811e-11
+error=1.091e-10
+spectral_radius=0.353553
+
+Gauss-Seidel:
+iterations=12, residual=6.615e-11
+error=1.544e-10
+spectral_radius=0.125000

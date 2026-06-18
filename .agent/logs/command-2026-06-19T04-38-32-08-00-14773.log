@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T04:38:32+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env PYTHONPATH=src python -c from py_sc import jacobi_iteration, gauss_seidel_iteration, spectral_radius; print('import ok')
+---- output ----
+import ok

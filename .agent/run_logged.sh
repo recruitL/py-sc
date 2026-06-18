@@ -8,7 +8,7 @@ mkdir -p "$LOG_DIR"
 
 timestamp="$(date -Iseconds)"
 safe_timestamp="${timestamp//[:+]/-}"
-log_file="$LOG_DIR/command-${safe_timestamp}.log"
+log_file="$LOG_DIR/command-${safe_timestamp}-$$.log"
 
 {
   echo "timestamp: $timestamp"

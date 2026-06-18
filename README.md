@@ -30,6 +30,9 @@ py-sc/
       notes/                # 理论笔记和补充说明
       scripts/              # 与 Notebook 对应的可运行脚本
       references.md         # 本章参考文献
+    ch07_iterative_linear_systems/ # 第七章：解线性方程组的迭代法
+      notebooks/            # 主要教学 Notebook
+      scripts/              # 与 Notebook 对应的可运行脚本
   docs/                     # 课程层面的说明和路线图
   references/               # 跨章节共享参考文献说明
   src/
@@ -45,6 +48,7 @@ py-sc/
 | 第三章 | 函数逼近与曲线拟合 | 理论扩充：逼近空间、误差范数、投影观点，Chebyshev/Legendre 级数，最小二乘、正则化、Padé、Fourier/FFT 与自适应逼近框架 |
 | 第四章 | 数值积分 | 新增建设：求积基本原理、Newton-Cotes、复合求积、Romberg、自适应 Simpson、Gauss-Legendre、带权高斯公式、离散数据积分、多重积分和高维 Monte Carlo 框架 |
 | 第五章 | 数值微分 | 新增建设：有限差分、函数型和离散数据微分、非等距权重、Richardson 外推、隐式紧致格式入口、样条微分、B 样条微分框架、二阶微分和误差实验 |
+| 第七章 | 解线性方程组的迭代法 | 建设中：Jacobi、Gauss-Seidel、矩阵分裂、迭代矩阵、谱半径、残差停止准则和收敛对比 |
 
 ## 阅读顺序
 
@@ -78,6 +82,8 @@ py-sc/
 26. `chapters/ch05_numerical_differentiation/notebooks/05_richardson_and_implicit.ipynb`
 27. `chapters/ch05_numerical_differentiation/notebooks/06_second_derivatives.ipynb`
 28. `chapters/ch05_numerical_differentiation/notebooks/07_experiments.ipynb`
+29. `chapters/ch07_iterative_linear_systems/README.md`
+30. `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
 
 运行脚本示例：
 
@@ -86,6 +92,7 @@ python chapters/ch02_interpolation/scripts/compare_interpolation.py
 python chapters/ch03_approximation/scripts/orthogonal_approximation.py
 python chapters/ch04_numerical_integration/scripts/integration_methods.py
 python chapters/ch05_numerical_differentiation/scripts/differentiation_methods.py
+python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py
 ```
 
 运行测试：

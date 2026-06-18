@@ -4,18 +4,18 @@
 最后更新时间：2026-06-19T04:33:21+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
+最后安全 commit：acef9b0
 当前章节：第7章
-当前小节：初始化
-当前原子任务：建立长任务持久化状态
-下一项具体动作：提交 ExecPlan 初始化 checkpoint，然后开始第7章 7.1 平稳迭代法。
+当前小节：7.1 雅可比迭代法与高斯-赛德尔迭代法
+当前原子任务：7.1 自检完成，准备 checkpoint
+下一项具体动作：显式暂存第7章 7.1 相关文件并创建 `checkpoint(ch07): add stationary iteration methods`，排除并保留第6章外部未提交文件。
 阻塞问题：无
 
 ## 总体进度
 
 | 章节 | 状态 | 当前里程碑 | 自检状态 | 最后 commit |
 |---|---|---|---|---|
-| 第7章 | pending | - | 未开始 | - |
+| 第7章 | in_progress | 7.1 平稳迭代法 | 通过最小自检 | - |
 | 第8章 | pending | - | 未开始 | - |
 | 第9章 | pending | - | 未开始 | - |
 | 第10章 | pending | - | 未开始 | - |
@@ -30,39 +30,56 @@
 * 读取 `AGENTS.md`、根 `README.md`、`pyproject.toml`、`.gitignore`、现有章节目录、`src/py_sc` 和 `tests` 概览。
 * 确认任务开始时工作树干净，起点 commit 为 `83c69e160f81e0d6d16ecb866a8b68928eb88bd8`。
 * 创建本地分支 `codex/chapters-07-12`。
+* 建立 `.agent` 持久化计划、日志、命令日志脚本，并创建初始化 checkpoint `acef9b0`。
+* 完成第7章 README 初稿、7.1 Notebook、章节脚本、`src/py_sc/iterative_linear.py` 中的 Jacobi/Gauss-Seidel 基础实现、`tests/test_iterative_linear.py` 中的 7.1 测试。
 
 ### 正在处理
 
-* 初始化 `.agent` 持久化计划、日志和命令输出目录。
+* 第7章 7.1 checkpoint。
 
 ### 已修改但尚未验证
 
-* `AGENTS.md`
-* `.agent/PLANS.md`
 * `.agent/execplans/chapters-07-12.md`
 * `.agent/RUN_LOG.md`
 * `.agent/run_logged.sh`
+* `README.md`
+* `src/py_sc/__init__.py`
+* `src/py_sc/iterative_linear.py`
+* `tests/test_iterative_linear.py`
+* `chapters/ch07_iterative_linear_systems/README.md`
+* `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
+* `chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
 
 ### 已通过的检查
 
 * `git status --short`：任务开始时无未提交修改。
 * `git branch --show-current`：初始分支 `main`，已切换到 `codex/chapters-07-12`。
 * `git log -5 --oneline`：最近提交包含第五章 `83c69e1`。
+* `git diff --check`：初始化文件检查通过。
+* `python -m py_compile src/py_sc/iterative_linear.py chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py tests/test_iterative_linear.py`：通过。
+* `PYTHONPATH=src python -c "from py_sc import jacobi_iteration, gauss_seidel_iteration, spectral_radius"`：通过。
+* `python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`：通过。
+* `python -m pytest tests/test_iterative_linear.py`：4 passed。
+* `nbclient` 执行 `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`：通过。
+* `git diff --check`：通过。
+* Notebook 结构检查：`01_stationary_iterations.ipynb` 无缺失 cell id，无提交输出。
 
 ### 失败或未执行的检查
 
-* 初始化 checkpoint 尚未运行 `git diff --check`。
+* 全仓库测试尚未运行，按章节顺序将在章节自检和最终检查阶段运行。
 
 ### 已知问题
 
 * 仓库当前只有第 2—5 章；用户要求直接按顺序建设第 7—12 章。本任务不创建第 6 章，只在必要处说明第 6 章直接法连接为前置空缺。
+* 发现外部第6章任务产生的未提交文件和修改：`.agent/execplans/chapter-06-direct-methods.md`、`src/py_sc/direct_linear.py`、`tests/test_direct_linear.py`，以及 `src/py_sc/__init__.py` 中 direct-linear 导出、`.agent/RUN_LOG.md` 中 CH06 日志。第7章 checkpoint 必须排除这些外部内容。
+* `.agent/run_logged.sh` 原先使用秒级时间戳，平行命令日志可能同名覆盖；已改为在日志文件名中加入进程号。
 
 ### 下一项具体动作
 
-1. 完成 `.agent` 初始化文件写入。
-2. 运行 `git diff --check` 和最小状态检查。
-3. 显式暂存 `.agent` 与 `AGENTS.md`，创建初始化 checkpoint commit。
-4. 开始第7章 7.1 Jacobi 与 Gauss-Seidel 原子工作单元。
+1. 暂存第7章 7.1 相关文件，排除第6章外部未提交文件和 direct-linear hunks。
+2. 创建 `checkpoint(ch07): add stationary iteration methods`。
+3. 记录 commit hash。
+4. 开始第7章 7.2 SOR 与块迭代。
 
 ### 恢复时应首先执行的命令
 
@@ -81,17 +98,40 @@ tail -80 .agent/RUN_LOG.md
 * `.agent/execplans/chapters-07-12.md`
 * `.agent/RUN_LOG.md`
 * `.agent/run_logged.sh`
+* `.agent/logs/command-2026-06-19T04-37-27-08-00.log`
+* `.agent/logs/command-2026-06-19T04-37-32-08-00.log`
+* `.agent/logs/command-2026-06-19T04-37-41-08-00.log`
+* `.agent/logs/command-2026-06-19T04-38-32-08-00-14773.log`
+* `.agent/logs/command-2026-06-19T04-38-32-08-00-14781.log`
+* `.agent/logs/command-2026-06-19T04-38-32-08-00-14789.log`
+* `.agent/logs/command-2026-06-19T04-38-32-08-00-14797.log`
+* `.agent/logs/command-2026-06-19T04-38-34-08-00-14762.log`
+* `src/py_sc/iterative_linear.py`
+* `tests/test_iterative_linear.py`
+* `chapters/ch07_iterative_linear_systems/README.md`
+* `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
+* `chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
 
 ### 已修改文件
 
 * `AGENTS.md`
+* `.agent/execplans/chapters-07-12.md`
+* `.agent/RUN_LOG.md`
+* `.agent/run_logged.sh`
+* `README.md`
+* `src/py_sc/__init__.py`
 
 ### 不应触碰的既有修改
 
-* 任务开始时无用户未提交修改。
+* `.agent/execplans/chapter-06-direct-methods.md`
+* `src/py_sc/direct_linear.py`
+* `tests/test_direct_linear.py`
+* `.agent/RUN_LOG.md` 中 CH06 日志块
+* `src/py_sc/__init__.py` 中 direct-linear 导入和 `__all__` 条目
 
 ## 决策日志
 
 * 决定：创建分支 `codex/chapters-07-12`。原因：任务开始时工作树干净，用户要求用 Git checkpoint 作为恢复断点。影响：全部第 7—12 章工作在该本地分支上进行。
 * 决定：不创建第 6 章。原因：用户明确要求按顺序完成第 7—12 章，仓库当前缺第 6 章但本任务范围不包含第 6 章。影响：第 7、11、12 章中涉及第六章直接法连接时，只作为前置章节空缺提示或轻量复用说明。
 * 决定：新章节不再单独建立 `references.md`。原因：用户要求从现在开始章节末尾只保留一个“小结”，资料来源使用 Notebook 内联引用、链接、脚注或统一参考文件。影响：第 7—12 章目录只设置 README、notebooks、scripts，必要时使用 notes，不设置章节级 `references.md`。
+* 决定：第7章 7.1 使用公共模块 `src/py_sc/iterative_linear.py` 而不是章节私有 scripts 作为正式实现。原因：前几章已采用 `src/py_sc` 作为可复用教学实现位置，章节 scripts 只作为快速运行入口。影响：`src/py_sc/__init__.py` 导出 iterative-linear 函数，Notebook 先展示教学实现再调用正式实现。
