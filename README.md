@@ -36,6 +36,9 @@ py-sc/
     ch08_nonlinear_roots/    # 第八章：非线性方程求根
       notebooks/            # 主要教学 Notebook
       scripts/              # 与 Notebook 对应的可运行脚本
+    ch09_nonlinear_systems/  # 第九章：非线性方程组解法
+      notebooks/            # 主要教学 Notebook
+      scripts/              # 与 Notebook 对应的可运行脚本
   docs/                     # 课程层面的说明和路线图
   references/               # 跨章节共享参考文献说明
   src/
@@ -53,6 +56,7 @@ py-sc/
 | 第五章 | 数值微分 | 新增建设：有限差分、函数型和离散数据微分、非等距权重、Richardson 外推、隐式紧致格式入口、样条微分、B 样条微分框架、二阶微分和误差实验 |
 | 第七章 | 解线性方程组的迭代法 | 建设中：Jacobi、Gauss-Seidel、SOR、块迭代、最速下降、CG、PCG、二维 Poisson 五点差分、矩阵分裂、谱半径和残差停止准则 |
 | 第八章 | 非线性方程求根 | 新增建设：区间扫描、二分法、不动点迭代、Aitken 加速、Steffensen 方法、Newton、阻尼 Newton、重根修正、弦截法、Müller 法、多项式根和局部收敛条件 |
+| 第九章 | 非线性方程组解法 | 建设中：向量不动点迭代、多元 Newton 法、残差范数、步长停止准则和奇异 Jacobian 失败情形 |
 
 ## 阅读顺序
 
@@ -97,6 +101,8 @@ py-sc/
 37. `chapters/ch08_nonlinear_roots/notebooks/03_newton_methods.ipynb`
 38. `chapters/ch08_nonlinear_roots/notebooks/04_secant_and_parabolic_methods.ipynb`
 39. `chapters/ch08_nonlinear_roots/notebooks/05_polynomial_roots_extensions.ipynb`
+40. `chapters/ch09_nonlinear_systems/README.md`
+41. `chapters/ch09_nonlinear_systems/notebooks/01_fixed_point_and_newton_systems.ipynb`
 
 运行脚本示例：
 
@@ -107,6 +113,7 @@ python chapters/ch04_numerical_integration/scripts/integration_methods.py
 python chapters/ch05_numerical_differentiation/scripts/differentiation_methods.py
 python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py
 python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py
+python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py
 ```
 
 运行测试：

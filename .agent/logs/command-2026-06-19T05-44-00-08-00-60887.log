@@ -1,0 +1,6 @@
+timestamp: 2026-06-19T05:44:00+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py
+---- output ----
+fixed point system: solution=[0.486405154666 0.233725501959] iterations=18 residual=4.058e-13
+Newton system: solution=[0.707106781187 0.707106781187] iterations=4 residual=2.220e-16

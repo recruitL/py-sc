@@ -439,6 +439,30 @@ Notebook 结构检查
 日志：`.agent/logs/command-2026-06-19T05-36-48-08-00-53440.log`、`.agent/logs/command-2026-06-19T05-36-48-08-00-53473.log`、`.agent/logs/command-2026-06-19T05-36-48-08-00-53458.log`、`.agent/logs/command-2026-06-19T05-36-48-08-00-53461.log`、`.agent/logs/command-2026-06-19T05-36-57-08-00-54136.log`、`.agent/logs/command-2026-06-19T05-38-18-08-00-55426.log`、`.agent/logs/command-2026-06-19T05-38-18-08-00-55427.log`、`.agent/logs/command-2026-06-19T05-39-01-08-00-57299.log`、`.agent/logs/command-2026-06-19T05-39-01-08-00-57301.log`。
 下一步：创建第8章最终提交。
 
+[2026-06-19T05:40:56+08:00] [CH08] [CHECKPOINT]
+命令：`git commit -m "Add chapter 08 nonlinear root-finding methods"`
+退出码：0
+摘要：第8章最终提交 `5cf5e10` 已创建。第8章状态为 done。
+下一步：开始第9章 9.1 非线性方程组的不动点和 Newton 基础。
+
+[2026-06-19T05:40:56+08:00] [CH09] [START]
+开始第9章“非线性方程组解法”。当前原子工作单元为 9.1 向量不动点迭代和 Newton 法。
+下一步：实现公共函数、Notebook、脚本和测试。
+
+[2026-06-19T05:45:13+08:00] [CH09] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import fixed_point_system_iteration, newton_system_method"`
+`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+`python -m pytest tests/test_nonlinear_systems.py`
+`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+`nbclient` 执行 `notebooks/01_fixed_point_and_newton_systems.ipynb`
+Notebook 结构检查
+`git diff --check`
+退出码：0
+摘要：9.1 向量不动点和 Newton 基础原子工作单元通过导入、脚本、3 个 ch09 测试、语法检查、Notebook 执行、Notebook 结构检查和 diff 空白检查。
+日志：`.agent/logs/command-2026-06-19T05-44-00-08-00-60886.log`、`.agent/logs/command-2026-06-19T05-44-00-08-00-60887.log`、`.agent/logs/command-2026-06-19T05-44-00-08-00-60893.log`、`.agent/logs/command-2026-06-19T05-44-00-08-00-60898.log`、`.agent/logs/command-2026-06-19T05-44-57-08-00-61637.log`、`.agent/logs/command-2026-06-19T05-45-05-08-00-61686.log`、`.agent/logs/command-2026-06-19T05-45-05-08-00-61692.log`。
+下一步：创建 9.1 checkpoint commit。
+
 [2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
 命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 退出码：0
@@ -695,4 +719,46 @@ Notebook 结构检查
 命令：`git diff --stat`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-39-01-08-00-57301.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:44:00+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-44-00-08-00-60898.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:44:00+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import fixed_point_system_iteration, newton_system_method; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-44-00-08-00-60886.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:44:00+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-44-00-08-00-60887.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:44:00+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-44-00-08-00-60893.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:44:57+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-44-57-08-00-61637.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:45:05+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-45-05-08-00-61686.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:45:05+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-45-05-08-00-61692.log`
 摘要：命令执行成功。

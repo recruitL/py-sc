@@ -92,6 +92,11 @@ from .nonlinear_roots import (
     steffensen_method,
     synthetic_division,
 )
+from .nonlinear_systems import (
+    NonlinearSystemResult,
+    fixed_point_system_iteration,
+    newton_system_method,
+)
 from .integration import (
     AdaptiveSimpsonResult,
     MonteCarloResult,
@@ -129,6 +134,7 @@ __all__ = [
     "MonteCarloResult",
     "NaturalCubicSpline",
     "LinearIterationResult",
+    "NonlinearSystemResult",
     "PolynomialRootsResult",
     "QuadraticFactorResult",
     "RichardsonDerivativeResult",
@@ -166,6 +172,7 @@ __all__ = [
     "finite_difference_weights",
     "find_sign_change_brackets",
     "fixed_point_iteration",
+    "fixed_point_system_iteration",
     "five_point_center_derivative",
     "five_point_endpoint_derivative",
     "forward_difference",
@@ -194,6 +201,7 @@ __all__ = [
     "newton_divided_differences",
     "newton_method",
     "newton_polynomial_roots",
+    "newton_system_method",
     "newton_cotes_integrate",
     "newton_interpolate",
     "observed_order",
