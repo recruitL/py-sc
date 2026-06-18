@@ -511,6 +511,32 @@ Notebook 结构检查
 日志：`.agent/logs/command-2026-06-19T05-53-20-08-00-68776.log`、`.agent/logs/command-2026-06-19T05-53-20-08-00-68787.log`、`.agent/logs/command-2026-06-19T05-53-20-08-00-68795.log`、`.agent/logs/command-2026-06-19T05-53-20-08-00-68826.log`、`.agent/logs/command-2026-06-19T05-53-29-08-00-69508.log`、`.agent/logs/command-2026-06-19T05-53-39-08-00-69556.log`、`.agent/logs/command-2026-06-19T05-53-39-08-00-69558.log`。
 下一步：创建 9.3 checkpoint commit。
 
+[2026-06-19T05:55:17+08:00] [CH09] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch09): add Broyden and continuation methods"`
+退出码：0
+摘要：第9章 9.3 checkpoint `a85a000` 已创建。
+下一步：执行第9章章节级自检。
+
+[2026-06-19T05:55:17+08:00] [CH09] [START]
+开始第9章章节级自检。
+下一步：重跑脚本、测试、三个 Notebook、全仓库 pytest、Notebook 结构和 Git 检查。
+
+[2026-06-19T05:56:20+08:00] [CH09] [TEST PASS]
+命令：
+`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+`python -m pytest tests/test_nonlinear_systems.py`
+`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+`python -m pytest`
+`nbclient` 执行第9章三个 Notebook 并清空输出
+Notebook 结构检查
+`git diff --check`
+`git status --short`
+`git diff --stat`
+退出码：0
+摘要：第9章章节级自检通过。ch09 测试 8 passed；全仓库 pytest 85 passed，其中包含外部第6章工作树中的 direct-linear 测试，仅作为环境状态验证；三个 Notebook 均可执行，已清空输出并移除执行 metadata；`git diff --check` 通过。`git status` 仍显示外部第6章未提交文件和 `docs/README.md` 修改，最终提交将继续过滤这些内容。
+日志：`.agent/logs/command-2026-06-19T05-55-50-08-00-72139.log`、`.agent/logs/command-2026-06-19T05-55-50-08-00-72200.log`、`.agent/logs/command-2026-06-19T05-55-50-08-00-72202.log`、`.agent/logs/command-2026-06-19T05-55-50-08-00-72236.log`、`.agent/logs/command-2026-06-19T05-55-59-08-00-72869.log`、`.agent/logs/command-2026-06-19T05-56-11-08-00-72957.log`、`.agent/logs/command-2026-06-19T05-56-11-08-00-72971.log`、`.agent/logs/command-2026-06-19T05-56-11-08-00-72978.log`、`.agent/logs/command-2026-06-19T05-56-11-08-00-72983.log`。
+下一步：创建第9章最终提交。
+
 [2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
 命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 退出码：0
@@ -893,4 +919,58 @@ Notebook 结构检查
 命令：`git diff --check`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-53-39-08-00-69558.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:55:50+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-55-50-08-00-72139.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:55:50+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_systems.py chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-55-50-08-00-72202.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:55:50+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_systems.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-55-50-08-00-72200.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:55:50+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-55-50-08-00-72236.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:55:59+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-55-59-08-00-72869.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:56:11+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-56-11-08-00-72957.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:56:11+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-56-11-08-00-72971.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:56:11+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-56-11-08-00-72978.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:56:11+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --stat`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-56-11-08-00-72983.log`
 摘要：命令执行成功。
