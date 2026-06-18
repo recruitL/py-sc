@@ -52,7 +52,7 @@ py-sc/
 | 第四章 | 数值积分 | 新增建设：求积基本原理、Newton-Cotes、复合求积、Romberg、自适应 Simpson、Gauss-Legendre、带权高斯公式、离散数据积分、多重积分和高维 Monte Carlo 框架 |
 | 第五章 | 数值微分 | 新增建设：有限差分、函数型和离散数据微分、非等距权重、Richardson 外推、隐式紧致格式入口、样条微分、B 样条微分框架、二阶微分和误差实验 |
 | 第七章 | 解线性方程组的迭代法 | 建设中：Jacobi、Gauss-Seidel、SOR、块迭代、最速下降、CG、PCG、二维 Poisson 五点差分、矩阵分裂、谱半径和残差停止准则 |
-| 第八章 | 非线性方程求根 | 建设中：区间扫描、二分法、不动点迭代、Aitken 加速、Steffensen 方法、区间不变量、误差上界和局部收敛条件 |
+| 第八章 | 非线性方程求根 | 建设中：区间扫描、二分法、不动点迭代、Aitken 加速、Steffensen 方法、Newton、阻尼 Newton、重根修正和局部收敛条件 |
 
 ## 阅读顺序
 
@@ -94,6 +94,7 @@ py-sc/
 34. `chapters/ch08_nonlinear_roots/README.md`
 35. `chapters/ch08_nonlinear_roots/notebooks/01_bracketing_methods.ipynb`
 36. `chapters/ch08_nonlinear_roots/notebooks/02_fixed_point_acceleration.ipynb`
+37. `chapters/ch08_nonlinear_roots/notebooks/03_newton_methods.ipynb`
 
 运行脚本示例：
 

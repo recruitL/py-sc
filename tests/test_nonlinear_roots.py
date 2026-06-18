@@ -8,8 +8,11 @@ import pytest
 from py_sc import (
     aitken_delta_squared,
     bisection_method,
+    damped_newton_method,
     find_sign_change_brackets,
     fixed_point_iteration,
+    modified_newton_method,
+    newton_method,
     steffensen_method,
 )
 
@@ -74,3 +77,40 @@ def test_steffensen_method_converges_faster_than_plain_fixed_point() -> None:
 def test_steffensen_rejects_zero_aitken_denominator() -> None:
     with pytest.raises(ValueError):
         steffensen_method(lambda x: x + 1.0, 0.0)
+
+
+def test_newton_method_solves_quadratic_equation() -> None:
+    result = newton_method(lambda x: x**2 - 2.0, lambda x: 2.0 * x, 1.5, tolerance=1e-12)
+
+    assert result.converged
+    assert abs(result.root - math.sqrt(2.0)) < 1e-12
+    assert result.iterations <= 5
+
+
+def test_damped_newton_backtracks_large_initial_step() -> None:
+    func = lambda x: x**3 - 1.0
+    derivative = lambda x: 3.0 * x**2
+
+    result = damped_newton_method(func, derivative, 0.1, tolerance=1e-12, max_iterations=50)
+
+    assert result.converged
+    assert abs(result.root - 1.0) < 1e-10
+    assert abs(func(result.history[1])) < abs(func(result.history[0]))
+
+
+def test_modified_newton_handles_known_multiple_root() -> None:
+    func = lambda x: (x - 2.0) ** 3
+    derivative = lambda x: 3.0 * (x - 2.0) ** 2
+
+    plain = newton_method(func, derivative, 3.5, tolerance=1e-8, max_iterations=100)
+    modified = modified_newton_method(func, derivative, 3.5, multiplicity=3, tolerance=1e-12)
+
+    assert plain.converged
+    assert modified.converged
+    assert abs(modified.root - 2.0) < 1e-12
+    assert modified.iterations < plain.iterations
+
+
+def test_newton_rejects_zero_derivative() -> None:
+    with pytest.raises(ValueError):
+        newton_method(lambda x: x**3 + 1.0, lambda x: 3.0 * x**2, 0.0)

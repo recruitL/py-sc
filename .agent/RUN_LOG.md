@@ -341,6 +341,30 @@ Notebook 结构检查
 日志：`.agent/logs/command-2026-06-19T05-17-13-08-00-33801.log`、`.agent/logs/command-2026-06-19T05-18-16-08-00-36526.log`、`.agent/logs/command-2026-06-19T05-18-16-08-00-36527.log`、`.agent/logs/command-2026-06-19T05-17-42-08-00-34820.log`、`.agent/logs/command-2026-06-19T05-17-52-08-00-34868.log`、`.agent/logs/command-2026-06-19T05-17-52-08-00-34869.log`、`.agent/logs/command-2026-06-19T05-18-21-08-00-36905.log`；失败日志：`.agent/logs/command-2026-06-19T05-17-22-08-00-34359.log`。
 下一步：创建 8.2 checkpoint commit。
 
+[2026-06-19T05:21:01+08:00] [CH08] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch08): add fixed point acceleration methods"`
+退出码：0
+摘要：第8章 8.2 checkpoint `d82400c` 已创建。
+下一步：开始 8.3 Newton、阻尼 Newton 和重根修正。
+
+[2026-06-19T05:21:01+08:00] [CH08] [START]
+开始第8章 8.3“Newton、阻尼 Newton 和重根修正”。当前原子工作单元为 Newton 类方法及配套 Notebook、脚本和测试。
+下一步：实现公共函数并补充教学 Notebook。
+
+[2026-06-19T05:24:02+08:00] [CH08] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import newton_method, damped_newton_method, modified_newton_method"`
+`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+`python -m pytest tests/test_nonlinear_roots.py`
+`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+`nbclient` 执行 `notebooks/03_newton_methods.ipynb`
+Notebook 结构检查
+`git diff --check`
+退出码：0
+摘要：8.3 Newton/阻尼 Newton/重根修正原子工作单元通过导入、脚本、12 个 ch08 测试、语法检查、Notebook 执行、Notebook 结构检查和 diff 空白检查。
+日志：`.agent/logs/command-2026-06-19T05-23-42-08-00-41197.log`、`.agent/logs/command-2026-06-19T05-23-42-08-00-41198.log`、`.agent/logs/command-2026-06-19T05-23-42-08-00-41201.log`、`.agent/logs/command-2026-06-19T05-23-42-08-00-41211.log`、`.agent/logs/command-2026-06-19T05-23-48-08-00-41676.log`、`.agent/logs/command-2026-06-19T05-23-56-08-00-41985.log`、`.agent/logs/command-2026-06-19T05-23-56-08-00-41986.log`。
+下一步：创建 8.3 checkpoint commit。
+
 [2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
 命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 退出码：0
@@ -405,4 +429,46 @@ Notebook 结构检查
 命令：`git diff --check`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-18-21-08-00-36905.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:23:42+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-42-08-00-41211.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:23:42+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-42-08-00-41198.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:23:42+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import newton_method, damped_newton_method, modified_newton_method; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-42-08-00-41197.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:23:42+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-42-08-00-41201.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:23:48+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-48-08-00-41676.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:23:56+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-56-08-00-41986.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:23:56+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-23-56-08-00-41985.log`
 摘要：命令执行成功。

@@ -204,6 +204,94 @@ def steffensen_method(
     )
 
 
+def newton_method(
+    func: ScalarFunction,
+    derivative: ScalarFunction,
+    initial: float,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    derivative_tolerance: float = 1e-14,
+) -> ScalarRootResult:
+    """Newton 法求解标量非线性方程。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    derivative_tolerance = _validate_tolerance(derivative_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x_old = float(initial)
+    return _newton_core(
+        func,
+        derivative,
+        x_old,
+        tolerance,
+        max_iterations,
+        derivative_tolerance,
+        multiplicity=1.0,
+        use_damping=False,
+    )
+
+
+def damped_newton_method(
+    func: ScalarFunction,
+    derivative: ScalarFunction,
+    initial: float,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    derivative_tolerance: float = 1e-14,
+    damping_factor: float = 0.5,
+    min_damping: float = 1e-4,
+) -> ScalarRootResult:
+    """带回溯阻尼的 Newton 法。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    derivative_tolerance = _validate_tolerance(derivative_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    damping_factor = float(damping_factor)
+    min_damping = _validate_tolerance(min_damping)
+    if not 0.0 < damping_factor < 1.0:
+        raise ValueError("damping_factor must be in (0, 1)")
+    if min_damping > 1.0:
+        raise ValueError("min_damping must be no larger than 1")
+    return _newton_core(
+        func,
+        derivative,
+        float(initial),
+        tolerance,
+        max_iterations,
+        derivative_tolerance,
+        multiplicity=1.0,
+        use_damping=True,
+        damping_factor=damping_factor,
+        min_damping=min_damping,
+    )
+
+
+def modified_newton_method(
+    func: ScalarFunction,
+    derivative: ScalarFunction,
+    initial: float,
+    multiplicity: int,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    derivative_tolerance: float = 1e-14,
+) -> ScalarRootResult:
+    """已知根重数时的修正 Newton 法。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    derivative_tolerance = _validate_tolerance(derivative_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    multiplicity = _validate_positive_int(multiplicity, "multiplicity")
+    return _newton_core(
+        func,
+        derivative,
+        float(initial),
+        tolerance,
+        max_iterations,
+        derivative_tolerance,
+        multiplicity=float(multiplicity),
+        use_damping=False,
+    )
+
+
 def _validate_interval(a: float, b: float) -> tuple[float, float]:
     a = float(a)
     b = float(b)
@@ -238,3 +326,80 @@ def _fixed_point_residual(
     if residual_func is None:
         return abs(_call_scalar(iteration_func, x) - x)
     return abs(_call_scalar(residual_func, x))
+
+
+def _newton_core(
+    func: ScalarFunction,
+    derivative: ScalarFunction,
+    initial: float,
+    tolerance: float,
+    max_iterations: int,
+    derivative_tolerance: float,
+    multiplicity: float,
+    use_damping: bool,
+    damping_factor: float = 0.5,
+    min_damping: float = 1e-4,
+) -> ScalarRootResult:
+    x_old = float(initial)
+    history = [x_old]
+    converged = False
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        fx = _call_scalar(func, x_old)
+        if abs(fx) <= tolerance:
+            converged = True
+            break
+        dfx = _call_scalar(derivative, x_old)
+        if abs(dfx) <= derivative_tolerance:
+            raise ValueError("Newton derivative is too small")
+
+        direction = -multiplicity * fx / dfx
+        x_new = x_old + direction
+        if use_damping:
+            x_new = _backtracking_newton_step(
+                func,
+                x_old,
+                direction,
+                abs(fx),
+                damping_factor,
+                min_damping,
+            )
+
+        history.append(x_new)
+        iterations = k
+        step = abs(x_new - x_old)
+        residual = abs(_call_scalar(func, x_new))
+        if residual <= tolerance or step <= tolerance * max(1.0, abs(x_new)):
+            converged = True
+            x_old = x_new
+            break
+        x_old = x_new
+
+    root = float(x_old)
+    residual = abs(_call_scalar(func, root))
+    return ScalarRootResult(
+        root=root,
+        iterations=iterations,
+        converged=converged,
+        residual=float(residual),
+        history=np.array(history, dtype=float),
+    )
+
+
+def _backtracking_newton_step(
+    func: ScalarFunction,
+    x_old: float,
+    direction: float,
+    current_residual: float,
+    damping_factor: float,
+    min_damping: float,
+) -> float:
+    damping = 1.0
+    while damping >= min_damping:
+        x_trial = x_old + damping * direction
+        trial_residual = abs(_call_scalar(func, x_trial))
+        if trial_residual < current_residual:
+            return x_trial
+        damping *= damping_factor
+    raise ValueError("damped Newton failed to reduce residual")

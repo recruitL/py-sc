@@ -16,8 +16,11 @@ if str(SRC) not in sys.path:
 from py_sc import (  # noqa: E402
     aitken_delta_squared,
     bisection_method,
+    damped_newton_method,
     find_sign_change_brackets,
     fixed_point_iteration,
+    modified_newton_method,
+    newton_method,
     steffensen_method,
 )
 
@@ -45,6 +48,29 @@ def main() -> None:
         f"residual={accelerated.residual:.3e}",
     )
     print("first Aitken accelerated values:", np.array2string(aitken_values[:3], precision=12))
+
+    sqrt2 = newton_method(lambda x: x**2 - 2.0, lambda x: 2.0 * x, 1.5, tolerance=1e-12)
+    damped = damped_newton_method(lambda x: x**3 - 1.0, lambda x: 3.0 * x**2, 0.1, tolerance=1e-12)
+    multiple_plain = newton_method(
+        lambda x: (x - 2.0) ** 3,
+        lambda x: 3.0 * (x - 2.0) ** 2,
+        3.5,
+        tolerance=1e-8,
+    )
+    multiple_modified = modified_newton_method(
+        lambda x: (x - 2.0) ** 3,
+        lambda x: 3.0 * (x - 2.0) ** 2,
+        3.5,
+        multiplicity=3,
+        tolerance=1e-12,
+    )
+    print(f"Newton sqrt(2): root={sqrt2.root:.12f}, iterations={sqrt2.iterations}")
+    print(f"damped Newton cubic: root={damped.root:.12f}, iterations={damped.iterations}")
+    print(
+        "multiple root:",
+        f"plain_iterations={multiple_plain.iterations}",
+        f"modified_iterations={multiple_modified.iterations}",
+    )
 
     polynomial = lambda x: (x - 1.0) * (x + 0.5) * (x - 2.0)
     print("polynomial brackets:", find_sign_change_brackets(polynomial, -1.0, 2.5, 35))
