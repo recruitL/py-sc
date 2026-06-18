@@ -99,6 +99,111 @@ def bisection_method(
     )
 
 
+def fixed_point_iteration(
+    iteration_func: ScalarFunction,
+    initial: float,
+    tolerance: float = 1e-10,
+    max_iterations: int = 100,
+    residual_func: ScalarFunction | None = None,
+) -> ScalarRootResult:
+    """用简单不动点迭代求解 ``x = iteration_func(x)``。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x_old = float(initial)
+    history = [x_old]
+    converged = False
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        x_new = _call_scalar(iteration_func, x_old)
+        history.append(x_new)
+        iterations = k
+        step = abs(x_new - x_old)
+        residual = _fixed_point_residual(iteration_func, residual_func, x_new)
+        if step <= tolerance * max(1.0, abs(x_new)) or residual <= tolerance:
+            converged = True
+            x_old = x_new
+            break
+        x_old = x_new
+
+    root = float(x_old)
+    residual = _fixed_point_residual(iteration_func, residual_func, root)
+    return ScalarRootResult(
+        root=root,
+        iterations=iterations,
+        converged=converged,
+        residual=float(residual),
+        history=np.array(history, dtype=float),
+    )
+
+
+def aitken_delta_squared(
+    sequence: np.ndarray | list[float] | tuple[float, ...],
+    denominator_tolerance: float = 1e-14,
+) -> np.ndarray:
+    """对一维序列应用 Aitken ``delta^2`` 加速。"""
+
+    denominator_tolerance = _validate_tolerance(denominator_tolerance)
+    values = np.asarray(sequence, dtype=float)
+    if values.ndim != 1:
+        raise ValueError("sequence must be one-dimensional")
+    if values.size < 3:
+        raise ValueError("sequence must contain at least three values")
+    first_delta = values[1:-1] - values[:-2]
+    second_delta = values[2:] - 2.0 * values[1:-1] + values[:-2]
+    accelerated = np.full(values.size - 2, np.nan, dtype=float)
+    stable = np.abs(second_delta) > denominator_tolerance
+    accelerated[stable] = values[:-2][stable] - first_delta[stable] ** 2 / second_delta[stable]
+    return accelerated
+
+
+def steffensen_method(
+    iteration_func: ScalarFunction,
+    initial: float,
+    tolerance: float = 1e-10,
+    max_iterations: int = 50,
+    residual_func: ScalarFunction | None = None,
+    denominator_tolerance: float = 1e-14,
+) -> ScalarRootResult:
+    """用 Steffensen 方法加速不动点迭代。"""
+
+    tolerance = _validate_tolerance(tolerance)
+    denominator_tolerance = _validate_tolerance(denominator_tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x_old = float(initial)
+    history = [x_old]
+    converged = False
+    iterations = 0
+
+    for k in range(1, max_iterations + 1):
+        x1 = _call_scalar(iteration_func, x_old)
+        x2 = _call_scalar(iteration_func, x1)
+        denominator = x2 - 2.0 * x1 + x_old
+        if abs(denominator) <= denominator_tolerance:
+            raise ValueError("Steffensen denominator is too small")
+        x_new = x_old - (x1 - x_old) ** 2 / denominator
+        history.append(x_new)
+        iterations = k
+        step = abs(x_new - x_old)
+        residual = _fixed_point_residual(iteration_func, residual_func, x_new)
+        if step <= tolerance * max(1.0, abs(x_new)) or residual <= tolerance:
+            converged = True
+            x_old = x_new
+            break
+        x_old = x_new
+
+    root = float(x_old)
+    residual = _fixed_point_residual(iteration_func, residual_func, root)
+    return ScalarRootResult(
+        root=root,
+        iterations=iterations,
+        converged=converged,
+        residual=float(residual),
+        history=np.array(history, dtype=float),
+    )
+
+
 def _validate_interval(a: float, b: float) -> tuple[float, float]:
     a = float(a)
     b = float(b)
@@ -123,3 +228,13 @@ def _validate_positive_int(value: int, name: str) -> int:
 
 def _call_scalar(func: ScalarFunction, x: float) -> float:
     return float(np.asarray(func(float(x)), dtype=float))
+
+
+def _fixed_point_residual(
+    iteration_func: ScalarFunction,
+    residual_func: ScalarFunction | None,
+    x: float,
+) -> float:
+    if residual_func is None:
+        return abs(_call_scalar(iteration_func, x) - x)
+    return abs(_call_scalar(residual_func, x))

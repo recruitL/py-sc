@@ -26,14 +26,15 @@ $$
 ## 阅读顺序
 
 1. `notebooks/01_bracketing_methods.ipynb`
-2. 后续将继续补充不动点与加速、Newton 法、弦截与抛物线法、多项式全部根拓展。
+2. `notebooks/02_fixed_point_acceleration.ipynb`
+3. 后续将继续补充 Newton 法、弦截与抛物线法、多项式全部根拓展。
 
 ## Notebook 对照表
 
 | Notebook | 作用 | 状态 |
 | --- | --- | --- |
 | `01_bracketing_methods.ipynb` | 根隔离、变号区间扫描、二分法、误差上界和偶重根局限。 | 已建设 |
-| `02_fixed_point_acceleration.ipynb` | 不动点迭代、Aitken 加速和 Steffensen 方法。 | 待建设 |
+| `02_fixed_point_acceleration.ipynb` | 不动点迭代、Aitken 加速和 Steffensen 方法。 | 已建设 |
 | `03_newton_methods.ipynb` | Newton 法、阻尼 Newton、重根修正和收敛阶实验。 | 待建设 |
 | `04_secant_and_parabolic_methods.ipynb` | 弦截法和 Müller 抛物线法。 | 待建设 |
 | `05_polynomial_roots_extensions.ipynb` | Bairstow 型劈因子法和逐次压缩 Newton 求全部零点。 | 待建设 |
@@ -60,7 +61,10 @@ src/py_sc/nonlinear_roots.py
 
 * `find_sign_change_brackets`
 * `bisection_method`
+* `fixed_point_iteration`
+* `aitken_delta_squared`
+* `steffensen_method`
 
 ## 本章小结
 
-标量求根方法可以先按是否保持括区间分为两类。区间分割和二分法依赖连续性与变号条件，可靠性强，并能给出清楚的区间误差上界；但它们对无变号偶重根无能为力，收敛速度也只是线性。后续开方法会尝试提高速度，但会付出初值敏感、导数要求或失败保护更复杂的代价。
+标量求根方法可以先按是否保持括区间分为两类。区间分割和二分法依赖连续性与变号条件，可靠性强，并能给出清楚的区间误差上界；但它们对无变号偶重根无能为力，收敛速度也只是线性。不动点迭代把求根问题改写为 $x=g(x)$，局部收敛依赖 $|g'(\alpha)|<1$；Aitken 和 Steffensen 能显著加快线性收敛，但也会引入分母退化、初值敏感和局部发散等风险。后续 Newton 类方法会进一步利用导数信息提高速度。

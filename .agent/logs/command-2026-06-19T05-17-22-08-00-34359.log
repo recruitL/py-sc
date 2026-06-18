@@ -1,0 +1,72 @@
+timestamp: 2026-06-19T05:17:22+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env MPLBACKEND=Agg PYTHONPATH=src python -
+---- output ----
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "/opt/anaconda3/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/opt/anaconda3/lib/python3.12/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/anaconda3/lib/python3.12/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+def teaching_steffensen(g, x0, tolerance=1e-10, max_iterations=50):
+    history = [float(x0)]
+    x_old = float(x0)
+    for k in range(1, max_iterations + 1):
+        y = float(g(x_old))
+        z = float(g(y))
+        denominator = z - 2.0 * y + x_old
+        if abs(denominator) <= 1e-14:
+            raise ValueError("Aitken denominator is too small")
+        x_new = x_old - (y - x_old) ** 2 / denominator
+        history.append(x_new)
+        if abs(x_new - x_old) <= tolerance * max(1.0, abs(x_new)):
+            return x_new, k, True, np.array(history)
+        x_old = x_new
+    return x_old, max_iterations, False, np.array(history)
+
+plain = fixed_point_iteration(math.cos, 0.5, tolerance=1e-12)
+steff = steffensen_method(math.cos, 0.5, tolerance=1e-12)
+teaching = teaching_steffensen(math.cos, 0.5, tolerance=1e-12)
+
+print(f"plain fixed point iterations = {plain.iterations}, root = {plain.root:.15f}")
+print(f"Steffensen iterations = {steff.iterations}, root = {steff.root:.15f}")
+print(f"teaching Steffensen iterations = {teaching[1]}, root = {teaching[0]:.15f}")
+
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mValueError[0m                                Traceback (most recent call last)
+Cell [0;32mIn[4], line 19[0m
+[1;32m     17[0m plain [38;5;241m=[39m fixed_point_iteration(math[38;5;241m.[39mcos, [38;5;241m0.5[39m, tolerance[38;5;241m=[39m[38;5;241m1e-12[39m)
+[1;32m     18[0m steff [38;5;241m=[39m steffensen_method(math[38;5;241m.[39mcos, [38;5;241m0.5[39m, tolerance[38;5;241m=[39m[38;5;241m1e-12[39m)
+[0;32m---> 19[0m teaching [38;5;241m=[39m teaching_steffensen(math[38;5;241m.[39mcos, [38;5;241m0.5[39m, tolerance[38;5;241m=[39m[38;5;241m1e-12[39m)
+[1;32m     21[0m [38;5;28mprint[39m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mplain fixed point iterations = [39m[38;5;132;01m{[39;00mplain[38;5;241m.[39miterations[38;5;132;01m}[39;00m[38;5;124m, root = [39m[38;5;132;01m{[39;00mplain[38;5;241m.[39mroot[38;5;132;01m:[39;00m[38;5;124m.15f[39m[38;5;132;01m}[39;00m[38;5;124m"[39m)
+[1;32m     22[0m [38;5;28mprint[39m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mSteffensen iterations = [39m[38;5;132;01m{[39;00msteff[38;5;241m.[39miterations[38;5;132;01m}[39;00m[38;5;124m, root = [39m[38;5;132;01m{[39;00msteff[38;5;241m.[39mroot[38;5;132;01m:[39;00m[38;5;124m.15f[39m[38;5;132;01m}[39;00m[38;5;124m"[39m)
+
+Cell [0;32mIn[4], line 9[0m, in [0;36mteaching_steffensen[0;34m(g, x0, tolerance, max_iterations)[0m
+[1;32m      7[0m denominator [38;5;241m=[39m z [38;5;241m-[39m [38;5;241m2.0[39m [38;5;241m*[39m y [38;5;241m+[39m x_old
+[1;32m      8[0m [38;5;28;01mif[39;00m [38;5;28mabs[39m(denominator) [38;5;241m<[39m[38;5;241m=[39m [38;5;241m1e-14[39m:
+[0;32m----> 9[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m([38;5;124m"[39m[38;5;124mAitken denominator is too small[39m[38;5;124m"[39m)
+[1;32m     10[0m x_new [38;5;241m=[39m x_old [38;5;241m-[39m (y [38;5;241m-[39m x_old) [38;5;241m*[39m[38;5;241m*[39m [38;5;241m2[39m [38;5;241m/[39m denominator
+[1;32m     11[0m history[38;5;241m.[39mappend(x_new)
+
+[0;31mValueError[0m: Aitken denominator is too small

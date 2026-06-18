@@ -316,3 +316,93 @@
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-11-52-08-00-28492.log`
 摘要：命令执行成功。
+
+[2026-06-19T05:14:19+08:00] [CH08] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch08): add bracketing root methods"`
+退出码：0
+摘要：第8章 8.1 checkpoint `836d450` 已创建。
+下一步：开始 8.2 不动点迭代、Aitken 加速和 Steffensen 方法。
+
+[2026-06-19T05:14:19+08:00] [CH08] [START]
+开始第8章 8.2“不动点迭代和加速”。当前原子工作单元为固定点迭代、Aitken 加速、Steffensen 方法及配套 Notebook、脚本和测试。
+下一步：实现公共函数并补充教学 Notebook。
+
+[2026-06-19T05:18:25+08:00] [CH08] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import fixed_point_iteration, aitken_delta_squared, steffensen_method"`
+`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+`python -m pytest tests/test_nonlinear_roots.py`
+`nbclient` 执行 `notebooks/02_fixed_point_acceleration.ipynb`
+`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+Notebook 结构检查
+`git diff --check`
+退出码：0
+摘要：8.2 不动点/Aitken/Steffensen 原子工作单元通过导入、脚本、8 个 ch08 测试、Notebook 执行、语法检查、Notebook 结构检查和 diff 空白检查。首次 Notebook 执行因教学版 Steffensen 到达根后继续计算导致 Aitken 分母退化失败；加入残差预检查后已重跑通过。偶重根脚本示例改为 19 个子区间，避免恰好采到偶重根导致退化区间。
+日志：`.agent/logs/command-2026-06-19T05-17-13-08-00-33801.log`、`.agent/logs/command-2026-06-19T05-18-16-08-00-36526.log`、`.agent/logs/command-2026-06-19T05-18-16-08-00-36527.log`、`.agent/logs/command-2026-06-19T05-17-42-08-00-34820.log`、`.agent/logs/command-2026-06-19T05-17-52-08-00-34868.log`、`.agent/logs/command-2026-06-19T05-17-52-08-00-34869.log`、`.agent/logs/command-2026-06-19T05-18-21-08-00-36905.log`；失败日志：`.agent/logs/command-2026-06-19T05-17-22-08-00-34359.log`。
+下一步：创建 8.2 checkpoint commit。
+
+[2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-13-08-00-33803.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import fixed_point_iteration, aitken_delta_squared, steffensen_method; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-13-08-00-33801.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:17:13+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-13-08-00-33808.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:17:22+08:00] [COMMAND] [EXIT 1]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：1
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-22-08-00-34359.log`
+摘要：命令执行失败，需查看日志并修复。
+
+[2026-06-19T05:17:42+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-42-08-00-34820.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:17:52+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-52-08-00-34869.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:17:52+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-52-08-00-34868.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:17:52+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-17-52-08-00-34875.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:18:16+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-18-16-08-00-36526.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:18:16+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-18-16-08-00-36527.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:18:21+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-18-21-08-00-36905.log`
+摘要：命令执行成功。

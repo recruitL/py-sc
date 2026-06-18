@@ -1,14 +1,14 @@
 # ExecPlan：第 7—12 章连续建设
 
 状态：in_progress
-最后更新时间：2026-06-19T04:33:21+08:00
+最后更新时间：2026-06-19T05:18:25+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：a3d823a
+最后安全 commit：836d450
 当前章节：第8章
-当前小节：8.1 区间分割法
-当前原子任务：8.1 自检完成，准备 checkpoint
-下一项具体动作：显式暂存第8章 8.1 相关文件并创建 `checkpoint(ch08): add bracketing root methods`，继续排除第6章外部未提交文件。
+当前小节：8.2 不动点迭代和加速
+当前原子任务：8.2 自检完成，准备 checkpoint
+下一项具体动作：显式暂存第8章 8.2 相关文件并创建 `checkpoint(ch08): add fixed point acceleration methods`，继续排除第6章外部未提交文件。
 阻塞问题：无
 
 ## 总体进度
@@ -16,7 +16,7 @@
 | 章节 | 状态 | 当前里程碑 | 自检状态 | 最后 commit |
 |---|---|---|---|---|
 | 第7章 | done | 章节自检完成 | 通过 | a3d823a |
-| 第8章 | in_progress | 8.1 区间分割法 | 通过最小自检 | - |
+| 第8章 | in_progress | 8.2 不动点迭代和加速 | 8.2 通过最小自检 | 836d450 |
 | 第9章 | pending | - | 未开始 | - |
 | 第10章 | pending | - | 未开始 | - |
 | 第11章 | pending | - | 未开始 | - |
@@ -42,24 +42,16 @@
 * 第7章相关测试 14 passed，全仓库测试 57 passed。
 * 创建第7章最终提交 `a3d823a`。
 * 完成第8章 README 初稿、8.1 Notebook、章节脚本、`src/py_sc/nonlinear_roots.py` 中的区间扫描和二分法、`tests/test_nonlinear_roots.py` 中的 8.1 测试。
+* 创建第8章 8.1 checkpoint commit `836d450`。
+* 完成 8.2 Notebook、脚本更新、`fixed_point_iteration`、`aitken_delta_squared`、`steffensen_method` 和对应测试。
 
 ### 正在处理
 
-* 第8章 8.1 checkpoint。
+* 第8章 8.2 checkpoint。
 
 ### 已修改但尚未验证
 
-* `.agent/execplans/chapters-07-12.md`
-* `.agent/RUN_LOG.md`
-* `.agent/run_logged.sh`
-* `README.md`
-* `src/py_sc/__init__.py`
-* `src/py_sc/iterative_linear.py`
-* `tests/test_iterative_linear.py`
-* `chapters/ch07_iterative_linear_systems/README.md`
-* `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
-* `chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
-* `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`
+* 无第8章 8.2 未验证修改。
 
 ### 已通过的检查
 
@@ -99,10 +91,17 @@
 * `nbclient` 执行 `chapters/ch08_nonlinear_roots/notebooks/01_bracketing_methods.ipynb`：通过。
 * `git diff --check`：通过。
 * Notebook 结构检查：`01_bracketing_methods.ipynb` 无缺失 cell id，无提交输出。
+* `PYTHONPATH=src python -c "from py_sc import fixed_point_iteration, aitken_delta_squared, steffensen_method"`：通过。
+* `python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`：通过；偶重根示例修正为不正好采到根的 19 个子区间。
+* `python -m pytest tests/test_nonlinear_roots.py`：8 passed。
+* `nbclient` 执行 `chapters/ch08_nonlinear_roots/notebooks/02_fixed_point_acceleration.ipynb`：首次因教学版 Steffensen 到达根后继续计算导致 Aitken 分母退化失败；增加残差预检查后重跑通过。
+* `python -m py_compile src/py_sc/nonlinear_roots.py chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py tests/test_nonlinear_roots.py`：通过。
+* Notebook 结构检查：第8章前两个 Notebook 均无缺失 cell id，无提交输出。
+* `git diff --check`：通过。
 
 ### 失败或未执行的检查
 
-* 全仓库测试尚未运行，按章节顺序将在章节自检和最终检查阶段运行。
+* 全仓库测试尚未运行，按第8章章节自检和最终检查阶段运行。
 
 ### 已知问题
 
@@ -112,10 +111,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第8章 8.1 相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
-2. 创建 `checkpoint(ch08): add bracketing root methods`。
+1. 暂存第8章 8.2 相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
+2. 创建 `checkpoint(ch08): add fixed point acceleration methods`。
 3. 记录 commit hash。
-4. 开始第8章 8.2 不动点迭代和加速迭代。
+4. 开始第8章 8.3 Newton、阻尼 Newton 和重根修正。
 
 ### 恢复时应首先执行的命令
 
@@ -142,6 +141,17 @@ tail -80 .agent/RUN_LOG.md
 * `.agent/logs/command-2026-06-19T04-38-32-08-00-14789.log`
 * `.agent/logs/command-2026-06-19T04-38-32-08-00-14797.log`
 * `.agent/logs/command-2026-06-19T04-38-34-08-00-14762.log`
+* `.agent/logs/command-2026-06-19T05-17-13-08-00-33801.log`
+* `.agent/logs/command-2026-06-19T05-17-13-08-00-33803.log`
+* `.agent/logs/command-2026-06-19T05-17-13-08-00-33808.log`
+* `.agent/logs/command-2026-06-19T05-17-22-08-00-34359.log`
+* `.agent/logs/command-2026-06-19T05-17-42-08-00-34820.log`
+* `.agent/logs/command-2026-06-19T05-17-52-08-00-34868.log`
+* `.agent/logs/command-2026-06-19T05-17-52-08-00-34869.log`
+* `.agent/logs/command-2026-06-19T05-17-52-08-00-34875.log`
+* `.agent/logs/command-2026-06-19T05-18-16-08-00-36526.log`
+* `.agent/logs/command-2026-06-19T05-18-16-08-00-36527.log`
+* `.agent/logs/command-2026-06-19T05-18-21-08-00-36905.log`
 * `src/py_sc/iterative_linear.py`
 * `tests/test_iterative_linear.py`
 * `chapters/ch07_iterative_linear_systems/README.md`
@@ -153,6 +163,7 @@ tail -80 .agent/RUN_LOG.md
 * `tests/test_nonlinear_roots.py`
 * `chapters/ch08_nonlinear_roots/README.md`
 * `chapters/ch08_nonlinear_roots/notebooks/01_bracketing_methods.ipynb`
+* `chapters/ch08_nonlinear_roots/notebooks/02_fixed_point_acceleration.ipynb`
 * `chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
 
 ## 第8章记录
@@ -160,10 +171,10 @@ tail -80 .agent/RUN_LOG.md
 ### 已完成
 
 * 8.1 区间扫描和二分法。
+* 8.2 不动点、Aitken、Steffensen。
 
 ### 待完成
 
-* 8.2 不动点、Aitken、Steffensen。
 * 8.3 Newton、阻尼 Newton、重根修正。
 * 8.4 弦截法与 Müller 抛物线法。
 * 8.5 Bairstow 型劈因子法。

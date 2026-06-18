@@ -1,0 +1,12 @@
+timestamp: 2026-06-19T05:17:13+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py
+---- output ----
+brackets: [(0.7000000000000001, 0.8)]
+root=0.739085133215, residual=6.550e-14, iterations=36
+fixed point: root=0.739085133215 iterations=68 residual=7.611e-13
+steffensen: root=0.739085133215 iterations=4 residual=0.000e+00
+first Aitken accelerated values: [0.731385186383 0.736086691713 0.737652871396]
+polynomial brackets: [(-0.5, -0.5), (1.0, 1.0), (2.0, 2.0)]
+even root sign-change brackets: [(1.0, 1.0)]
+grid min near even root: 0.0

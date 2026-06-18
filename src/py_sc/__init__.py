@@ -75,8 +75,11 @@ from .iterative_linear import (
 )
 from .nonlinear_roots import (
     ScalarRootResult,
+    aitken_delta_squared,
     bisection_method,
     find_sign_change_brackets,
+    fixed_point_iteration,
+    steffensen_method,
 )
 from .integration import (
     AdaptiveSimpsonResult,
@@ -120,6 +123,7 @@ __all__ = [
     "ScalarRootResult",
     "adaptive_simpson",
     "adaptive_piecewise_linear",
+    "aitken_delta_squared",
     "average_parabolic_integral",
     "backward_difference",
     "bilinear_interpolate_cell",
@@ -146,6 +150,7 @@ __all__ = [
     "divided_difference_table",
     "finite_difference_weights",
     "find_sign_change_brackets",
+    "fixed_point_iteration",
     "five_point_center_derivative",
     "five_point_endpoint_derivative",
     "forward_difference",
@@ -201,6 +206,7 @@ __all__ = [
     "sor_iteration",
     "sor_iteration_matrix",
     "steepest_descent",
+    "steffensen_method",
     "spectral_radius",
     "tensor_product_gauss_legendre",
     "three_point_endpoint_derivative",
