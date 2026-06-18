@@ -111,6 +111,7 @@ py-sc/
 43. `chapters/ch09_nonlinear_systems/notebooks/03_broyden_and_continuation.ipynb`
 44. `chapters/ch10_eigenvalue_methods/README.md`
 45. `chapters/ch10_eigenvalue_methods/notebooks/01_power_and_inverse_iteration.ipynb`
+46. `chapters/ch10_eigenvalue_methods/notebooks/02_jacobi_and_qr_eigenvalues.ipynb`
 
 运行脚本示例：
 

@@ -16,7 +16,9 @@ $$
 * 用残差范数判断近似特征对是否可信；
 * 理解幂法对模最大特征值的选择机制；
 * 用位移反幂法寻找靠近给定位移的特征值；
-* 理解 Rayleigh 商迭代把位移动态更新后的快速收敛现象。
+* 理解 Rayleigh 商迭代把位移动态更新后的快速收敛现象；
+* 用 Jacobi 旋转求实对称矩阵的全部特征值和正交特征向量；
+* 理解 QR 迭代如何把矩阵逐步推向近似对角形式。
 
 ## 与前面章节的联系
 
@@ -25,12 +27,14 @@ $$
 ## 阅读顺序
 
 1. `notebooks/01_power_and_inverse_iteration.ipynb`
+2. `notebooks/02_jacobi_and_qr_eigenvalues.ipynb`
 
 ## Notebook 对照表
 
 | Notebook | 作用 | 状态 |
 | --- | --- | --- |
 | `01_power_and_inverse_iteration.ipynb` | Rayleigh 商、幂法、位移反幂法和 Rayleigh 商迭代。 | 已建设 |
+| `02_jacobi_and_qr_eigenvalues.ipynb` | 对称 Jacobi 旋转、正交特征向量和 QR 特征值迭代。 | 已建设 |
 
 ## 可运行脚本
 
@@ -56,7 +60,10 @@ src/py_sc/eigenvalues.py
 * `power_method`
 * `inverse_power_method`
 * `rayleigh_quotient_iteration`
+* `off_diagonal_frobenius_norm`
+* `jacobi_eigenvalue_method`
+* `qr_eigenvalue_iteration`
 
 ## 本章小结
 
-幂法不断放大初始向量在主特征向量方向上的分量，因此适合估计模最大的特征值。反幂法通过反复求解带位移线性系统，把“靠近位移的特征值”转化为变换后模最大的特征值。Rayleigh 商迭代进一步把位移设为当前 Rayleigh 商，在对称矩阵和合适初值下可以非常快地收敛。三者都应配合特征残差来判断结果，而不只观察相邻特征值估计的变化。
+幂法不断放大初始向量在主特征向量方向上的分量，因此适合估计模最大的特征值。反幂法通过反复求解带位移线性系统，把“靠近位移的特征值”转化为变换后模最大的特征值。Rayleigh 商迭代进一步把位移设为当前 Rayleigh 商，在对称矩阵和合适初值下可以非常快地收敛。Jacobi 方法用一系列正交旋转消去非对角元，适合展示对称矩阵正交对角化；QR 迭代则通过反复分解和相似变换把矩阵推向近似对角形式。所有方法都应配合特征残差或非对角范数来判断结果，而不只观察相邻特征值估计的变化。

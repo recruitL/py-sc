@@ -15,7 +15,9 @@ if str(SRC) not in sys.path:
 from py_sc import (  # noqa: E402
     eigen_residual_norm,
     inverse_power_method,
+    jacobi_eigenvalue_method,
     power_method,
+    qr_eigenvalue_iteration,
     rayleigh_quotient,
     rayleigh_quotient_iteration,
 )
@@ -61,6 +63,22 @@ def main() -> None:
     print(
         "dominant residual recomputed:",
         f"{eigen_residual_norm(symmetric, dominant.eigenvalue, dominant.eigenvector):.3e}",
+    )
+
+    jacobi = jacobi_eigenvalue_method(symmetric, tolerance=1e-12)
+    print("Jacobi eigenvalues:", np.array2string(jacobi.eigenvalues, precision=12))
+    print(
+        "Jacobi:",
+        f"rotations={jacobi.iterations}",
+        f"offdiag={jacobi.off_diagonal_norm:.3e}",
+    )
+
+    qr = qr_eigenvalue_iteration(symmetric[:2, :2], tolerance=1e-12)
+    print("QR iteration eigenvalues:", np.array2string(np.sort(qr.eigenvalues), precision=12))
+    print(
+        "QR iteration:",
+        f"iterations={qr.iterations}",
+        f"offdiag={qr.off_diagonal_norm:.3e}",
     )
 
 

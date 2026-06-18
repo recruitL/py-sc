@@ -6,8 +6,11 @@ import pytest
 from py_sc import (
     eigen_residual_norm,
     inverse_power_method,
+    jacobi_eigenvalue_method,
     normalize_vector,
+    off_diagonal_frobenius_norm,
     power_method,
+    qr_eigenvalue_iteration,
     rayleigh_quotient,
     rayleigh_quotient_iteration,
 )
@@ -74,3 +77,43 @@ def test_eigen_residual_norm_is_small_for_exact_eigenpair() -> None:
 def test_eigenvalue_routines_validate_square_matrix() -> None:
     with pytest.raises(ValueError):
         rayleigh_quotient(np.ones((2, 3)), [1.0, 1.0, 1.0])
+
+
+def test_off_diagonal_frobenius_norm_ignores_diagonal_entries() -> None:
+    matrix = np.array([[10.0, 3.0], [4.0, -2.0]])
+
+    assert off_diagonal_frobenius_norm(matrix) == pytest.approx(5.0)
+
+
+def test_jacobi_eigenvalue_method_matches_numpy_for_symmetric_matrix() -> None:
+    matrix = np.array(
+        [
+            [4.0, 1.0, 0.0],
+            [1.0, 3.0, 1.0],
+            [0.0, 1.0, 2.0],
+        ]
+    )
+
+    result = jacobi_eigenvalue_method(matrix, tolerance=1e-12, max_iterations=100)
+
+    assert result.converged
+    assert np.allclose(result.eigenvalues, np.linalg.eigvalsh(matrix), atol=1e-10)
+    assert np.allclose(result.eigenvectors.T @ result.eigenvectors, np.eye(3), atol=1e-10)
+    assert np.linalg.norm(matrix @ result.eigenvectors - result.eigenvectors @ np.diag(result.eigenvalues)) < 1e-9
+    assert result.off_diagonal_history[-1] <= result.off_diagonal_history[0]
+
+
+def test_jacobi_eigenvalue_method_rejects_nonsymmetric_matrix() -> None:
+    with pytest.raises(ValueError):
+        jacobi_eigenvalue_method(np.array([[1.0, 2.0], [0.0, 1.0]]))
+
+
+def test_qr_eigenvalue_iteration_matches_numpy_for_symmetric_matrix() -> None:
+    matrix = np.array([[2.0, 1.0], [1.0, 2.0]])
+
+    result = qr_eigenvalue_iteration(matrix, tolerance=1e-12, max_iterations=100)
+
+    assert result.converged
+    assert np.allclose(np.sort(result.eigenvalues), np.linalg.eigvalsh(matrix), atol=1e-10)
+    assert result.off_diagonal_norm < 1e-10
+    assert result.schur_form.shape == matrix.shape

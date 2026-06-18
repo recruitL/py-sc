@@ -1,0 +1,25 @@
+timestamp: 2026-06-19T06:09:55+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: git status --short
+---- output ----
+ M .agent/RUN_LOG.md
+ M .agent/execplans/chapters-07-12.md
+ M README.md
+ M chapters/ch10_eigenvalue_methods/README.md
+ M chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py
+ M docs/README.md
+ M src/py_sc/__init__.py
+ M src/py_sc/eigenvalues.py
+ M tests/test_eigenvalues.py
+?? .agent/execplans/chapter-06-direct-methods.md
+?? .agent/logs/command-2026-06-19T06-09-38-08-00-86070.log
+?? .agent/logs/command-2026-06-19T06-09-38-08-00-86072.log
+?? .agent/logs/command-2026-06-19T06-09-38-08-00-86077.log
+?? .agent/logs/command-2026-06-19T06-09-45-08-00-86606.log
+?? .agent/logs/command-2026-06-19T06-09-55-08-00-86680.log
+?? .agent/logs/command-2026-06-19T06-09-55-08-00-86687.log
+?? .agent/logs/command-2026-06-19T06-09-55-08-00-86692.log
+?? chapters/ch06_direct_linear_systems/
+?? chapters/ch10_eigenvalue_methods/notebooks/02_jacobi_and_qr_eigenvalues.ipynb
+?? src/py_sc/direct_linear.py
+?? tests/test_direct_linear.py
