@@ -4,6 +4,8 @@ import numpy as np
 import pytest
 
 from py_sc import (
+    block_gauss_seidel_iteration,
+    block_jacobi_iteration,
     gauss_seidel_iteration,
     gauss_seidel_iteration_matrix,
     is_strictly_diagonally_dominant,
@@ -11,6 +13,9 @@ from py_sc import (
     jacobi_iteration,
     jacobi_iteration_matrix,
     relative_residual,
+    scan_sor_omega,
+    sor_iteration,
+    sor_iteration_matrix,
     spectral_radius,
 )
 
@@ -63,3 +68,66 @@ def test_jacobi_rejects_zero_diagonal() -> None:
 
     with pytest.raises(ValueError):
         jacobi_iteration(A, b)
+
+
+def test_sor_solves_system_and_matches_gauss_seidel_when_omega_is_one() -> None:
+    A = np.array(
+        [
+            [4.0, -1.0, 0.0],
+            [-1.0, 4.0, -1.0],
+            [0.0, -1.0, 4.0],
+        ]
+    )
+    b = np.array([2.0, 4.0, 6.0])
+    exact = np.linalg.solve(A, b)
+
+    sor = sor_iteration(A, b, omega=1.15, tolerance=1e-10, max_iterations=200)
+    gs = gauss_seidel_iteration(A, b, tolerance=1e-10, max_iterations=200)
+    sor_as_gs = sor_iteration(A, b, omega=1.0, tolerance=1e-10, max_iterations=200)
+
+    assert sor.converged
+    np.testing.assert_allclose(sor.value, exact, atol=1e-9)
+    np.testing.assert_allclose(sor_as_gs.value, gs.value, atol=1e-12)
+    assert spectral_radius(sor_iteration_matrix(A, 1.0)) == pytest.approx(
+        spectral_radius(gauss_seidel_iteration_matrix(A))
+    )
+
+
+def test_sor_omega_scan_returns_convergence_rows() -> None:
+    A = np.array([[4.0, -1.0], [-1.0, 4.0]])
+    b = np.array([1.0, 2.0])
+
+    rows = scan_sor_omega(A, b, np.array([0.8, 1.0, 1.2]), tolerance=1e-10, max_iterations=100)
+
+    assert len(rows) == 3
+    assert all(row[2] for row in rows)
+    assert all(row[3] < 1e-10 for row in rows)
+
+
+def test_block_iterations_solve_system() -> None:
+    A = np.array(
+        [
+            [5.0, -1.0, 0.0, 0.0],
+            [-1.0, 5.0, -1.0, 0.0],
+            [0.0, -1.0, 5.0, -1.0],
+            [0.0, 0.0, -1.0, 5.0],
+        ]
+    )
+    b = np.array([1.0, 2.0, 3.0, 4.0])
+    exact = np.linalg.solve(A, b)
+
+    block_j = block_jacobi_iteration(A, b, [2, 2], tolerance=1e-10, max_iterations=200)
+    block_gs = block_gauss_seidel_iteration(A, b, [2, 2], tolerance=1e-10, max_iterations=200)
+
+    assert block_j.converged
+    assert block_gs.converged
+    np.testing.assert_allclose(block_j.value, exact, atol=1e-9)
+    np.testing.assert_allclose(block_gs.value, exact, atol=1e-9)
+
+
+def test_sor_rejects_invalid_omega() -> None:
+    A = np.eye(2)
+    b = np.ones(2)
+
+    with pytest.raises(ValueError):
+        sor_iteration(A, b, omega=2.0)

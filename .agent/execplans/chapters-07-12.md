@@ -4,18 +4,18 @@
 最后更新时间：2026-06-19T04:33:21+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：acef9b0
+最后安全 commit：adb5267
 当前章节：第7章
-当前小节：7.1 雅可比迭代法与高斯-赛德尔迭代法
-当前原子任务：7.1 自检完成，准备 checkpoint
-下一项具体动作：显式暂存第7章 7.1 相关文件并创建 `checkpoint(ch07): add stationary iteration methods`，排除并保留第6章外部未提交文件。
+当前小节：7.2 超松弛迭代法
+当前原子任务：7.2 自检完成，准备 checkpoint
+下一项具体动作：显式暂存第7章 7.2 相关文件并创建 `checkpoint(ch07): add SOR and block iterations`，继续排除第6章外部未提交文件。
 阻塞问题：无
 
 ## 总体进度
 
 | 章节 | 状态 | 当前里程碑 | 自检状态 | 最后 commit |
 |---|---|---|---|---|
-| 第7章 | in_progress | 7.1 平稳迭代法 | 通过最小自检 | - |
+| 第7章 | in_progress | 7.2 SOR 与块迭代 | 7.1 和 7.2 通过 | adb5267 |
 | 第8章 | pending | - | 未开始 | - |
 | 第9章 | pending | - | 未开始 | - |
 | 第10章 | pending | - | 未开始 | - |
@@ -32,10 +32,12 @@
 * 创建本地分支 `codex/chapters-07-12`。
 * 建立 `.agent` 持久化计划、日志、命令日志脚本，并创建初始化 checkpoint `acef9b0`。
 * 完成第7章 README 初稿、7.1 Notebook、章节脚本、`src/py_sc/iterative_linear.py` 中的 Jacobi/Gauss-Seidel 基础实现、`tests/test_iterative_linear.py` 中的 7.1 测试。
+* 创建 7.1 checkpoint commit `adb5267`。
+* 完成 SOR、松弛因子扫描、块 Jacobi、块 Gauss-Seidel 公共实现、Notebook、脚本更新和测试扩展。
 
 ### 正在处理
 
-* 第7章 7.1 checkpoint。
+* 第7章 7.2 checkpoint。
 
 ### 已修改但尚未验证
 
@@ -49,6 +51,7 @@
 * `chapters/ch07_iterative_linear_systems/README.md`
 * `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
 * `chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
+* `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`
 
 ### 已通过的检查
 
@@ -63,6 +66,12 @@
 * `nbclient` 执行 `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`：通过。
 * `git diff --check`：通过。
 * Notebook 结构检查：`01_stationary_iterations.ipynb` 无缺失 cell id，无提交输出。
+* `PYTHONPATH=src python -c "from py_sc import sor_iteration, block_jacobi_iteration, block_gauss_seidel_iteration"`：通过。
+* `python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`：通过。
+* `python -m pytest tests/test_iterative_linear.py`：9 passed。
+* `nbclient` 执行 `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`：通过。
+* `git diff --check`：通过。
+* Notebook 结构检查：第7章两个 Notebook 均无缺失 cell id，无提交输出。
 
 ### 失败或未执行的检查
 
@@ -76,10 +85,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第7章 7.1 相关文件，排除第6章外部未提交文件和 direct-linear hunks。
-2. 创建 `checkpoint(ch07): add stationary iteration methods`。
+1. 暂存第7章 7.2 相关文件，排除第6章外部未提交文件和 direct-linear hunks。
+2. 创建 `checkpoint(ch07): add SOR and block iterations`。
 3. 记录 commit hash。
-4. 开始第7章 7.2 SOR 与块迭代。
+4. 开始第7章 7.3 最速下降、CG 与 PCG。
 
 ### 恢复时应首先执行的命令
 
@@ -110,6 +119,7 @@ tail -80 .agent/RUN_LOG.md
 * `tests/test_iterative_linear.py`
 * `chapters/ch07_iterative_linear_systems/README.md`
 * `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
+* `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`
 * `chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
 
 ### 已修改文件
@@ -135,3 +145,4 @@ tail -80 .agent/RUN_LOG.md
 * 决定：不创建第 6 章。原因：用户明确要求按顺序完成第 7—12 章，仓库当前缺第 6 章但本任务范围不包含第 6 章。影响：第 7、11、12 章中涉及第六章直接法连接时，只作为前置章节空缺提示或轻量复用说明。
 * 决定：新章节不再单独建立 `references.md`。原因：用户要求从现在开始章节末尾只保留一个“小结”，资料来源使用 Notebook 内联引用、链接、脚注或统一参考文件。影响：第 7—12 章目录只设置 README、notebooks、scripts，必要时使用 notes，不设置章节级 `references.md`。
 * 决定：第7章 7.1 使用公共模块 `src/py_sc/iterative_linear.py` 而不是章节私有 scripts 作为正式实现。原因：前几章已采用 `src/py_sc` 作为可复用教学实现位置，章节 scripts 只作为快速运行入口。影响：`src/py_sc/__init__.py` 导出 iterative-linear 函数，Notebook 先展示教学实现再调用正式实现。
+* 决定：块迭代 API 使用 `block_sizes` 而不是任意索引列表。原因：第七章教学重点是按连续变量组分块，连续块 API 更简单、错误面更小。影响：`block_jacobi_iteration` 和 `block_gauss_seidel_iteration` 支持连续块，任意子域排序留作后续拓展。

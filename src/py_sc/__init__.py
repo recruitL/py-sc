@@ -51,6 +51,8 @@ from .interpolation import (
 )
 from .iterative_linear import (
     LinearIterationResult,
+    block_gauss_seidel_iteration,
+    block_jacobi_iteration,
     gauss_seidel_iteration,
     gauss_seidel_iteration_matrix,
     is_strictly_diagonally_dominant,
@@ -58,6 +60,9 @@ from .iterative_linear import (
     jacobi_iteration,
     jacobi_iteration_matrix,
     relative_residual,
+    scan_sor_omega,
+    sor_iteration,
+    sor_iteration_matrix,
     spectral_radius,
 )
 from .integration import (
@@ -104,6 +109,8 @@ __all__ = [
     "average_parabolic_integral",
     "backward_difference",
     "bilinear_interpolate_cell",
+    "block_gauss_seidel_iteration",
+    "block_jacobi_iteration",
     "central_difference",
     "chebyshev_fit_function",
     "chebyshev_nodes",
@@ -161,12 +168,15 @@ __all__ = [
     "relative_residual",
     "richardson_derivative",
     "richardson_extrapolate",
+    "scan_sor_omega",
     "romberg_integrate",
     "second_derivative_endpoint_three_point",
     "second_derivative_five_point",
     "second_derivative_three_point",
     "simpson_rule",
     "simpson_three_eighths_rule",
+    "sor_iteration",
+    "sor_iteration_matrix",
     "spectral_radius",
     "tensor_product_gauss_legendre",
     "three_point_endpoint_derivative",

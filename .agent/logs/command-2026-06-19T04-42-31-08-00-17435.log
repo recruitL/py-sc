@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T04:42:31+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env PYTHONPATH=src python -c from py_sc import sor_iteration, block_jacobi_iteration, block_gauss_seidel_iteration; print('import ok')
+---- output ----
+import ok

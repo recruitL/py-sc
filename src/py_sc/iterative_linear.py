@@ -138,6 +138,160 @@ def gauss_seidel_iteration(
     )
 
 
+def sor_iteration(
+    A: np.ndarray,
+    b: np.ndarray,
+    omega: float,
+    x0: np.ndarray | None = None,
+    tolerance: float = 1e-8,
+    max_iterations: int = 500,
+) -> LinearIterationResult:
+    """逐次超松弛（SOR）迭代法求解 ``Ax=b``。"""
+
+    A, b = _as_linear_system(A, b)
+    omega = _validate_omega(omega)
+    tolerance = _validate_tolerance(tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    if np.any(np.diag(A) == 0):
+        raise ValueError("SOR iteration requires nonzero diagonal entries")
+    x = _initial_guess(b, x0)
+
+    residuals = [relative_residual(A, x, b)]
+    converged = residuals[-1] <= tolerance
+    iterations = 0
+    for k in range(1, max_iterations + 1):
+        x_old = x.copy()
+        for i in range(b.size):
+            left = A[i, :i] @ x[:i]
+            right = A[i, i + 1 :] @ x_old[i + 1 :]
+            gs_value = (b[i] - left - right) / A[i, i]
+            x[i] = (1.0 - omega) * x_old[i] + omega * gs_value
+        residuals.append(relative_residual(A, x, b))
+        iterations = k
+        if residuals[-1] <= tolerance:
+            converged = True
+            break
+
+    return LinearIterationResult(
+        value=x,
+        iterations=iterations,
+        converged=converged,
+        residual_norms=np.array(residuals, dtype=float),
+    )
+
+
+def sor_iteration_matrix(A: np.ndarray, omega: float) -> np.ndarray:
+    """SOR 迭代矩阵。"""
+
+    A = _as_square_matrix(A)
+    omega = _validate_omega(omega)
+    D = np.diag(np.diag(A))
+    L = np.tril(A, -1)
+    U = np.triu(A, 1)
+    left = D + omega * L
+    right = (1.0 - omega) * D - omega * U
+    return np.linalg.solve(left, right)
+
+
+def scan_sor_omega(
+    A: np.ndarray,
+    b: np.ndarray,
+    omega_values: np.ndarray,
+    tolerance: float = 1e-8,
+    max_iterations: int = 500,
+) -> list[tuple[float, int, bool, float]]:
+    """扫描一组 SOR 松弛因子，返回 ``(omega, iterations, converged, residual)``。"""
+
+    rows: list[tuple[float, int, bool, float]] = []
+    for omega in np.asarray(omega_values, dtype=float):
+        result = sor_iteration(A, b, omega, tolerance=tolerance, max_iterations=max_iterations)
+        rows.append((float(omega), result.iterations, result.converged, float(result.residual_norms[-1])))
+    return rows
+
+
+def block_jacobi_iteration(
+    A: np.ndarray,
+    b: np.ndarray,
+    block_sizes: list[int] | tuple[int, ...],
+    x0: np.ndarray | None = None,
+    tolerance: float = 1e-8,
+    max_iterations: int = 500,
+) -> LinearIterationResult:
+    """块 Jacobi 迭代法。"""
+
+    A, b = _as_linear_system(A, b)
+    blocks = _block_slices(block_sizes, b.size)
+    tolerance = _validate_tolerance(tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x = _initial_guess(b, x0)
+
+    residuals = [relative_residual(A, x, b)]
+    converged = residuals[-1] <= tolerance
+    iterations = 0
+    for k in range(1, max_iterations + 1):
+        old = x.copy()
+        new = old.copy()
+        for block in blocks:
+            rhs = b[block] - A[block, :] @ old + A[block, block] @ old[block]
+            new[block] = np.linalg.solve(A[block, block], rhs)
+        x = new
+        residuals.append(relative_residual(A, x, b))
+        iterations = k
+        if residuals[-1] <= tolerance:
+            converged = True
+            break
+
+    return LinearIterationResult(
+        value=x,
+        iterations=iterations,
+        converged=converged,
+        residual_norms=np.array(residuals, dtype=float),
+    )
+
+
+def block_gauss_seidel_iteration(
+    A: np.ndarray,
+    b: np.ndarray,
+    block_sizes: list[int] | tuple[int, ...],
+    x0: np.ndarray | None = None,
+    tolerance: float = 1e-8,
+    max_iterations: int = 500,
+) -> LinearIterationResult:
+    """块 Gauss-Seidel 迭代法。"""
+
+    A, b = _as_linear_system(A, b)
+    blocks = _block_slices(block_sizes, b.size)
+    tolerance = _validate_tolerance(tolerance)
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    x = _initial_guess(b, x0)
+
+    residuals = [relative_residual(A, x, b)]
+    converged = residuals[-1] <= tolerance
+    iterations = 0
+    for k in range(1, max_iterations + 1):
+        old = x.copy()
+        for block in blocks:
+            rhs = b[block] - A[block, :] @ x + A[block, block] @ x[block]
+            # 尚未更新的后续块仍应使用上一轮值。
+            stop = block.stop
+            if stop < b.size:
+                tail = slice(stop, b.size)
+                rhs -= A[block, tail] @ (old[tail] - x[tail])
+            x[block] = np.linalg.solve(A[block, block], rhs)
+        residuals.append(relative_residual(A, x, b))
+        iterations = k
+        if residuals[-1] <= tolerance:
+            converged = True
+            break
+
+    return LinearIterationResult(
+        value=x,
+        iterations=iterations,
+        converged=converged,
+        residual_norms=np.array(residuals, dtype=float),
+    )
+
+
 def is_strictly_diagonally_dominant(A: np.ndarray) -> bool:
     """判断矩阵是否严格行对角占优。"""
 
@@ -232,3 +386,27 @@ def _validate_positive_int(value: int, name: str) -> int:
     if value < 1:
         raise ValueError(f"{name} must be positive")
     return value
+
+
+def _validate_omega(omega: float) -> float:
+    omega = float(omega)
+    if not 0.0 < omega < 2.0:
+        raise ValueError("omega must satisfy 0 < omega < 2 for SOR")
+    return omega
+
+
+def _block_slices(block_sizes: list[int] | tuple[int, ...], n: int) -> list[slice]:
+    if not block_sizes:
+        raise ValueError("block_sizes must be non-empty")
+    sizes = [int(size) for size in block_sizes]
+    if any(size < 1 for size in sizes):
+        raise ValueError("all block sizes must be positive")
+    if sum(sizes) != n:
+        raise ValueError("block sizes must sum to the system dimension")
+    blocks = []
+    start = 0
+    for size in sizes:
+        stop = start + size
+        blocks.append(slice(start, stop))
+        start = stop
+    return blocks

@@ -13,10 +13,14 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from py_sc import (  # noqa: E402
+    block_gauss_seidel_iteration,
+    block_jacobi_iteration,
     gauss_seidel_iteration,
     gauss_seidel_iteration_matrix,
     jacobi_iteration,
     jacobi_iteration_matrix,
+    scan_sor_omega,
+    sor_iteration,
     spectral_radius,
 )
 
@@ -44,6 +48,26 @@ def main() -> None:
     print(f"iterations={gs.iterations}, residual={gs.residual_norms[-1]:.3e}")
     print(f"error={np.linalg.norm(gs.value - exact):.3e}")
     print(f"spectral_radius={spectral_radius(gauss_seidel_iteration_matrix(A)):.6f}")
+
+    print("\nSOR omega scan:")
+    rows = scan_sor_omega(A, b, np.array([0.8, 1.0, 1.15, 1.4]), tolerance=1e-10, max_iterations=200)
+    for omega, iterations, converged, residual in rows:
+        print(f"omega={omega:.2f}, iterations={iterations}, converged={converged}, residual={residual:.3e}")
+
+    print("\nBlock iterations:")
+    A4 = np.array(
+        [
+            [5.0, -1.0, 0.0, 0.0],
+            [-1.0, 5.0, -1.0, 0.0],
+            [0.0, -1.0, 5.0, -1.0],
+            [0.0, 0.0, -1.0, 5.0],
+        ]
+    )
+    b4 = np.array([1.0, 2.0, 3.0, 4.0])
+    block_j = block_jacobi_iteration(A4, b4, [2, 2], tolerance=1e-10, max_iterations=200)
+    block_gs = block_gauss_seidel_iteration(A4, b4, [2, 2], tolerance=1e-10, max_iterations=200)
+    sor = sor_iteration(A4, b4, omega=1.1, tolerance=1e-10, max_iterations=200)
+    print(f"block_jacobi_iterations={block_j.iterations}, block_gs_iterations={block_gs.iterations}, sor_iterations={sor.iterations}")
 
 
 if __name__ == "__main__":

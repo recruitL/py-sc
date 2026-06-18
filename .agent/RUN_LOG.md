@@ -76,6 +76,23 @@
 摘要：7.1 Jacobi/Gauss-Seidel 原子工作单元通过导入、脚本、4 个测试、Notebook 执行和 diff 空白检查。发现第6章外部未提交文件，后续 checkpoint 将显式排除。
 下一步：创建 7.1 checkpoint commit。
 
+[2026-06-19T04:39:10+08:00] [CH07] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch07): add stationary iteration methods"`
+退出码：0
+摘要：创建第7章 7.1 checkpoint commit `adb5267`。提交时显式排除了第6章外部未提交文件和 direct-linear 导出。
+下一步：开始 7.2 SOR 与块迭代。
+
+[2026-06-19T04:42:33+08:00] [CH07] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import sor_iteration, block_jacobi_iteration, block_gauss_seidel_iteration"`
+`python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
+`python -m pytest tests/test_iterative_linear.py`
+`nbclient` 执行 `notebooks/02_sor_and_block_iterations.ipynb`
+`git diff --check`
+退出码：0
+摘要：7.2 SOR/块迭代原子工作单元通过导入、脚本、9 个测试、Notebook 执行和 diff 空白检查。
+下一步：创建 7.2 checkpoint commit。
+
 [2026-06-19T04:38:32+08:00] [COMMAND] [EXIT 0]
 命令：`env PYTHONPATH=src python -c from py_sc import jacobi_iteration, gauss_seidel_iteration, spectral_radius; print('import ok')`
 退出码：0
@@ -104,4 +121,34 @@
 命令：`git diff --check`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-38-34-08-00-14762.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:42:31+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import sor_iteration, block_jacobi_iteration, block_gauss_seidel_iteration; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-42-31-08-00-17435.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:42:31+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-42-31-08-00-17443.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:42:31+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_iterative_linear.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-42-31-08-00-17451.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:42:31+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-42-31-08-00-17459.log`
+摘要：命令执行成功。
+
+[2026-06-19T04:42:33+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T04-42-33-08-00-17424.log`
 摘要：命令执行成功。
