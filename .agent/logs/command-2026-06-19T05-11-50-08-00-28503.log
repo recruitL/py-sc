@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T05:11:50+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env PYTHONPATH=src python -c from py_sc import bisection_method, find_sign_change_brackets; print('import ok')
+---- output ----
+import ok

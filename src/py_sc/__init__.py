@@ -73,6 +73,11 @@ from .iterative_linear import (
     steepest_descent,
     spectral_radius,
 )
+from .nonlinear_roots import (
+    ScalarRootResult,
+    bisection_method,
+    find_sign_change_brackets,
+)
 from .integration import (
     AdaptiveSimpsonResult,
     MonteCarloResult,
@@ -112,11 +117,13 @@ __all__ = [
     "LinearIterationResult",
     "RichardsonDerivativeResult",
     "RombergResult",
+    "ScalarRootResult",
     "adaptive_simpson",
     "adaptive_piecewise_linear",
     "average_parabolic_integral",
     "backward_difference",
     "bilinear_interpolate_cell",
+    "bisection_method",
     "block_gauss_seidel_iteration",
     "block_jacobi_iteration",
     "central_difference",
@@ -138,6 +145,7 @@ __all__ = [
     "discrete_trapezoid",
     "divided_difference_table",
     "finite_difference_weights",
+    "find_sign_change_brackets",
     "five_point_center_derivative",
     "five_point_endpoint_derivative",
     "forward_difference",

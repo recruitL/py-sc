@@ -254,6 +254,27 @@
 摘要：第7章 7.4 和章节级自检通过。过程中 `test_poisson_matrix_matches_matvec` 因约 `5.7e-14` 舍入差异失败一次，已改为 `atol=1e-12` 并重跑通过；第7章测试 14 passed，全仓库 57 passed。
 下一步：创建第7章最终提交。
 
+[2026-06-19T05:09:20+08:00] [CH07] [CHECKPOINT]
+命令：`git commit -m "Add chapter 07 iterative methods for linear systems"`
+退出码：0
+摘要：第7章最终提交 `a3d823a` 已创建。第7章状态为 done。
+下一步：开始第8章 8.1 区间分割法。
+
+[2026-06-19T05:09:20+08:00] [CH08] [START]
+开始第8章“非线性方程求根”。当前原子工作单元为 8.1 区间扫描和二分法。
+下一步：实现 `src/py_sc/nonlinear_roots.py` 的区间扫描和二分法。
+
+[2026-06-19T05:11:52+08:00] [CH08] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import bisection_method, find_sign_change_brackets"`
+`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+`python -m pytest tests/test_nonlinear_roots.py`
+`nbclient` 执行 `notebooks/01_bracketing_methods.ipynb`
+`git diff --check`
+退出码：0
+摘要：8.1 区间扫描/二分法原子工作单元通过导入、脚本、4 个测试、Notebook 执行和 diff 空白检查。
+下一步：创建 8.1 checkpoint commit。
+
 [2026-06-19T05:08:08+08:00] [COMMAND] [EXIT 0]
 命令：`python -m pytest tests/test_iterative_linear.py`
 退出码：0
@@ -264,4 +285,34 @@
 命令：`python -m pytest`
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-08-08-08-00-26128.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:11:50+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import bisection_method, find_sign_change_brackets; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-11-50-08-00-28503.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:11:50+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-11-50-08-00-28511.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:11:50+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_nonlinear_roots.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-11-50-08-00-28520.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:11:50+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-11-50-08-00-28528.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:11:52+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-11-52-08-00-28492.log`
 摘要：命令执行成功。
