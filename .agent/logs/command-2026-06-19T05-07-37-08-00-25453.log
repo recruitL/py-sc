@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T05:07:37+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env PYTHONPATH=src python -c from py_sc import poisson_2d_dirichlet_matrix, poisson_2d_matvec, poisson_2d_rhs; print('import ok')
+---- output ----
+import ok

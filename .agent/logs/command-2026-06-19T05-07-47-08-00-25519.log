@@ -1,0 +1,48 @@
+timestamp: 2026-06-19T05:07:47+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m pytest
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.2.0
+collected 57 items
+
+tests/test_approximation.py .....                                        [  8%]
+tests/test_differentiation.py ..........                                 [ 26%]
+tests/test_direct_linear.py .......                                      [ 38%]
+tests/test_integration.py ........                                       [ 52%]
+tests/test_interpolation.py .............                                [ 75%]
+tests/test_iterative_linear.py ...........F..                            [100%]
+
+=================================== FAILURES ===================================
+______________________ test_poisson_matrix_matches_matvec ______________________
+
+    def test_poisson_matrix_matches_matvec() -> None:
+        A, _ = poisson_2d_dirichlet_matrix(4)
+        vector = np.arange(16, dtype=float)
+    
+>       np.testing.assert_allclose(poisson_2d_matvec(vector, 4), A @ vector)
+E       AssertionError: 
+E       Not equal to tolerance rtol=1e-07, atol=0
+E       
+E       Mismatched elements: 3 / 16 (18.8%)
+E       Mismatch at indices:
+E        [6]: 0.0 (ACTUAL), -5.684341886080802e-14 (DESIRED)
+E        [9]: 0.0 (ACTUAL), -5.684341886080802e-14 (DESIRED)
+E        [10]: 0.0 (ACTUAL), 5.684341886080802e-14 (DESIRED)
+E       Max absolute difference among violations: 5.68434189e-14
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([-125.,  -75.,  -50.,   75.,   75.,    0.,    0.,  200.,  175.,
+E                 0.,    0.,  300.,  675.,  425.,  450.,  875.])
+E        DESIRED: array([-1.250000e+02, -7.500000e+01, -5.000000e+01,  7.500000e+01,
+E               7.500000e+01,  0.000000e+00, -5.684342e-14,  2.000000e+02,
+E               1.750000e+02, -5.684342e-14,  5.684342e-14,  3.000000e+02,
+E               6.750000e+02,  4.250000e+02,  4.500000e+02,  8.750000e+02])
+
+tests/test_iterative_linear.py:186: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_iterative_linear.py::test_poisson_matrix_matches_matvec - A...
+========================= 1 failed, 56 passed in 0.17s =========================

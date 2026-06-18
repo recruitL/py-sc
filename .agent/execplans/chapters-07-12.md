@@ -4,18 +4,18 @@
 最后更新时间：2026-06-19T04:33:21+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：7a3cd91
+最后安全 commit：fb1c9db
 当前章节：第7章
-当前小节：7.3 共轭梯度法
-当前原子任务：7.3 自检完成，准备 checkpoint
-下一项具体动作：显式暂存第7章 7.3 相关文件并创建 `checkpoint(ch07): add CG and PCG methods`，继续排除第6章外部未提交文件。
+当前小节：7.4 二维泊松方程的稀疏迭代求解
+当前原子任务：第7章章节自检完成，准备章节提交
+下一项具体动作：显式暂存第7章 7.4 和章节自检相关文件，创建 `Add chapter 07 iterative methods for linear systems`，继续排除第6章外部未提交文件。
 阻塞问题：无
 
 ## 总体进度
 
 | 章节 | 状态 | 当前里程碑 | 自检状态 | 最后 commit |
 |---|---|---|---|---|
-| 第7章 | in_progress | 7.3 CG 与 PCG | 7.1-7.3 通过 | 7a3cd91 |
+| 第7章 | done | 章节自检完成 | 通过 | 待记录 |
 | 第8章 | pending | - | 未开始 | - |
 | 第9章 | pending | - | 未开始 | - |
 | 第10章 | pending | - | 未开始 | - |
@@ -36,10 +36,14 @@
 * 完成 SOR、松弛因子扫描、块 Jacobi、块 Gauss-Seidel 公共实现、Notebook、脚本更新和测试扩展。
 * 创建 7.2 checkpoint commit `7a3cd91`。
 * 完成最速下降、CG、Jacobi 预处理、PCG 公共实现、Notebook、脚本更新和测试扩展。
+* 创建 7.3 checkpoint commit `fb1c9db`。
+* 完成二维 Poisson 五点差分矩阵、矩阵-向量乘法、右端采样、解向量还原、Notebook、脚本更新和测试扩展。
+* 第7章四个 Notebook 均已执行通过，且无提交输出。
+* 第7章相关测试 14 passed，全仓库测试 57 passed。
 
 ### 正在处理
 
-* 第7章 7.3 checkpoint。
+* 第7章最终 checkpoint。
 
 ### 已修改但尚未验证
 
@@ -80,6 +84,13 @@
 * `nbclient` 执行 `chapters/ch07_iterative_linear_systems/notebooks/03_cg_and_pcg.ipynb`：通过。
 * `git diff --check`：通过。
 * Notebook 结构检查：第7章三个 Notebook 均无缺失 cell id，无提交输出。
+* `PYTHONPATH=src python -c "from py_sc import poisson_2d_dirichlet_matrix, poisson_2d_matvec, poisson_2d_rhs"`：通过。
+* `python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`：通过。
+* `python -m pytest tests/test_iterative_linear.py`：首次因 Poisson matvec 浮点零值容差过严失败；修复 `atol=1e-12` 后 14 passed。
+* `nbclient` 执行 `chapters/ch07_iterative_linear_systems/notebooks/04_poisson_sparse_iterations.ipynb`：通过。
+* `python -m pytest`：首次因同一容差问题失败；修复后 57 passed。
+* `git diff --check`：通过。
+* Notebook 结构检查：第7章四个 Notebook 均无缺失 cell id，无提交输出。
 
 ### 失败或未执行的检查
 
@@ -93,10 +104,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第7章 7.3 相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
-2. 创建 `checkpoint(ch07): add CG and PCG methods`。
+1. 暂存第7章 7.4 和章节自检相关文件，排除第6章外部未提交文件、`docs/README.md` 和 direct-linear hunks。
+2. 创建 `Add chapter 07 iterative methods for linear systems`。
 3. 记录 commit hash。
-4. 开始第7章 7.4 二维 Poisson 稀疏迭代。
+4. 开始第8章 8.1 区间分割法。
 
 ### 恢复时应首先执行的命令
 
@@ -129,6 +140,7 @@ tail -80 .agent/RUN_LOG.md
 * `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
 * `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`
 * `chapters/ch07_iterative_linear_systems/notebooks/03_cg_and_pcg.ipynb`
+* `chapters/ch07_iterative_linear_systems/notebooks/04_poisson_sparse_iterations.ipynb`
 * `chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
 
 ### 已修改文件
@@ -156,3 +168,4 @@ tail -80 .agent/RUN_LOG.md
 * 决定：新章节不再单独建立 `references.md`。原因：用户要求从现在开始章节末尾只保留一个“小结”，资料来源使用 Notebook 内联引用、链接、脚注或统一参考文件。影响：第 7—12 章目录只设置 README、notebooks、scripts，必要时使用 notes，不设置章节级 `references.md`。
 * 决定：第7章 7.1 使用公共模块 `src/py_sc/iterative_linear.py` 而不是章节私有 scripts 作为正式实现。原因：前几章已采用 `src/py_sc` 作为可复用教学实现位置，章节 scripts 只作为快速运行入口。影响：`src/py_sc/__init__.py` 导出 iterative-linear 函数，Notebook 先展示教学实现再调用正式实现。
 * 决定：块迭代 API 使用 `block_sizes` 而不是任意索引列表。原因：第七章教学重点是按连续变量组分块，连续块 API 更简单、错误面更小。影响：`block_jacobi_iteration` 和 `block_gauss_seidel_iteration` 支持连续块，任意子域排序留作后续拓展。
+* 决定：Poisson 小规模验证提供稠密矩阵函数，同时提供矩阵-向量乘法函数。原因：测试和教学需要可与 `np.linalg.solve` 对照，但用户要求不要为大网格构造稠密矩阵。影响：`poisson_2d_dirichlet_matrix` 文档明确仅用于小规模教学验证，Notebook 中强调大网格应使用稀疏结构或 matvec。

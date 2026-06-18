@@ -1,0 +1,20 @@
+timestamp: 2026-06-19T05:08:08+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m pytest
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.2.0
+collected 57 items
+
+tests/test_approximation.py .....                                        [  8%]
+tests/test_differentiation.py ..........                                 [ 26%]
+tests/test_direct_linear.py .......                                      [ 38%]
+tests/test_integration.py ........                                       [ 52%]
+tests/test_interpolation.py .............                                [ 75%]
+tests/test_iterative_linear.py ..............                            [100%]
+
+============================== 57 passed in 0.19s ==============================

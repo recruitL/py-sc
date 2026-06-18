@@ -199,3 +199,69 @@
 退出码：0
 摘要：7.3 CG/PCG 原子工作单元通过导入、脚本、11 个测试、Notebook 执行和 diff 空白检查。
 下一步：创建 7.3 checkpoint commit。
+
+[2026-06-19T04:47:20+08:00] [CH07] [CHECKPOINT]
+命令：`git commit -m "checkpoint(ch07): add CG and PCG methods"`
+退出码：0
+摘要：创建第7章 7.3 checkpoint commit `fb1c9db`。提交时继续排除了第6章外部未提交文件、`docs/README.md` 外部路线图和 direct-linear 导出。
+下一步：开始 7.4 二维 Poisson 稀疏迭代。
+
+[2026-06-19T05:07:37+08:00] [COMMAND] [EXIT 0]
+命令：`env PYTHONPATH=src python -c from py_sc import poisson_2d_dirichlet_matrix, poisson_2d_matvec, poisson_2d_rhs; print('import ok')`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-07-37-08-00-25453.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:07:37+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-07-37-08-00-25461.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:07:37+08:00] [COMMAND] [EXIT 1]
+命令：`python -m pytest tests/test_iterative_linear.py`
+退出码：1
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-07-37-08-00-25469.log`
+摘要：命令执行失败，需查看日志并修复。
+
+[2026-06-19T05:07:38+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-07-38-08-00-25442.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:07:47+08:00] [COMMAND] [EXIT 1]
+命令：`python -m pytest`
+退出码：1
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-07-47-08-00-25519.log`
+摘要：命令执行失败，需查看日志并修复。
+
+[2026-06-19T05:08:08+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-08-08-08-00-26159.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:08:08+08:00] [CH07] [TEST PASS]
+命令：
+`PYTHONPATH=src python -c "from py_sc import poisson_2d_dirichlet_matrix, poisson_2d_matvec, poisson_2d_rhs"`
+`python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py`
+`python -m pytest tests/test_iterative_linear.py`
+`nbclient` 执行 `notebooks/04_poisson_sparse_iterations.ipynb`
+`python -m pytest`
+`git diff --check`
+退出码：0
+摘要：第7章 7.4 和章节级自检通过。过程中 `test_poisson_matrix_matches_matvec` 因约 `5.7e-14` 舍入差异失败一次，已改为 `atol=1e-12` 并重跑通过；第7章测试 14 passed，全仓库 57 passed。
+下一步：创建第7章最终提交。
+
+[2026-06-19T05:08:08+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_iterative_linear.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-08-08-08-00-26123.log`
+摘要：命令执行成功。
+
+[2026-06-19T05:08:08+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T05-08-08-08-00-26128.log`
+摘要：命令执行成功。

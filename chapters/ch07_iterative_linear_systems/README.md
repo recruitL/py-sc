@@ -36,7 +36,7 @@ $$
 1. `notebooks/01_stationary_iterations.ipynb`
 2. `notebooks/02_sor_and_block_iterations.ipynb`
 3. `notebooks/03_cg_and_pcg.ipynb`
-4. 后续将继续补充二维 Poisson 稀疏迭代。
+4. `notebooks/04_poisson_sparse_iterations.ipynb`
 
 ## Notebook 对照表
 
@@ -45,7 +45,7 @@ $$
 | `01_stationary_iterations.ipynb` | Jacobi 与 Gauss-Seidel、矩阵分裂、谱半径、残差停止准则和收敛/发散对比。 | 已建设 |
 | `02_sor_and_block_iterations.ipynb` | SOR、松弛因子扫描、块 Jacobi、块 Gauss-Seidel 和块迭代适用条件。 | 已建设 |
 | `03_cg_and_pcg.ipynb` | 最速下降、CG、PCG、条件数影响和预处理效果。 | 已建设 |
-| `04_poisson_sparse_iterations.ipynb` | 二维 Poisson 五点差分稀疏系统和多种迭代法比较。 | 待建设 |
+| `04_poisson_sparse_iterations.ipynb` | 二维 Poisson 五点差分稀疏系统和多种迭代法比较。 | 已建设 |
 
 ## 可运行脚本
 
@@ -80,6 +80,10 @@ src/py_sc/iterative_linear.py
 * `conjugate_gradient`
 * `jacobi_preconditioner`
 * `preconditioned_conjugate_gradient`
+* `poisson_2d_dirichlet_matrix`
+* `poisson_2d_matvec`
+* `poisson_2d_rhs`
+* `reshape_poisson_solution`
 * `spectral_radius`
 * `relative_residual`
 * `is_strictly_diagonally_dominant`
@@ -87,4 +91,4 @@ src/py_sc/iterative_linear.py
 
 ## 本章小结
 
-平稳迭代法把 \(Ax=b\) 改写为 \(Mx^{(k+1)}=Nx^{(k)}+b\)。Jacobi 方法每一步只使用上一轮全部分量，便于并行但通常较慢；Gauss-Seidel 方法在同一轮中立即使用新分量，常收敛更快，但顺序依赖更强。SOR 在 Gauss-Seidel 的候选更新上加入松弛因子，可能显著减少迭代次数，但需要选择合适的 \(\omega\)。块迭代用小线性系统替代标量更新，适合有自然分组结构的问题。对于 SPD 系统，最速下降和 CG 可以从二次型最小化角度理解；CG 通过共轭方向减少重复搜索，PCG 则用预处理改善条件性。谱半径 \(\rho(B)<1\) 是线性定常迭代收敛的核心判据，残差历史、最大迭代次数和矩阵结构共同决定方法选择。
+平稳迭代法把 \(Ax=b\) 改写为 \(Mx^{(k+1)}=Nx^{(k)}+b\)。Jacobi 方法每一步只使用上一轮全部分量，便于并行但通常较慢；Gauss-Seidel 方法在同一轮中立即使用新分量，常收敛更快，但顺序依赖更强。SOR 在 Gauss-Seidel 的候选更新上加入松弛因子，可能显著减少迭代次数，但需要选择合适的 \(\omega\)。块迭代用小线性系统替代标量更新，适合有自然分组结构的问题。对于 SPD 系统，最速下降和 CG 可以从二次型最小化角度理解；CG 通过共轭方向减少重复搜索，PCG 则用预处理改善条件性。二维 Poisson 五点差分给出了稀疏 SPD 系统的典型来源，也说明大网格上必须重视稀疏结构。谱半径 \(\rho(B)<1\) 是线性定常迭代收敛的核心判据，残差历史、最大迭代次数和矩阵结构共同决定方法选择。

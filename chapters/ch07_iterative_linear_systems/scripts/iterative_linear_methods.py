@@ -21,7 +21,10 @@ from py_sc import (  # noqa: E402
     jacobi_preconditioner,
     jacobi_iteration,
     jacobi_iteration_matrix,
+    poisson_2d_dirichlet_matrix,
+    poisson_2d_rhs,
     preconditioned_conjugate_gradient,
+    reshape_poisson_solution,
     scan_sor_omega,
     sor_iteration,
     steepest_descent,
@@ -91,6 +94,18 @@ def main() -> None:
         tolerance=1e-12,
     )
     print(f"steepest_descent_iterations={sd.iterations}, cg_iterations={cg.iterations}, pcg_iterations={pcg.iterations}")
+
+    print("\n2D Poisson:")
+    n = 8
+    A_p, _ = poisson_2d_dirichlet_matrix(n)
+    rhs, x_grid, y_grid = poisson_2d_rhs(
+        n,
+        lambda x, y: 2.0 * np.pi**2 * np.sin(np.pi * x) * np.sin(np.pi * y),
+    )
+    exact_grid = np.sin(np.pi * x_grid) * np.sin(np.pi * y_grid)
+    poisson_cg = conjugate_gradient(A_p, rhs, tolerance=1e-10, max_iterations=n * n)
+    error = np.max(np.abs(reshape_poisson_solution(poisson_cg.value, n) - exact_grid))
+    print(f"cg_iterations={poisson_cg.iterations}, residual={poisson_cg.residual_norms[-1]:.3e}, max_error={error:.3e}")
 
 
 if __name__ == "__main__":

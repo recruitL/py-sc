@@ -1,0 +1,28 @@
+timestamp: 2026-06-19T05:07:37+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py
+---- output ----
+Jacobi:
+iterations=23, residual=3.811e-11
+error=1.091e-10
+spectral_radius=0.353553
+
+Gauss-Seidel:
+iterations=12, residual=6.615e-11
+error=1.544e-10
+spectral_radius=0.125000
+
+SOR omega scan:
+omega=0.80, iterations=24, converged=True, residual=7.452e-11
+omega=1.00, iterations=12, converged=True, residual=6.615e-11
+omega=1.15, iterations=13, converged=True, residual=4.784e-11
+omega=1.40, iterations=26, converged=True, residual=7.695e-11
+
+Block iterations:
+block_jacobi_iterations=15, block_gs_iterations=8, sor_iterations=12
+
+CG and PCG:
+steepest_descent_iterations=29, cg_iterations=3, pcg_iterations=3
+
+2D Poisson:
+cg_iterations=1, residual=2.331e-15, max_error=9.908e-03

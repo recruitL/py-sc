@@ -447,6 +447,75 @@ def preconditioned_conjugate_gradient(
     )
 
 
+def poisson_2d_dirichlet_matrix(grid_size: int) -> tuple[np.ndarray, float]:
+    """构造二维 Poisson 方程零 Dirichlet 边界的五点差分矩阵。
+
+    ``grid_size`` 是每个方向上的内部网格点数量。本函数返回小规模教学验证用的
+    稠密矩阵和网格步长；大规模问题应使用稀疏矩阵或矩阵-向量乘法。
+    """
+
+    n = _validate_positive_int(grid_size, "grid_size")
+    h = 1.0 / (n + 1)
+    size = n * n
+    A = np.zeros((size, size), dtype=float)
+    for i in range(n):
+        for j in range(n):
+            row = i * n + j
+            A[row, row] = 4.0 / h**2
+            if i > 0:
+                A[row, (i - 1) * n + j] = -1.0 / h**2
+            if i + 1 < n:
+                A[row, (i + 1) * n + j] = -1.0 / h**2
+            if j > 0:
+                A[row, i * n + (j - 1)] = -1.0 / h**2
+            if j + 1 < n:
+                A[row, i * n + (j + 1)] = -1.0 / h**2
+    return A, h
+
+
+def poisson_2d_matvec(vector: np.ndarray, grid_size: int) -> np.ndarray:
+    """零 Dirichlet 边界五点差分矩阵的矩阵-向量乘法。"""
+
+    n = _validate_positive_int(grid_size, "grid_size")
+    vector = _as_vector(vector, "vector")
+    if vector.size != n * n:
+        raise ValueError("vector length must be grid_size**2")
+    h = 1.0 / (n + 1)
+    u = vector.reshape(n, n)
+    result = 4.0 * u.copy()
+    result[:-1, :] -= u[1:, :]
+    result[1:, :] -= u[:-1, :]
+    result[:, :-1] -= u[:, 1:]
+    result[:, 1:] -= u[:, :-1]
+    return (result / h**2).reshape(-1)
+
+
+def poisson_2d_rhs(
+    grid_size: int,
+    source: Callable[[np.ndarray, np.ndarray], np.ndarray],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """在内部网格上采样 Poisson 方程右端项。"""
+
+    n = _validate_positive_int(grid_size, "grid_size")
+    h = 1.0 / (n + 1)
+    points = np.linspace(h, 1.0 - h, n)
+    x, y = np.meshgrid(points, points, indexing="ij")
+    values = np.asarray(source(x, y), dtype=float)
+    if values.shape != (n, n):
+        raise ValueError("source must return an array with shape (grid_size, grid_size)")
+    return values.reshape(-1), x, y
+
+
+def reshape_poisson_solution(vector: np.ndarray, grid_size: int) -> np.ndarray:
+    """把 Poisson 内部点向量还原为二维网格数组。"""
+
+    n = _validate_positive_int(grid_size, "grid_size")
+    vector = _as_vector(vector, "vector")
+    if vector.size != n * n:
+        raise ValueError("vector length must be grid_size**2")
+    return vector.reshape(n, n)
+
+
 def is_strictly_diagonally_dominant(A: np.ndarray) -> bool:
     """判断矩阵是否严格行对角占优。"""
 

@@ -14,8 +14,12 @@ from py_sc import (
     jacobi_preconditioner,
     jacobi_iteration,
     jacobi_iteration_matrix,
+    poisson_2d_dirichlet_matrix,
+    poisson_2d_matvec,
+    poisson_2d_rhs,
     preconditioned_conjugate_gradient,
     relative_residual,
+    reshape_poisson_solution,
     scan_sor_omega,
     sor_iteration,
     sor_iteration_matrix,
@@ -173,3 +177,31 @@ def test_cg_rejects_non_spd_matrix() -> None:
 
     with pytest.raises(ValueError):
         conjugate_gradient(A, b)
+
+
+def test_poisson_matrix_matches_matvec() -> None:
+    A, _ = poisson_2d_dirichlet_matrix(4)
+    vector = np.arange(16, dtype=float)
+
+    np.testing.assert_allclose(poisson_2d_matvec(vector, 4), A @ vector, atol=1e-12)
+
+
+def test_poisson_manufactured_solution_with_cg() -> None:
+    n = 8
+    A, _ = poisson_2d_dirichlet_matrix(n)
+    rhs, x, y = poisson_2d_rhs(
+        n,
+        lambda xx, yy: 2.0 * np.pi**2 * np.sin(np.pi * xx) * np.sin(np.pi * yy),
+    )
+    exact_grid = np.sin(np.pi * x) * np.sin(np.pi * y)
+
+    result = conjugate_gradient(A, rhs, tolerance=1e-10, max_iterations=n * n)
+    numerical = reshape_poisson_solution(result.value, n)
+
+    assert result.converged
+    assert np.max(np.abs(numerical - exact_grid)) < 1.5e-2
+
+
+def test_poisson_matvec_rejects_wrong_length() -> None:
+    with pytest.raises(ValueError):
+        poisson_2d_matvec(np.ones(3), 2)
