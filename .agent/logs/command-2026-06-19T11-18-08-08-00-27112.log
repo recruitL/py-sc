@@ -1,0 +1,41 @@
+timestamp: 2026-06-19T11:18:08+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m pytest tests/test_pde.py
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+plugins: anyio-4.2.0
+collected 17 items
+
+tests/test_pde.py ..............F..                                      [100%]
+
+=================================== FAILURES ===================================
+____________ test_solve_poisson_2d_sor_tracks_manufactured_solution ____________
+
+    def test_solve_poisson_2d_sor_tracks_manufactured_solution() -> None:
+        nx = ny = 18
+        x = np.linspace(0.0, 1.0, nx + 2)
+        y = np.linspace(0.0, 1.0, ny + 2)
+        xx, yy = np.meshgrid(x, y, indexing="ij")
+        exact = np.sin(math.pi * xx) * np.sin(math.pi * yy)
+        source = 2.0 * math.pi * math.pi * exact
+        boundary = np.zeros_like(exact)
+
+        result = solve_poisson_2d_sor(source, boundary, hx=x[1] - x[0], hy=y[1] - y[0], omega=1.6, tolerance=1e-9)
+
+        assert result.converged
+        assert result.residual_norm < 1e-8
+>       assert np.linalg.norm(result.solution - exact, ord=np.inf) < 3e-3
+E       AssertionError: assert np.float64(0.027438604292116763) < 0.003
+E        +  where np.float64(0.027438604292116763) = <function norm at 0x1024a0ab0>((array([[0.        , 0.        , 0.        , 0.        , 0.        ,\n        0.        , 0.        , 0.        , 0.    ..., 0.        , 0.        , 0.        , 0.        ,\n        0.        , 0.        , 0.        , 0.        , 0.        ]]) - array([[0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00,\n        0.00000000e+00, 0.00000000e+00, 0.0000...02523325e-16, 9.01001932e-17, 7.52193633e-17,\n        5.82867451e-17, 3.97642166e-17, 2.01570238e-17, 1.49975978e-32]])), ord=inf)
+E        +    where <function norm at 0x1024a0ab0> = <module 'numpy.linalg' from '/opt/anaconda3/lib/python3.12/site-packages/numpy/linalg/__init__.py'>.norm
+E        +      where <module 'numpy.linalg' from '/opt/anaconda3/lib/python3.12/site-packages/numpy/linalg/__init__.py'> = np.linalg
+E        +    and   array([[0.        , 0.        , 0.        , 0.        , 0.        ,\n        0.        , 0.        , 0.        , 0.    ..., 0.        , 0.        , 0.        , 0.        ,\n        0.        , 0.        , 0.        , 0.        , 0.        ]]) = EllipticSORResult(solution=array([[0.        , 0.        , 0.        , 0.        , 0.        ,\n        0.        , 0. ...4981806e-09,\n       1.45674406e-09, 1.28584787e-09, 1.13568355e-09, 1.00256869e-09,\n       8.85270524e-10]), omega=1.6).solution
+E        +    and   inf = np.inf
+
+tests/test_pde.py:179: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_pde.py::test_solve_poisson_2d_sor_tracks_manufactured_solution
+========================= 1 failed, 16 passed in 0.19s =========================

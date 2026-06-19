@@ -68,7 +68,7 @@ py-sc/
 | 第九章 | 非线性方程组解法 | 新增建设：向量不动点迭代、多元 Newton 法、阻尼 Newton、弦 Newton、有限差分 Jacobian、Broyden、参数延拓、残差范数和奇异 Jacobian 失败情形 |
 | 第十章 | 特征值计算 | 新增建设：Rayleigh 商、特征残差、幂法、带位移反幂法、Rayleigh 商迭代、对称 Jacobi 旋转和 QR 特征值迭代 |
 | 第十一章 | 常微分方程初值问题 | 新增建设：显式 Euler、Heun、中点法、经典 RK4、固定步长求解、全局误差、观测收敛阶、自适应 Heun-Euler 和嵌入式误差控制 |
-| 第十二章 | 偏微分方程数值解法 | 建设中：双曲型 PDE、抛物型 PDE、CFL 条件、一维/二维对流方程、上风格式、Lax 系列格式、一维波动方程和一维热方程 |
+| 第十二章 | 偏微分方程数值解法 | 建设中：双曲型、抛物型和椭圆型 PDE，CFL 条件，一维/二维对流方程，波动方程，热方程，Poisson/Laplace 方程和 SOR |
 
 ## 阅读顺序
 
@@ -126,6 +126,7 @@ py-sc/
 50. `chapters/ch12_pde_methods/README.md`
 51. `chapters/ch12_pde_methods/notebooks/01_hyperbolic_advection_and_wave.ipynb`
 52. `chapters/ch12_pde_methods/notebooks/02_parabolic_heat_equation.ipynb`
+53. `chapters/ch12_pde_methods/notebooks/03_elliptic_poisson_sor.ipynb`
 
 运行脚本示例：
 

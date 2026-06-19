@@ -57,6 +57,18 @@ class Heat1DResult:
     diffusion_number: float
 
 
+@dataclass(frozen=True)
+class EllipticSORResult:
+    """二维椭圆型方程 SOR 求解结果。"""
+
+    solution: np.ndarray
+    iterations: int
+    converged: bool
+    residual_norm: float
+    residual_history: np.ndarray
+    omega: float
+
+
 def periodic_grid_1d(start: float, stop: float, points: int) -> np.ndarray:
     """生成不重复终点的一维周期网格。"""
 
@@ -367,6 +379,140 @@ def solve_heat_1d_crank_nicolson(
     return Heat1DResult(grid, times, np.vstack(values), "crank_nicolson", float(ratio))
 
 
+def poisson_2d_dirichlet_matrix(nx: int, ny: int, hx: float, hy: float) -> np.ndarray:
+    """构造 ``-Delta`` 在二维内部网格上的五点差分矩阵。"""
+
+    nx = _validate_positive_int(nx, "nx")
+    ny = _validate_positive_int(ny, "ny")
+    hx = _validate_step_size(hx, "hx")
+    hy = _validate_step_size(hy, "hy")
+    size = nx * ny
+    matrix = np.zeros((size, size), dtype=float)
+    diag = 2.0 / (hx * hx) + 2.0 / (hy * hy)
+    for i in range(nx):
+        for j in range(ny):
+            row = i * ny + j
+            matrix[row, row] = diag
+            if i > 0:
+                matrix[row, (i - 1) * ny + j] = -1.0 / (hx * hx)
+            if i < nx - 1:
+                matrix[row, (i + 1) * ny + j] = -1.0 / (hx * hx)
+            if j > 0:
+                matrix[row, i * ny + (j - 1)] = -1.0 / (hy * hy)
+            if j < ny - 1:
+                matrix[row, i * ny + (j + 1)] = -1.0 / (hy * hy)
+    return matrix
+
+
+def solve_poisson_2d_sor(
+    source: np.ndarray | list[list[float]],
+    boundary: np.ndarray | list[list[float]],
+    hx: float,
+    hy: float,
+    omega: float = 1.5,
+    tolerance: float = 1e-8,
+    max_iterations: int = 10000,
+) -> EllipticSORResult:
+    """用 SOR 解二维 Dirichlet Poisson 方程 ``-Delta u = source``。"""
+
+    f = _as_matrix(source, "source")
+    u = _as_matrix(boundary, "boundary").copy()
+    if f.shape != u.shape:
+        raise ValueError("source and boundary must have the same shape")
+    if u.shape[0] < 3 or u.shape[1] < 3:
+        raise ValueError("at least one interior point is required in each direction")
+    hx = _validate_step_size(hx, "hx")
+    hy = _validate_step_size(hy, "hy")
+    omega = _validate_relaxation(omega)
+    tolerance = _validate_tolerance(tolerance, "tolerance")
+    max_iterations = _validate_positive_int(max_iterations, "max_iterations")
+    ax = 1.0 / (hx * hx)
+    ay = 1.0 / (hy * hy)
+    denominator = 2.0 * ax + 2.0 * ay
+    residual_history = [poisson_2d_residual_norm(u, f, hx, hy)]
+    converged = residual_history[-1] <= tolerance
+    iterations = 0
+
+    for iteration in range(1, max_iterations + 1):
+        if converged:
+            break
+        for i in range(1, u.shape[0] - 1):
+            for j in range(1, u.shape[1] - 1):
+                candidate = (
+                    ax * (u[i - 1, j] + u[i + 1, j])
+                    + ay * (u[i, j - 1] + u[i, j + 1])
+                    + f[i, j]
+                ) / denominator
+                u[i, j] = (1.0 - omega) * u[i, j] + omega * candidate
+        residual = poisson_2d_residual_norm(u, f, hx, hy)
+        residual_history.append(residual)
+        iterations = iteration
+        if residual <= tolerance:
+            converged = True
+            break
+
+    return EllipticSORResult(
+        solution=u.copy(),
+        iterations=iterations,
+        converged=bool(converged),
+        residual_norm=float(residual_history[-1]),
+        residual_history=np.array(residual_history, dtype=float),
+        omega=float(omega),
+    )
+
+
+def solve_laplace_2d_sor(
+    boundary: np.ndarray | list[list[float]],
+    hx: float,
+    hy: float,
+    omega: float = 1.5,
+    tolerance: float = 1e-8,
+    max_iterations: int = 10000,
+) -> EllipticSORResult:
+    """用 SOR 解二维 Dirichlet Laplace 方程。"""
+
+    boundary_array = _as_matrix(boundary, "boundary")
+    source = np.zeros_like(boundary_array)
+    return solve_poisson_2d_sor(source, boundary_array, hx, hy, omega, tolerance, max_iterations)
+
+
+def poisson_2d_residual(
+    solution: np.ndarray | list[list[float]],
+    source: np.ndarray | list[list[float]],
+    hx: float,
+    hy: float,
+) -> np.ndarray:
+    """计算内部网格上 ``-Delta u - source`` 的离散残差。"""
+
+    u = _as_matrix(solution, "solution")
+    f = _as_matrix(source, "source")
+    if u.shape != f.shape:
+        raise ValueError("solution and source must have the same shape")
+    hx = _validate_step_size(hx, "hx")
+    hy = _validate_step_size(hy, "hy")
+    residual = np.zeros_like(u)
+    residual[1:-1, 1:-1] = (
+        (2.0 * u[1:-1, 1:-1] - u[:-2, 1:-1] - u[2:, 1:-1]) / (hx * hx)
+        + (2.0 * u[1:-1, 1:-1] - u[1:-1, :-2] - u[1:-1, 2:]) / (hy * hy)
+        - f[1:-1, 1:-1]
+    )
+    return residual
+
+
+def poisson_2d_residual_norm(
+    solution: np.ndarray | list[list[float]],
+    source: np.ndarray | list[list[float]],
+    hx: float,
+    hy: float,
+) -> float:
+    """计算二维 Poisson 离散内部残差的无穷范数。"""
+
+    residual = poisson_2d_residual(solution, source, hx, hy)
+    if residual.shape[0] <= 2 or residual.shape[1] <= 2:
+        return 0.0
+    return float(np.linalg.norm(residual[1:-1, 1:-1].ravel(), ord=np.inf))
+
+
 def _as_vector(values: np.ndarray | list[float] | tuple[float, ...], name: str) -> np.ndarray:
     array = np.array(values, dtype=float)
     if array.ndim != 1:
@@ -399,6 +545,20 @@ def _validate_nonnegative_int(value: int, name: str) -> int:
     value = int(value)
     if value < 0:
         raise ValueError(f"{name} must be nonnegative")
+    return value
+
+
+def _validate_tolerance(value: float, name: str) -> float:
+    value = float(value)
+    if value <= 0.0:
+        raise ValueError(f"{name} must be positive")
+    return value
+
+
+def _validate_relaxation(value: float) -> float:
+    value = float(value)
+    if not 0.0 < value < 2.0:
+        raise ValueError("omega must be between 0 and 2")
     return value
 
 

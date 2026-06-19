@@ -20,6 +20,8 @@ from py_sc import (  # noqa: E402
     solve_heat_1d_crank_nicolson,
     solve_heat_1d_ftcs,
     solve_heat_1d_implicit_euler,
+    solve_laplace_2d_sor,
+    solve_poisson_2d_sor,
     solve_wave_1d_dirichlet,
     upwind_advection_1d,
     upwind_advection_2d,
@@ -83,6 +85,30 @@ def main() -> None:
         heat_exact = np.exp(-math.pi * math.pi * heat.times[-1]) * np.sin(math.pi * heat_grid)
         error = np.linalg.norm(heat.values[-1] - heat_exact, ord=np.inf)
         print(f"  {name:15s} r={heat.diffusion_number:.3f} max_error={error:.3e}")
+
+    nx = ny = 18
+    x = np.linspace(0.0, 1.0, nx + 2)
+    y = np.linspace(0.0, 1.0, ny + 2)
+    xx, yy = np.meshgrid(x, y, indexing="ij")
+    poisson_exact = np.sin(math.pi * xx) * np.sin(math.pi * yy)
+    source = 2.0 * math.pi * math.pi * poisson_exact
+    boundary = np.zeros_like(poisson_exact)
+    poisson = solve_poisson_2d_sor(source, boundary, hx=x[1] - x[0], hy=y[1] - y[0], omega=1.6, tolerance=1e-9)
+    print("\n2D Poisson equation by SOR:")
+    print(
+        f"  iterations={poisson.iterations}",
+        f"residual={poisson.residual_norm:.3e}",
+        f"max_error={np.max(np.abs(poisson.solution - poisson_exact)):.3e}",
+    )
+
+    laplace_boundary = np.ones((8, 8))
+    laplace = solve_laplace_2d_sor(laplace_boundary, hx=1.0 / 7.0, hy=1.0 / 7.0, omega=1.4, tolerance=1e-10)
+    print("\n2D Laplace equation by SOR:")
+    print(
+        f"  iterations={laplace.iterations}",
+        f"residual={laplace.residual_norm:.3e}",
+        f"center={laplace.solution[4, 4]:.6f}",
+    )
 
 
 if __name__ == "__main__":

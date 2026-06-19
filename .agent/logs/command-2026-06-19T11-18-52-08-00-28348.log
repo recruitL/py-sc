@@ -1,0 +1,25 @@
+timestamp: 2026-06-19T11:18:52+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python chapters/ch12_pde_methods/scripts/pde_methods.py
+---- output ----
+1D advection on a smooth sine wave:
+  upwind          CFL=0.400 max_error=1.470e-02
+  lax_friedrichs  CFL=0.400 max_error=5.052e-02
+  lax_wendroff    CFL=0.400 max_error=5.423e-04
+
+2D upwind advection:
+  shape=(4, 20, 20) CFL_x=1.000 CFL_y=0.000 mass=36.000000
+
+1D wave equation:
+  CFL=0.400 max_error=1.276e-05 energy_change=-2.939e-02
+
+1D heat equation:
+  FTCS            r=0.400 max_error=2.733e-05
+  Implicit Euler  r=2.000 max_error=3.104e-04
+  Crank-Nicolson  r=40.000 max_error=6.287e-04
+
+2D Poisson equation by SOR:
+  iterations=196 residual=8.853e-10 max_error=2.266e-03
+
+2D Laplace equation by SOR:
+  iterations=0 residual=0.000e+00 center=1.000000

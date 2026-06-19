@@ -11,9 +11,13 @@ from py_sc import (
     lax_friedrichs_advection_1d,
     lax_wendroff_advection_1d,
     periodic_grid_1d,
+    poisson_2d_dirichlet_matrix,
+    poisson_2d_residual_norm,
+    solve_laplace_2d_sor,
     solve_heat_1d_crank_nicolson,
     solve_heat_1d_ftcs,
     solve_heat_1d_implicit_euler,
+    solve_poisson_2d_sor,
     solve_wave_1d_dirichlet,
     upwind_advection_1d,
     upwind_advection_2d,
@@ -147,3 +151,44 @@ def test_solve_heat_1d_crank_nicolson_tracks_sine_decay() -> None:
     exact = np.exp(-math.pi * math.pi * result.times[-1]) * np.sin(math.pi * grid)
 
     assert np.linalg.norm(result.values[-1] - exact, ord=np.inf) < 8e-3
+
+
+def test_poisson_2d_dirichlet_matrix_has_expected_five_point_structure() -> None:
+    matrix = poisson_2d_dirichlet_matrix(nx=2, ny=2, hx=0.5, hy=0.5)
+
+    assert matrix.shape == (4, 4)
+    assert np.allclose(np.diag(matrix), 16.0)
+    assert np.count_nonzero(matrix[0]) == 3
+    assert matrix[0, 1] == pytest.approx(-4.0)
+    assert matrix[0, 2] == pytest.approx(-4.0)
+
+
+def test_solve_poisson_2d_sor_tracks_manufactured_solution() -> None:
+    nx = ny = 18
+    x = np.linspace(0.0, 1.0, nx + 2)
+    y = np.linspace(0.0, 1.0, ny + 2)
+    xx, yy = np.meshgrid(x, y, indexing="ij")
+    exact = np.sin(math.pi * xx) * np.sin(math.pi * yy)
+    source = 2.0 * math.pi * math.pi * exact
+    boundary = np.zeros_like(exact)
+
+    result = solve_poisson_2d_sor(source, boundary, hx=x[1] - x[0], hy=y[1] - y[0], omega=1.6, tolerance=1e-9)
+
+    assert result.converged
+    assert result.residual_norm < 1e-8
+    assert np.max(np.abs(result.solution - exact)) < 3e-3
+
+
+def test_solve_laplace_2d_sor_preserves_constant_boundary_solution() -> None:
+    boundary = np.ones((8, 8))
+
+    result = solve_laplace_2d_sor(boundary, hx=1.0 / 7.0, hy=1.0 / 7.0, omega=1.4, tolerance=1e-10)
+
+    assert result.converged
+    assert np.allclose(result.solution, 1.0)
+    assert poisson_2d_residual_norm(result.solution, np.zeros_like(boundary), 1.0 / 7.0, 1.0 / 7.0) < 1e-10
+
+
+def test_solve_poisson_2d_sor_rejects_invalid_omega() -> None:
+    with pytest.raises(ValueError):
+        solve_laplace_2d_sor(np.zeros((5, 5)), hx=0.25, hy=0.25, omega=2.1)
