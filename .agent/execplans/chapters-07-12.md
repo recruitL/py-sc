@@ -1,14 +1,14 @@
 # ExecPlan：第 7—12 章连续建设
 
 状态：in_progress
-最后更新时间：2026-06-19T06:20:03+08:00
+最后更新时间：2026-06-19T10:11:24+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：915b68c
+最后安全 commit：66ad2b9
 当前章节：第11章
-当前小节：11.2 自适应步长与误差控制
-当前原子任务：11.2 自检通过，准备创建 checkpoint commit。
-下一项具体动作：过滤暂存第11章 11.2 文件、命令日志和 README/包入口更新，创建 `checkpoint(ch11): add adaptive IVP step control`。
+当前小节：章节级自检
+当前原子任务：第11章自检通过，准备最终提交。
+下一项具体动作：过滤暂存第11章最终状态、章节级自检日志和 README 状态更新，创建 `Add chapter 11 numerical methods for ODEs`。
 阻塞问题：无
 
 ## 总体进度
@@ -19,7 +19,7 @@
 | 第8章 | done | 章节级自检完成 | 通过 | 5cf5e10 |
 | 第9章 | done | 章节级自检完成 | 通过 | 4d85607 |
 | 第10章 | done | 章节级自检完成 | 通过 | 6532e3c |
-| 第11章 | verifying | 11.2 自适应步长与误差控制 | 11.1/11.2 通过 | 915b68c |
+| 第11章 | verifying | 章节级自检 | 通过 | 66ad2b9 |
 | 第12章 | pending | - | 未开始 | - |
 
 ## 当前断点
@@ -70,10 +70,12 @@
 * 完成第11章 README 初稿、11.1 Notebook、章节脚本、`src/py_sc/ode_ivp.py` 中的 Euler、Heun、中点法、RK4、固定步长 IVP 求解、全局误差和观测阶估计，以及 `tests/test_ode_ivp.py` 中的 11.1 测试。
 * 创建第11章 11.1 checkpoint commit `915b68c`。
 * 完成第11章 11.2 Notebook、脚本更新、`AdaptiveODEResult`、Heun-Euler 嵌入式误差估计、自适应步长求解和对应测试。
+* 创建第11章 11.2 checkpoint commit `66ad2b9`。
+* 第11章章节级自检通过：脚本、13 个 ch11 测试、两个 Notebook、Notebook 结构、全仓库 pytest、diff 空白检查均通过。
 
 ### 正在处理
 
-* 第11章 11.2 checkpoint 提交。
+* 第11章章节级自检。
 
 ### 已修改但尚未验证
 
@@ -218,6 +220,14 @@
 * Notebook 结构检查：第11章两个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
 * `git diff --check`：通过。
 * `git status --short` 已记录；显示外部第6章工作树修改和 `docs/README.md` 仍未提交，本任务提交继续过滤。
+* 第11章章节级 `python chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py`：通过。
+* 第11章章节级 `python -m pytest tests/test_ode_ivp.py`：13 passed。
+* 第11章章节级 `python -m py_compile src/py_sc/ode_ivp.py chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py tests/test_ode_ivp.py`：通过。
+* 第11章章节级 `python -m pytest`：110 passed；其中包含外部第6章工作树中的 `tests/test_direct_linear.py`，仅作为环境状态验证，不纳入本任务提交。
+* 第11章两个 Notebook 全量执行并清空输出：通过。
+* Notebook 结构检查：第11章两个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
+* `git diff --check`：通过。
+* `git status --short` 和 `git diff --stat` 已记录；显示外部第6章工作树修改和 `docs/README.md` 仍未提交，本任务提交继续过滤。
 
 ### 失败或未执行的检查
 
@@ -231,10 +241,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第11章 11.2 文件、命令日志和过滤后的 README/`src/py_sc/__init__.py`。
-2. 创建 `checkpoint(ch11): add adaptive IVP step control`。
+1. 暂存第11章最终状态、命令日志和过滤后的 README。
+2. 创建第11章最终提交 `Add chapter 11 numerical methods for ODEs`。
 3. 记录 commit hash。
-4. 继续第11章章节级自检。
+4. 开始第12章。
 
 ### 恢复时应首先执行的命令
 

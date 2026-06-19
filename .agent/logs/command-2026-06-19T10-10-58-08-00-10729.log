@@ -1,0 +1,18 @@
+timestamp: 2026-06-19T10:10:58+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: env MPLBACKEND=Agg PYTHONPATH=src python -
+---- output ----
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+executed and cleared: /Users/yl/Desktop/research/github_recruitL/py-sc/chapters/ch11_ode_initial_value/notebooks/01_euler_and_runge_kutta.ipynb
+executed and cleared: /Users/yl/Desktop/research/github_recruitL/py-sc/chapters/ch11_ode_initial_value/notebooks/02_adaptive_step_control.ipynb

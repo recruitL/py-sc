@@ -1259,3 +1259,66 @@ Notebook 结构检查
 
 [2026-06-19T06:20:03+08:00] [CH11] [VERIFY]
 11.2 自适应步长与误差控制已完成并通过自检：编译、章节脚本、`tests/test_ode_ivp.py` 13 passed、第11章两个 Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。
+
+[2026-06-19T06:21:10+08:00] [CH11] [CHECKPOINT]
+第11章 11.2 checkpoint 提交完成：`66ad2b941aad9c41f909487d4e10f7f7f52237bf`（`checkpoint(ch11): add adaptive IVP step control`）。
+
+[2026-06-19T06:21:10+08:00] [CH11] [VERIFY]
+开始第11章章节级自检：将运行章节脚本、专项测试、编译检查、全仓库测试、全部第11章 Notebook 执行/清空、Notebook 结构检查、`git diff --check` 和状态记录。
+
+[2026-06-19T10:10:47+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-10-47-08-00-9971.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:10:47+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/ode_ivp.py chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py tests/test_ode_ivp.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-10-47-08-00-10017.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:10:47+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_ode_ivp.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-10-47-08-00-9986.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:10:47+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-10-47-08-00-10019.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:10:58+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-10-58-08-00-10729.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:11:14+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-11-14-08-00-10791.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:11:14+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-11-14-08-00-10809.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:11:14+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-11-14-08-00-10813.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:11:14+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --stat`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-11-14-08-00-10885.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:11:24+08:00] [CH11] [VERIFY]
+第11章章节级自检通过：章节脚本通过，`tests/test_ode_ivp.py` 13 passed，`python -m py_compile` 通过，`python -m pytest` 110 passed，两个第11章 Notebook 已执行并清空输出，Notebook 结构检查通过，`git diff --check` 通过。全仓库测试包含外部第6章工作树测试，仅作为环境状态验证；最终提交继续过滤第6章和 `docs/README.md`。
