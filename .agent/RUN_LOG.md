@@ -1609,3 +1609,120 @@ python -m pytest`
 
 [2026-06-19T12:17:14+08:00] [CH12] [VERIFY]
 从当前暂存索引导出临时树后运行 `python -m pytest`，结果为 120 passed；该验证排除了工作树中未纳入本任务提交的外部第6章文件。
+
+[2026-06-19T12:18:17+08:00] [CH12] [COMMIT]
+创建第12章最终提交 `503bb0738781c848d5c474ef2ca93f33c1a3013b`，提交信息为 `Add chapter 12 numerical methods for PDEs`。
+
+[2026-06-19T12:18:17+08:00] [FINAL] [START]
+开始第7—12章综合收尾检查：从当前 HEAD 提交树导出临时目录，验证章节目录、根 README 导航、包入口导出、脚本、Notebook JSON、全仓库测试和 Git 状态。
+
+[2026-06-19T12:19:05+08:00] [COMMAND] [EXIT 0]
+命令：`bash -lc set -euo pipefail
+tmp=$(mktemp -d)
+git archive HEAD | tar -x -C "$tmp"
+cd "$tmp"
+PYTHONPATH=src MPLBACKEND=Agg python - <<'PY'
+from __future__ import annotations
+
+import json
+import os
+import pathlib
+import subprocess
+import sys
+
+root = pathlib.Path.cwd()
+chapters = {
+    "ch07_iterative_linear_systems": 4,
+    "ch08_nonlinear_roots": 5,
+    "ch09_nonlinear_systems": 3,
+    "ch10_eigenvalue_methods": 2,
+    "ch11_ode_initial_value": 2,
+    "ch12_pde_methods": 3,
+}
+readme = (root / "README.md").read_text()
+for index, chapter in enumerate(chapters, start=7):
+    chapter_dir = root / "chapters" / chapter
+    assert chapter_dir.is_dir(), f"missing {chapter_dir}"
+    assert (chapter_dir / "README.md").is_file(), f"missing README for {chapter}"
+    assert (chapter_dir / "scripts").is_dir(), f"missing scripts for {chapter}"
+    notebooks = sorted((chapter_dir / "notebooks").glob("*.ipynb"))
+    assert len(notebooks) == chapters[chapter], f"unexpected notebook count for {chapter}: {len(notebooks)}"
+    assert chapter in readme, f"README missing {chapter}"
+    assert f"第{index}" in readme or ["七", "八", "九", "十", "十一", "十二"][index - 7] in readme
+
+required_readme_terms = [
+    "第七章", "第八章", "第九章", "第十章", "第十一章", "第十二章",
+    "新增建设：双曲型、抛物型和椭圆型 PDE",
+]
+for term in required_readme_terms:
+    assert term in readme, f"README missing term: {term}"
+
+init_text = (root / "src" / "py_sc" / "__init__.py").read_text()
+assert "direct_linear" not in init_text
+assert "pde_poisson_2d_dirichlet_matrix" in init_text
+
+for notebook in sorted((root / "chapters").glob("ch*_*/notebooks/*.ipynb")):
+    if notebook.parts[-3] not in chapters:
+        continue
+    nb = json.loads(notebook.read_text())
+    missing_ids = [i for i, cell in enumerate(nb.get("cells", [])) if not cell.get("id")]
+    output_cells = [i for i, cell in enumerate(nb.get("cells", [])) if cell.get("cell_type") == "code" and cell.get("outputs")]
+    executed = [i for i, cell in enumerate(nb.get("cells", [])) if cell.get("cell_type") == "code" and cell.get("execution_count") is not None]
+    assert not missing_ids, f"{notebook} missing cell ids: {missing_ids}"
+    assert not output_cells, f"{notebook} has outputs: {output_cells}"
+    assert not executed, f"{notebook} has execution counts: {executed}"
+
+sys.path.insert(0, str(root / "src"))
+from py_sc import (  # noqa: E402
+    conjugate_gradient,
+    muller_method,
+    broyden_system_method,
+    power_method,
+    solve_ivp_fixed_step,
+    pde_poisson_2d_dirichlet_matrix,
+)
+assert callable(conjugate_gradient)
+assert callable(muller_method)
+assert callable(broyden_system_method)
+assert callable(power_method)
+assert callable(solve_ivp_fixed_step)
+assert pde_poisson_2d_dirichlet_matrix(nx=1, ny=1, hx=1.0, hy=1.0).shape == (1, 1)
+
+scripts = []
+for chapter in chapters:
+    scripts.extend(sorted((root / "chapters" / chapter / "scripts").glob("*.py")))
+for script in scripts:
+    subprocess.run([sys.executable, str(script)], check=True)
+
+py_files = sorted(root.glob("src/py_sc/*.py")) + sorted((root / "tests").glob("test_*.py"))
+subprocess.run([sys.executable, "-m", "py_compile", *map(str, py_files)], check=True)
+subprocess.run([sys.executable, "-m", "pytest"], check=True)
+print(f"comprehensive check passed: {len(chapters)} chapters, {sum(chapters.values())} notebooks, {len(scripts)} scripts")
+PY`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-19-05-08-00-44968.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:19:11+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-19-11-08-00-45026.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:19:12+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short --branch`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-19-12-08-00-45074.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:19:12+08:00] [COMMAND] [EXIT 0]
+命令：`git log -12 --oneline`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-19-12-08-00-45085.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:19:36+08:00] [FINAL] [VERIFY]
+第7—12章综合收尾检查通过：从 HEAD 提交树导出临时目录后验证 6 个章节目录、19 个 Notebook、6 个脚本、README 导航、包入口导出、Notebook JSON 结构、`py_compile` 和 `python -m pytest` 120 passed；`git diff --check`、`git status --short --branch`、`git log -12 --oneline` 已记录。
+
+[2026-06-19T12:19:36+08:00] [FINAL] [DONE]
+第7—12章建设完成，本地 checkpoint 和章节最终提交已建立；按用户要求未执行 `git push`。

@@ -1,0 +1,213 @@
+timestamp: 2026-06-19T12:19:05+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: bash -lc set -euo pipefail
+tmp=$(mktemp -d)
+git archive HEAD | tar -x -C "$tmp"
+cd "$tmp"
+PYTHONPATH=src MPLBACKEND=Agg python - <<'PY'
+from __future__ import annotations
+
+import json
+import os
+import pathlib
+import subprocess
+import sys
+
+root = pathlib.Path.cwd()
+chapters = {
+    "ch07_iterative_linear_systems": 4,
+    "ch08_nonlinear_roots": 5,
+    "ch09_nonlinear_systems": 3,
+    "ch10_eigenvalue_methods": 2,
+    "ch11_ode_initial_value": 2,
+    "ch12_pde_methods": 3,
+}
+readme = (root / "README.md").read_text()
+for index, chapter in enumerate(chapters, start=7):
+    chapter_dir = root / "chapters" / chapter
+    assert chapter_dir.is_dir(), f"missing {chapter_dir}"
+    assert (chapter_dir / "README.md").is_file(), f"missing README for {chapter}"
+    assert (chapter_dir / "scripts").is_dir(), f"missing scripts for {chapter}"
+    notebooks = sorted((chapter_dir / "notebooks").glob("*.ipynb"))
+    assert len(notebooks) == chapters[chapter], f"unexpected notebook count for {chapter}: {len(notebooks)}"
+    assert chapter in readme, f"README missing {chapter}"
+    assert f"第{index}" in readme or ["七", "八", "九", "十", "十一", "十二"][index - 7] in readme
+
+required_readme_terms = [
+    "第七章", "第八章", "第九章", "第十章", "第十一章", "第十二章",
+    "新增建设：双曲型、抛物型和椭圆型 PDE",
+]
+for term in required_readme_terms:
+    assert term in readme, f"README missing term: {term}"
+
+init_text = (root / "src" / "py_sc" / "__init__.py").read_text()
+assert "direct_linear" not in init_text
+assert "pde_poisson_2d_dirichlet_matrix" in init_text
+
+for notebook in sorted((root / "chapters").glob("ch*_*/notebooks/*.ipynb")):
+    if notebook.parts[-3] not in chapters:
+        continue
+    nb = json.loads(notebook.read_text())
+    missing_ids = [i for i, cell in enumerate(nb.get("cells", [])) if not cell.get("id")]
+    output_cells = [i for i, cell in enumerate(nb.get("cells", [])) if cell.get("cell_type") == "code" and cell.get("outputs")]
+    executed = [i for i, cell in enumerate(nb.get("cells", [])) if cell.get("cell_type") == "code" and cell.get("execution_count") is not None]
+    assert not missing_ids, f"{notebook} missing cell ids: {missing_ids}"
+    assert not output_cells, f"{notebook} has outputs: {output_cells}"
+    assert not executed, f"{notebook} has execution counts: {executed}"
+
+sys.path.insert(0, str(root / "src"))
+from py_sc import (  # noqa: E402
+    conjugate_gradient,
+    muller_method,
+    broyden_system_method,
+    power_method,
+    solve_ivp_fixed_step,
+    pde_poisson_2d_dirichlet_matrix,
+)
+assert callable(conjugate_gradient)
+assert callable(muller_method)
+assert callable(broyden_system_method)
+assert callable(power_method)
+assert callable(solve_ivp_fixed_step)
+assert pde_poisson_2d_dirichlet_matrix(nx=1, ny=1, hx=1.0, hy=1.0).shape == (1, 1)
+
+scripts = []
+for chapter in chapters:
+    scripts.extend(sorted((root / "chapters" / chapter / "scripts").glob("*.py")))
+for script in scripts:
+    subprocess.run([sys.executable, str(script)], check=True)
+
+py_files = sorted(root.glob("src/py_sc/*.py")) + sorted((root / "tests").glob("test_*.py"))
+subprocess.run([sys.executable, "-m", "py_compile", *map(str, py_files)], check=True)
+subprocess.run([sys.executable, "-m", "pytest"], check=True)
+print(f"comprehensive check passed: {len(chapters)} chapters, {sum(chapters.values())} notebooks, {len(scripts)} scripts")
+PY
+---- output ----
+Jacobi:
+iterations=23, residual=3.811e-11
+error=1.091e-10
+spectral_radius=0.353553
+
+Gauss-Seidel:
+iterations=12, residual=6.615e-11
+error=1.544e-10
+spectral_radius=0.125000
+
+SOR omega scan:
+omega=0.80, iterations=24, converged=True, residual=7.452e-11
+omega=1.00, iterations=12, converged=True, residual=6.615e-11
+omega=1.15, iterations=13, converged=True, residual=4.784e-11
+omega=1.40, iterations=26, converged=True, residual=7.695e-11
+
+Block iterations:
+block_jacobi_iterations=15, block_gs_iterations=8, sor_iterations=12
+
+CG and PCG:
+steepest_descent_iterations=29, cg_iterations=3, pcg_iterations=3
+
+2D Poisson:
+cg_iterations=1, residual=2.331e-15, max_error=9.908e-03
+brackets: [(0.7000000000000001, 0.8)]
+root=0.739085133215, residual=6.550e-14, iterations=36
+fixed point: root=0.739085133215 iterations=68 residual=7.611e-13
+steffensen: root=0.739085133215 iterations=4 residual=0.000e+00
+first Aitken accelerated values: [0.731385186383 0.736086691713 0.737652871396]
+Newton sqrt(2): root=1.414213562373, iterations=4
+damped Newton cubic: root=1.000000000000, iterations=5
+multiple root: plain_iterations=17 modified_iterations=1
+secant cos fixed point: root=0.739085133215, iterations=5
+Muller cubic: root=1.521379706805, iterations=5
+synthetic division quotient: [ 1. -5.  6.] remainder: 0.000e+00
+Newton deflation roots: [1. 2. 3.]
+Bairstow factor: [ 1. -3.  2.]
+polynomial brackets: [(-0.5, -0.5), (1.0, 1.0), (2.0, 2.0)]
+even root sign-change brackets: []
+grid min near even root: 0.0
+fixed point system: solution=[0.486405154666 0.233725501959] iterations=18 residual=4.058e-13
+Newton system: solution=[0.707106781187 0.707106781187] iterations=4 residual=2.220e-16
+finite-difference Jacobian at [0.8, 0.6]:
+[[ 1.60000002  1.20000002]
+ [ 1.         -1.        ]]
+chord Newton: solution=[0.707106781185 0.707106781185] iterations=6 residual=3.271e-12
+damped Newton: solution=[1. 0.] iterations=5 residual=1.599e-14
+Broyden: solution=[0.707106781191 0.707106781191] iterations=4 residual=1.315e-11
+continuation parameters: [1.  1.5 2. ]
+continuation solutions:
+[[1.         1.        ]
+ [1.22474487 1.5       ]
+ [1.41421356 2.        ]]
+Rayleigh quotient: 4.500000000000
+power method: lambda=4.732050807569 iterations=54 residual=4.536e-12
+inverse power near shift 2.8: lambda=3.000000000000 iterations=13 residual=4.122e-12
+Rayleigh quotient iteration: lambda=4.732050807569 iterations=6 residual=6.280e-16
+numpy eigvalsh: [1.267949192431 3.             4.732050807569]
+dominant residual recomputed: 4.536e-12
+Jacobi eigenvalues: [1.267949192431 3.             4.732050807569]
+Jacobi: rotations=9 offdiag=1.204e-17
+QR iteration eigenvalues: [2.38196601125 4.61803398875]
+QR iteration: iterations=41 offdiag=3.181e-12
+one-step comparison for y'=y, y(0)=1:
+  Euler    value=1.100000000000 error=5.171e-03
+  Heun     value=1.105000000000 error=1.709e-04
+  Midpoint value=1.105000000000 error=1.709e-04
+  RK4      value=1.105170833333 error=8.474e-08
+
+fixed-step solve on [0, 1]:
+  euler    y(1)=2.593742460100 error=1.245e-01
+  heun     y(1)=2.714080846608 error=4.201e-03
+  midpoint y(1)=2.714080846608 error=4.201e-03
+  rk4      y(1)=2.718279744135 error=2.084e-06
+
+observed order:
+  Euler: 0.912
+  RK4:   3.910
+
+Heun-Euler embedded step:
+  high=1.105000000000 low=1.100000000000 estimate=5.000e-03
+
+adaptive Heun:
+  y(1)=2.718275173481 accepted=261 rejected=4 max_error_norm=9.032e-01
+
+oscillator at pi/2: [ 7.968559839755e-10 -9.999999999896e-01]
+1D advection on a smooth sine wave:
+  upwind          CFL=0.400 max_error=1.470e-02
+  lax_friedrichs  CFL=0.400 max_error=5.052e-02
+  lax_wendroff    CFL=0.400 max_error=5.423e-04
+
+2D upwind advection:
+  shape=(4, 20, 20) CFL_x=1.000 CFL_y=0.000 mass=36.000000
+
+1D wave equation:
+  CFL=0.400 max_error=1.276e-05 energy_change=-2.939e-02
+
+1D heat equation:
+  FTCS            r=0.400 max_error=2.733e-05
+  Implicit Euler  r=2.000 max_error=3.104e-04
+  Crank-Nicolson  r=40.000 max_error=6.287e-04
+
+2D Poisson equation by SOR:
+  iterations=196 residual=8.853e-10 max_error=2.266e-03
+
+2D Laplace equation by SOR:
+  iterations=0 residual=0.000e+00 center=1.000000
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /private/var/folders/_8/bv4nbfb13qqfmlkbg023v9bm0000gn/T/tmp.1eLEkcrkle
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.2.0
+collected 120 items
+
+tests/test_approximation.py .....                                        [  4%]
+tests/test_differentiation.py ..........                                 [ 12%]
+tests/test_eigenvalues.py ............                                   [ 22%]
+tests/test_integration.py ........                                       [ 29%]
+tests/test_interpolation.py .............                                [ 40%]
+tests/test_iterative_linear.py ..............                            [ 51%]
+tests/test_nonlinear_roots.py ....................                       [ 68%]
+tests/test_nonlinear_systems.py ........                                 [ 75%]
+tests/test_ode_ivp.py .............                                      [ 85%]
+tests/test_pde.py .................                                      [100%]
+
+============================= 120 passed in 0.32s ==============================
+comprehensive check passed: 6 chapters, 19 notebooks, 6 scripts

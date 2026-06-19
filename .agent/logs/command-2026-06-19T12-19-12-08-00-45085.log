@@ -1,0 +1,16 @@
+timestamp: 2026-06-19T12:19:12+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: git log -12 --oneline
+---- output ----
+503bb07 Add chapter 12 numerical methods for PDEs
+ac6bb40 checkpoint(ch12): add elliptic Poisson SOR methods
+f20338c checkpoint(ch12): add parabolic heat equation methods
+6f622c8 checkpoint(ch12): add hyperbolic PDE methods
+53080ac Add chapter 11 numerical methods for ODEs
+66ad2b9 checkpoint(ch11): add adaptive IVP step control
+915b68c checkpoint(ch11): add Euler and Runge-Kutta IVP methods
+6532e3c Add chapter 10 eigenvalue methods
+a75d0b2 checkpoint(ch10): add Jacobi and QR eigenvalue methods
+51ebedc checkpoint(ch10): add power and inverse iteration
+4d85607 Add chapter 09 nonlinear systems methods
+a85a000 checkpoint(ch09): add Broyden and continuation methods
