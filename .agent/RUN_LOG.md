@@ -1373,3 +1373,54 @@ Notebook 结构检查
 
 [2026-06-19T10:19:13+08:00] [CH12] [VERIFY]
 12.1 双曲型偏微分方程已完成并通过自检：编译、章节脚本、`tests/test_pde.py` 9 passed、Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。
+
+[2026-06-19T10:20:54+08:00] [CH12] [CHECKPOINT]
+第12章 12.1 checkpoint 提交完成：`6f622c875cb266365a4eb116311e193787bf5326`（`checkpoint(ch12): add hyperbolic PDE methods`）。
+
+[2026-06-19T10:20:54+08:00] [CH12] [START]
+开始第12章 12.2 抛物型偏微分方程。计划扩展一维热方程 FTCS、隐式 Euler、Crank-Nicolson、脚本、测试和 Notebook，并在自检通过后创建 12.2 checkpoint。
+
+[2026-06-19T11:13:48+08:00] [CH12] [VERIFY]
+12.2 抛物型偏微分方程已完成并通过自检：编译、章节脚本、`tests/test_pde.py` 13 passed、第12章两个 Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。
+
+[2026-06-19T11:13:11+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/pde.py chapters/ch12_pde_methods/scripts/pde_methods.py tests/test_pde.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-13-11-08-00-23179.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:13:13+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch12_pde_methods/scripts/pde_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-13-13-08-00-23337.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:13:13+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_pde.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-13-13-08-00-23415.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:13:25+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-13-25-08-00-23744.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:13:37+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-13-37-08-00-23842.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:13:37+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-13-37-08-00-23824.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:13:37+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-13-37-08-00-23860.log`
+摘要：命令执行成功。

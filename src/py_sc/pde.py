@@ -46,6 +46,17 @@ class Wave1DResult:
     energy_history: np.ndarray
 
 
+@dataclass(frozen=True)
+class Heat1DResult:
+    """一维热方程数值结果。"""
+
+    grid: np.ndarray
+    times: np.ndarray
+    values: np.ndarray
+    method: str
+    diffusion_number: float
+
+
 def periodic_grid_1d(start: float, stop: float, points: int) -> np.ndarray:
     """生成不重复终点的一维周期网格。"""
 
@@ -261,6 +272,101 @@ def wave_discrete_energy(
     return kinetic + potential
 
 
+def heat_diffusion_number(diffusivity: float, dt: float, dx: float) -> float:
+    """计算一维热方程显式格式中的扩散数 ``kappa dt / dx^2``。"""
+
+    dx = _validate_step_size(dx, "dx")
+    dt = _validate_step_size(dt, "dt")
+    return float(diffusivity) * dt / (dx * dx)
+
+
+def solve_heat_1d_ftcs(
+    initial: np.ndarray | list[float] | tuple[float, ...],
+    diffusivity: float,
+    dx: float,
+    dt: float,
+    steps: int,
+) -> Heat1DResult:
+    """用 FTCS 显式格式求解一维齐次热方程，端点为零 Dirichlet 边界。"""
+
+    u = _as_vector(initial, "initial")
+    _validate_heat_state(u)
+    dx = _validate_step_size(dx, "dx")
+    dt = _validate_step_size(dt, "dt")
+    steps = _validate_nonnegative_int(steps, "steps")
+    ratio = heat_diffusion_number(diffusivity, dt, dx)
+    values = [u.copy()]
+    for _ in range(steps):
+        u_next = u.copy()
+        u_next[1:-1] = u[1:-1] + ratio * (u[2:] - 2.0 * u[1:-1] + u[:-2])
+        u_next[0] = 0.0
+        u_next[-1] = 0.0
+        u = u_next
+        values.append(u.copy())
+    grid = np.arange(u.size, dtype=float) * dx
+    times = np.arange(steps + 1, dtype=float) * dt
+    return Heat1DResult(grid, times, np.vstack(values), "ftcs", float(ratio))
+
+
+def solve_heat_1d_implicit_euler(
+    initial: np.ndarray | list[float] | tuple[float, ...],
+    diffusivity: float,
+    dx: float,
+    dt: float,
+    steps: int,
+) -> Heat1DResult:
+    """用隐式 Euler 格式求解一维齐次热方程，端点为零 Dirichlet 边界。"""
+
+    u = _as_vector(initial, "initial")
+    _validate_heat_state(u)
+    dx = _validate_step_size(dx, "dx")
+    dt = _validate_step_size(dt, "dt")
+    steps = _validate_nonnegative_int(steps, "steps")
+    ratio = heat_diffusion_number(diffusivity, dt, dx)
+    matrix = _heat_implicit_matrix(u.size - 2, ratio)
+    values = [u.copy()]
+    for _ in range(steps):
+        interior = np.linalg.solve(matrix, u[1:-1])
+        u = u.copy()
+        u[1:-1] = interior
+        u[0] = 0.0
+        u[-1] = 0.0
+        values.append(u.copy())
+    grid = np.arange(u.size, dtype=float) * dx
+    times = np.arange(steps + 1, dtype=float) * dt
+    return Heat1DResult(grid, times, np.vstack(values), "implicit_euler", float(ratio))
+
+
+def solve_heat_1d_crank_nicolson(
+    initial: np.ndarray | list[float] | tuple[float, ...],
+    diffusivity: float,
+    dx: float,
+    dt: float,
+    steps: int,
+) -> Heat1DResult:
+    """用 Crank-Nicolson 格式求解一维齐次热方程，端点为零 Dirichlet 边界。"""
+
+    u = _as_vector(initial, "initial")
+    _validate_heat_state(u)
+    dx = _validate_step_size(dx, "dx")
+    dt = _validate_step_size(dt, "dt")
+    steps = _validate_nonnegative_int(steps, "steps")
+    ratio = heat_diffusion_number(diffusivity, dt, dx)
+    system = _heat_crank_nicolson_left_matrix(u.size - 2, ratio)
+    right = _heat_crank_nicolson_right_matrix(u.size - 2, ratio)
+    values = [u.copy()]
+    for _ in range(steps):
+        interior = np.linalg.solve(system, right @ u[1:-1])
+        u = u.copy()
+        u[1:-1] = interior
+        u[0] = 0.0
+        u[-1] = 0.0
+        values.append(u.copy())
+    grid = np.arange(u.size, dtype=float) * dx
+    times = np.arange(steps + 1, dtype=float) * dt
+    return Heat1DResult(grid, times, np.vstack(values), "crank_nicolson", float(ratio))
+
+
 def _as_vector(values: np.ndarray | list[float] | tuple[float, ...], name: str) -> np.ndarray:
     array = np.array(values, dtype=float)
     if array.ndim != 1:
@@ -303,3 +409,26 @@ def _source_values(source: Source1D | None, time: float, grid: np.ndarray, size:
     if values.size != size:
         raise ValueError("source values must match grid size")
     return values
+
+
+def _validate_heat_state(values: np.ndarray) -> None:
+    if values.size < 3:
+        raise ValueError("at least three grid points are required")
+
+
+def _heat_implicit_matrix(size: int, ratio: float) -> np.ndarray:
+    diag = (1.0 + 2.0 * ratio) * np.ones(size)
+    off = -ratio * np.ones(size - 1)
+    return np.diag(diag) + np.diag(off, k=1) + np.diag(off, k=-1)
+
+
+def _heat_crank_nicolson_left_matrix(size: int, ratio: float) -> np.ndarray:
+    diag = (1.0 + ratio) * np.ones(size)
+    off = -0.5 * ratio * np.ones(size - 1)
+    return np.diag(diag) + np.diag(off, k=1) + np.diag(off, k=-1)
+
+
+def _heat_crank_nicolson_right_matrix(size: int, ratio: float) -> np.ndarray:
+    diag = (1.0 - ratio) * np.ones(size)
+    off = 0.5 * ratio * np.ones(size - 1)
+    return np.diag(diag) + np.diag(off, k=1) + np.diag(off, k=-1)

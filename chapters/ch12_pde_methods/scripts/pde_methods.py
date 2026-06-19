@@ -17,6 +17,9 @@ from py_sc import (  # noqa: E402
     lax_friedrichs_advection_1d,
     lax_wendroff_advection_1d,
     periodic_grid_1d,
+    solve_heat_1d_crank_nicolson,
+    solve_heat_1d_ftcs,
+    solve_heat_1d_implicit_euler,
     solve_wave_1d_dirichlet,
     upwind_advection_1d,
     upwind_advection_2d,
@@ -64,6 +67,22 @@ def main() -> None:
         f"max_error={np.linalg.norm(wave.values[-1] - wave_exact, ord=np.inf):.3e}",
         f"energy_change={wave.energy_history[-1] - wave.energy_history[0]:.3e}",
     )
+
+    heat_points = 51
+    heat_grid = np.linspace(0.0, 1.0, heat_points)
+    heat_dx = heat_grid[1] - heat_grid[0]
+    heat_initial = np.sin(math.pi * heat_grid)
+    print("\n1D heat equation:")
+    heat_cases = [
+        ("FTCS", solve_heat_1d_ftcs, 0.4 * heat_dx * heat_dx, 40),
+        ("Implicit Euler", solve_heat_1d_implicit_euler, 2.0 * heat_dx * heat_dx, 10),
+        ("Crank-Nicolson", solve_heat_1d_crank_nicolson, 0.8 * heat_dx, 5),
+    ]
+    for name, solver, heat_dt, heat_steps in heat_cases:
+        heat = solver(heat_initial, diffusivity=1.0, dx=heat_dx, dt=heat_dt, steps=heat_steps)
+        heat_exact = np.exp(-math.pi * math.pi * heat.times[-1]) * np.sin(math.pi * heat_grid)
+        error = np.linalg.norm(heat.values[-1] - heat_exact, ord=np.inf)
+        print(f"  {name:15s} r={heat.diffusion_number:.3f} max_error={error:.3e}")
 
 
 if __name__ == "__main__":

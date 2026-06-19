@@ -11,6 +11,7 @@
 * 写出一维常系数对流方程的上风、Lax-Friedrichs 和 Lax-Wendroff 格式；
 * 理解 CFL 条件、数值耗散和数值色散；
 * 用中心差分求解一维波动方程并监控能量变化；
+* 比较热方程显式、隐式和 Crank-Nicolson 格式；
 * 用解析解或制造解检查 PDE 离散结果。
 
 ## 与前面章节的联系
@@ -20,12 +21,14 @@
 ## 阅读顺序
 
 1. `notebooks/01_hyperbolic_advection_and_wave.ipynb`
+2. `notebooks/02_parabolic_heat_equation.ipynb`
 
 ## Notebook 对照表
 
 | Notebook | 作用 | 状态 |
 | --- | --- | --- |
 | `01_hyperbolic_advection_and_wave.ipynb` | 一维/二维对流方程、CFL 条件、上风/Lax 系列格式和一维波动方程。 | 已建设 |
+| `02_parabolic_heat_equation.ipynb` | 一维热方程、FTCS、隐式 Euler、Crank-Nicolson 和稳定性对比。 | 已建设 |
 
 ## 可运行脚本
 
@@ -54,7 +57,11 @@ src/py_sc/pde.py
 * `wave_cfl`
 * `solve_wave_1d_dirichlet`
 * `wave_discrete_energy`
+* `heat_diffusion_number`
+* `solve_heat_1d_ftcs`
+* `solve_heat_1d_implicit_euler`
+* `solve_heat_1d_crank_nicolson`
 
 ## 本章小结
 
-双曲型方程的核心是信息沿特征传播。上风格式把传播方向嵌入差分模板，通常更稳健但有数值耗散；Lax-Friedrichs 增加平均项，耗散更明显；Lax-Wendroff 利用二阶 Taylor 展开降低耗散，但可能带来色散振荡。波动方程的中心差分格式需要用初始位移和初始速度构造第一时间层，并满足 CFL 条件。后续抛物型和椭圆型问题将进一步强调稳定性、隐式线性系统和稀疏矩阵结构。
+双曲型方程的核心是信息沿特征传播。上风格式把传播方向嵌入差分模板，通常更稳健但有数值耗散；Lax-Friedrichs 增加平均项，耗散更明显；Lax-Wendroff 利用二阶 Taylor 展开降低耗散，但可能带来色散振荡。波动方程的中心差分格式需要用初始位移和初始速度构造第一时间层，并满足 CFL 条件。热方程代表抛物型问题，显式 FTCS 受扩散数稳定性限制，隐式 Euler 和 Crank-Nicolson 通过线性系统换取更强稳定性。后续椭圆型问题将进一步强调稀疏矩阵结构和边界条件处理。

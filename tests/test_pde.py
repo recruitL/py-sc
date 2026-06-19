@@ -7,9 +7,13 @@ import pytest
 
 from py_sc import (
     advection_cfl,
+    heat_diffusion_number,
     lax_friedrichs_advection_1d,
     lax_wendroff_advection_1d,
     periodic_grid_1d,
+    solve_heat_1d_crank_nicolson,
+    solve_heat_1d_ftcs,
+    solve_heat_1d_implicit_euler,
     solve_wave_1d_dirichlet,
     upwind_advection_1d,
     upwind_advection_2d,
@@ -96,3 +100,50 @@ def test_wave_discrete_energy_is_positive_for_nonzero_state() -> None:
 def test_pde_routines_validate_shapes() -> None:
     with pytest.raises(ValueError):
         solve_wave_1d_dirichlet([0.0, 1.0], [0.0], speed=1.0, dx=0.1, dt=0.05, steps=1)
+
+
+def test_heat_diffusion_number_uses_diffusivity_time_and_space_steps() -> None:
+    assert heat_diffusion_number(0.5, 0.01, 0.1) == pytest.approx(0.5)
+
+
+def test_solve_heat_1d_ftcs_tracks_sine_decay_under_stability_limit() -> None:
+    points = 51
+    grid = np.linspace(0.0, 1.0, points)
+    dx = grid[1] - grid[0]
+    dt = 0.4 * dx * dx
+    steps = 40
+    initial = np.sin(math.pi * grid)
+
+    result = solve_heat_1d_ftcs(initial, diffusivity=1.0, dx=dx, dt=dt, steps=steps)
+    exact = np.exp(-math.pi * math.pi * result.times[-1]) * np.sin(math.pi * grid)
+
+    assert result.diffusion_number == pytest.approx(0.4)
+    assert np.linalg.norm(result.values[-1] - exact, ord=np.inf) < 8e-4
+
+
+def test_solve_heat_1d_implicit_euler_stays_stable_for_large_step() -> None:
+    points = 31
+    grid = np.linspace(0.0, 1.0, points)
+    dx = grid[1] - grid[0]
+    dt = 2.0 * dx * dx
+    initial = np.sin(math.pi * grid)
+
+    result = solve_heat_1d_implicit_euler(initial, diffusivity=1.0, dx=dx, dt=dt, steps=10)
+
+    assert result.diffusion_number == pytest.approx(2.0)
+    assert np.max(np.abs(result.values[-1])) < np.max(np.abs(initial))
+    assert np.all(np.isfinite(result.values))
+
+
+def test_solve_heat_1d_crank_nicolson_tracks_sine_decay() -> None:
+    points = 41
+    grid = np.linspace(0.0, 1.0, points)
+    dx = grid[1] - grid[0]
+    dt = 0.8 * dx
+    steps = 5
+    initial = np.sin(math.pi * grid)
+
+    result = solve_heat_1d_crank_nicolson(initial, diffusivity=1.0, dx=dx, dt=dt, steps=steps)
+    exact = np.exp(-math.pi * math.pi * result.times[-1]) * np.sin(math.pi * grid)
+
+    assert np.linalg.norm(result.values[-1] - exact, ord=np.inf) < 8e-3
