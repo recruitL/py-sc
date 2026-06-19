@@ -30,6 +30,11 @@ py-sc/
       notes/                # 理论笔记和补充说明
       scripts/              # 与 Notebook 对应的可运行脚本
       references.md         # 本章参考文献
+    ch06_direct_linear_systems/ # 第六章：解线性方程组的直接方法
+      notebooks/            # 主要教学 Notebook
+      notes/                # 理论笔记和补充说明
+      scripts/              # 与 Notebook 对应的可运行脚本
+      references.md         # 本章参考文献
     ch07_iterative_linear_systems/ # 第七章：解线性方程组的迭代法
       notebooks/            # 主要教学 Notebook
       scripts/              # 与 Notebook 对应的可运行脚本
@@ -63,6 +68,7 @@ py-sc/
 | 第三章 | 函数逼近与曲线拟合 | 理论扩充：逼近空间、误差范数、投影观点，Chebyshev/Legendre 级数，最小二乘、正则化、Padé、Fourier/FFT 与自适应逼近框架 |
 | 第四章 | 数值积分 | 新增建设：求积基本原理、Newton-Cotes、复合求积、Romberg、自适应 Simpson、Gauss-Legendre、带权高斯公式、离散数据积分、多重积分和高维 Monte Carlo 框架 |
 | 第五章 | 数值微分 | 新增建设：有限差分、函数型和离散数据微分、非等距权重、Richardson 外推、隐式紧致格式入口、样条微分、B 样条微分框架、二阶微分和误差实验 |
+| 第六章 | 解线性方程组的直接方法 | 新增建设：前代、回代、高斯消元、部分选主元、LU/PLU、Cholesky、LDL^T、Thomas 追赶法、Gram-Schmidt、Householder QR、Givens QR 和稳定性实验 |
 | 第七章 | 解线性方程组的迭代法 | 建设中：Jacobi、Gauss-Seidel、SOR、块迭代、最速下降、CG、PCG、二维 Poisson 五点差分、矩阵分裂、谱半径和残差停止准则 |
 | 第八章 | 非线性方程求根 | 新增建设：区间扫描、二分法、不动点迭代、Aitken 加速、Steffensen 方法、Newton、阻尼 Newton、重根修正、弦截法、Müller 法、多项式根和局部收敛条件 |
 | 第九章 | 非线性方程组解法 | 新增建设：向量不动点迭代、多元 Newton 法、阻尼 Newton、弦 Newton、有限差分 Jacobian、Broyden、参数延拓、残差范数和奇异 Jacobian 失败情形 |
@@ -102,31 +108,39 @@ py-sc/
 26. `chapters/ch05_numerical_differentiation/notebooks/05_richardson_and_implicit.ipynb`
 27. `chapters/ch05_numerical_differentiation/notebooks/06_second_derivatives.ipynb`
 28. `chapters/ch05_numerical_differentiation/notebooks/07_experiments.ipynb`
-29. `chapters/ch07_iterative_linear_systems/README.md`
-30. `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
-31. `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`
-32. `chapters/ch07_iterative_linear_systems/notebooks/03_cg_and_pcg.ipynb`
-33. `chapters/ch07_iterative_linear_systems/notebooks/04_poisson_sparse_iterations.ipynb`
-34. `chapters/ch08_nonlinear_roots/README.md`
-35. `chapters/ch08_nonlinear_roots/notebooks/01_bracketing_methods.ipynb`
-36. `chapters/ch08_nonlinear_roots/notebooks/02_fixed_point_acceleration.ipynb`
-37. `chapters/ch08_nonlinear_roots/notebooks/03_newton_methods.ipynb`
-38. `chapters/ch08_nonlinear_roots/notebooks/04_secant_and_parabolic_methods.ipynb`
-39. `chapters/ch08_nonlinear_roots/notebooks/05_polynomial_roots_extensions.ipynb`
-40. `chapters/ch09_nonlinear_systems/README.md`
-41. `chapters/ch09_nonlinear_systems/notebooks/01_fixed_point_and_newton_systems.ipynb`
-42. `chapters/ch09_nonlinear_systems/notebooks/02_damped_and_chord_newton.ipynb`
-43. `chapters/ch09_nonlinear_systems/notebooks/03_broyden_and_continuation.ipynb`
-44. `chapters/ch10_eigenvalue_methods/README.md`
-45. `chapters/ch10_eigenvalue_methods/notebooks/01_power_and_inverse_iteration.ipynb`
-46. `chapters/ch10_eigenvalue_methods/notebooks/02_jacobi_and_qr_eigenvalues.ipynb`
-47. `chapters/ch11_ode_initial_value/README.md`
-48. `chapters/ch11_ode_initial_value/notebooks/01_euler_and_runge_kutta.ipynb`
-49. `chapters/ch11_ode_initial_value/notebooks/02_adaptive_step_control.ipynb`
-50. `chapters/ch12_pde_methods/README.md`
-51. `chapters/ch12_pde_methods/notebooks/01_hyperbolic_advection_and_wave.ipynb`
-52. `chapters/ch12_pde_methods/notebooks/02_parabolic_heat_equation.ipynb`
-53. `chapters/ch12_pde_methods/notebooks/03_elliptic_poisson_sor.ipynb`
+29. `chapters/ch06_direct_linear_systems/README.md`
+30. `chapters/ch06_direct_linear_systems/notebooks/01_linear_systems_overview.ipynb`
+31. `chapters/ch06_direct_linear_systems/notebooks/02_gaussian_elimination.ipynb`
+32. `chapters/ch06_direct_linear_systems/notebooks/03_lu_factorization.ipynb`
+33. `chapters/ch06_direct_linear_systems/notebooks/04_spd_factorizations.ipynb`
+34. `chapters/ch06_direct_linear_systems/notebooks/05_tridiagonal_systems.ipynb`
+35. `chapters/ch06_direct_linear_systems/notebooks/06_qr_factorization.ipynb`
+36. `chapters/ch06_direct_linear_systems/notebooks/07_experiments.ipynb`
+37. `chapters/ch07_iterative_linear_systems/README.md`
+38. `chapters/ch07_iterative_linear_systems/notebooks/01_stationary_iterations.ipynb`
+39. `chapters/ch07_iterative_linear_systems/notebooks/02_sor_and_block_iterations.ipynb`
+40. `chapters/ch07_iterative_linear_systems/notebooks/03_cg_and_pcg.ipynb`
+41. `chapters/ch07_iterative_linear_systems/notebooks/04_poisson_sparse_iterations.ipynb`
+42. `chapters/ch08_nonlinear_roots/README.md`
+43. `chapters/ch08_nonlinear_roots/notebooks/01_bracketing_methods.ipynb`
+44. `chapters/ch08_nonlinear_roots/notebooks/02_fixed_point_acceleration.ipynb`
+45. `chapters/ch08_nonlinear_roots/notebooks/03_newton_methods.ipynb`
+46. `chapters/ch08_nonlinear_roots/notebooks/04_secant_and_parabolic_methods.ipynb`
+47. `chapters/ch08_nonlinear_roots/notebooks/05_polynomial_roots_extensions.ipynb`
+48. `chapters/ch09_nonlinear_systems/README.md`
+49. `chapters/ch09_nonlinear_systems/notebooks/01_fixed_point_and_newton_systems.ipynb`
+50. `chapters/ch09_nonlinear_systems/notebooks/02_damped_and_chord_newton.ipynb`
+51. `chapters/ch09_nonlinear_systems/notebooks/03_broyden_and_continuation.ipynb`
+52. `chapters/ch10_eigenvalue_methods/README.md`
+53. `chapters/ch10_eigenvalue_methods/notebooks/01_power_and_inverse_iteration.ipynb`
+54. `chapters/ch10_eigenvalue_methods/notebooks/02_jacobi_and_qr_eigenvalues.ipynb`
+55. `chapters/ch11_ode_initial_value/README.md`
+56. `chapters/ch11_ode_initial_value/notebooks/01_euler_and_runge_kutta.ipynb`
+57. `chapters/ch11_ode_initial_value/notebooks/02_adaptive_step_control.ipynb`
+58. `chapters/ch12_pde_methods/README.md`
+59. `chapters/ch12_pde_methods/notebooks/01_hyperbolic_advection_and_wave.ipynb`
+60. `chapters/ch12_pde_methods/notebooks/02_parabolic_heat_equation.ipynb`
+61. `chapters/ch12_pde_methods/notebooks/03_elliptic_poisson_sor.ipynb`
 
 运行脚本示例：
 
@@ -135,6 +149,7 @@ python chapters/ch02_interpolation/scripts/compare_interpolation.py
 python chapters/ch03_approximation/scripts/orthogonal_approximation.py
 python chapters/ch04_numerical_integration/scripts/integration_methods.py
 python chapters/ch05_numerical_differentiation/scripts/differentiation_methods.py
+python chapters/ch06_direct_linear_systems/scripts/direct_methods.py
 python chapters/ch07_iterative_linear_systems/scripts/iterative_linear_methods.py
 python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py
 python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py
