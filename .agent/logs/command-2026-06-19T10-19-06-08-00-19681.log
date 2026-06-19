@@ -1,0 +1,5 @@
+timestamp: 2026-06-19T10:19:06+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -
+---- output ----
+notebook structure clean: chapters/ch12_pde_methods/notebooks/01_hyperbolic_advection_and_wave.ipynb

@@ -1322,3 +1322,54 @@ Notebook 结构检查
 
 [2026-06-19T10:11:24+08:00] [CH11] [VERIFY]
 第11章章节级自检通过：章节脚本通过，`tests/test_ode_ivp.py` 13 passed，`python -m py_compile` 通过，`python -m pytest` 110 passed，两个第11章 Notebook 已执行并清空输出，Notebook 结构检查通过，`git diff --check` 通过。全仓库测试包含外部第6章工作树测试，仅作为环境状态验证；最终提交继续过滤第6章和 `docs/README.md`。
+
+[2026-06-19T10:14:27+08:00] [CH11] [CHECKPOINT]
+第11章最终提交完成：`53080ac30f9dcc41659b33cb33ff3cd8163efe66`（`Add chapter 11 numerical methods for ODEs`）。
+
+[2026-06-19T10:14:27+08:00] [CH12] [START]
+开始第12章“偏微分方程数值解法”。当前小节：12.1 双曲型偏微分方程。附件要求覆盖双曲型、抛物型和椭圆型 PDE；先实现一维/二维对流方程和一维波动方程基础格式、脚本、测试和首个 Notebook。
+
+[2026-06-19T10:18:42+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/pde.py chapters/ch12_pde_methods/scripts/pde_methods.py tests/test_pde.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-18-42-08-00-19057.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:18:42+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch12_pde_methods/scripts/pde_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-18-42-08-00-19058.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:18:42+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_pde.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-18-42-08-00-19061.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:18:54+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-18-54-08-00-19629.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:19:06+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-19-06-08-00-19683.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:19:06+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-19-06-08-00-19681.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:19:06+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T10-19-06-08-00-19741.log`
+摘要：命令执行成功。
+
+[2026-06-19T10:19:13+08:00] [CH12] [VERIFY]
+12.1 双曲型偏微分方程已完成并通过自检：编译、章节脚本、`tests/test_pde.py` 9 passed、Notebook 执行/清空、Notebook 结构检查和 `git diff --check` 均通过。外部第6章工作树修改和 `docs/README.md` 仍继续过滤，不纳入本任务提交。

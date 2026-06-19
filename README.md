@@ -45,6 +45,9 @@ py-sc/
     ch11_ode_initial_value/  # 第十一章：常微分方程初值问题
       notebooks/            # 主要教学 Notebook
       scripts/              # 与 Notebook 对应的可运行脚本
+    ch12_pde_methods/        # 第十二章：偏微分方程数值解法
+      notebooks/            # 主要教学 Notebook
+      scripts/              # 与 Notebook 对应的可运行脚本
   docs/                     # 课程层面的说明和路线图
   references/               # 跨章节共享参考文献说明
   src/
@@ -65,6 +68,7 @@ py-sc/
 | 第九章 | 非线性方程组解法 | 新增建设：向量不动点迭代、多元 Newton 法、阻尼 Newton、弦 Newton、有限差分 Jacobian、Broyden、参数延拓、残差范数和奇异 Jacobian 失败情形 |
 | 第十章 | 特征值计算 | 新增建设：Rayleigh 商、特征残差、幂法、带位移反幂法、Rayleigh 商迭代、对称 Jacobi 旋转和 QR 特征值迭代 |
 | 第十一章 | 常微分方程初值问题 | 新增建设：显式 Euler、Heun、中点法、经典 RK4、固定步长求解、全局误差、观测收敛阶、自适应 Heun-Euler 和嵌入式误差控制 |
+| 第十二章 | 偏微分方程数值解法 | 建设中：双曲型 PDE、CFL 条件、一维/二维对流方程、上风格式、Lax-Friedrichs、Lax-Wendroff 和一维波动方程 |
 
 ## 阅读顺序
 
@@ -119,6 +123,8 @@ py-sc/
 47. `chapters/ch11_ode_initial_value/README.md`
 48. `chapters/ch11_ode_initial_value/notebooks/01_euler_and_runge_kutta.ipynb`
 49. `chapters/ch11_ode_initial_value/notebooks/02_adaptive_step_control.ipynb`
+50. `chapters/ch12_pde_methods/README.md`
+51. `chapters/ch12_pde_methods/notebooks/01_hyperbolic_advection_and_wave.ipynb`
 
 运行脚本示例：
 
@@ -132,6 +138,7 @@ python chapters/ch08_nonlinear_roots/scripts/nonlinear_root_methods.py
 python chapters/ch09_nonlinear_systems/scripts/nonlinear_system_methods.py
 python chapters/ch10_eigenvalue_methods/scripts/eigenvalue_methods.py
 python chapters/ch11_ode_initial_value/scripts/ode_ivp_methods.py
+python chapters/ch12_pde_methods/scripts/pde_methods.py
 ```
 
 运行测试：
