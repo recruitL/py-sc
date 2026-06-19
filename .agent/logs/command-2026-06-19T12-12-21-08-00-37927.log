@@ -1,0 +1,15 @@
+timestamp: 2026-06-19T12:12:21+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: git diff --stat
+---- output ----
+ .agent/RUN_LOG.md                                  | 111 +++++++++++++++++++++
+ .agent/execplans/chapters-07-12.md                 |  25 ++---
+ README.md                                          |  67 ++++++++-----
+ chapters/ch12_pde_methods/README.md                |   2 +-
+ .../01_hyperbolic_advection_and_wave.ipynb         |  45 ++++++++-
+ .../notebooks/02_parabolic_heat_equation.ipynb     |  45 ++++++++-
+ .../notebooks/03_elliptic_poisson_sor.ipynb        |  49 +++++++--
+ docs/README.md                                     |  11 +-
+ src/py_sc/__init__.py                              |  53 +++++++++-
+ tests/test_pde.py                                  |   4 +-
+ 10 files changed, 344 insertions(+), 68 deletions(-)

@@ -11,7 +11,7 @@ from py_sc import (
     lax_friedrichs_advection_1d,
     lax_wendroff_advection_1d,
     periodic_grid_1d,
-    poisson_2d_dirichlet_matrix,
+    pde_poisson_2d_dirichlet_matrix,
     poisson_2d_residual_norm,
     solve_laplace_2d_sor,
     solve_heat_1d_crank_nicolson,
@@ -154,7 +154,7 @@ def test_solve_heat_1d_crank_nicolson_tracks_sine_decay() -> None:
 
 
 def test_poisson_2d_dirichlet_matrix_has_expected_five_point_structure() -> None:
-    matrix = poisson_2d_dirichlet_matrix(nx=2, ny=2, hx=0.5, hy=0.5)
+    matrix = pde_poisson_2d_dirichlet_matrix(nx=2, ny=2, hx=0.5, hy=0.5)
 
     assert matrix.shape == (4, 4)
     assert np.allclose(np.diag(matrix), 16.0)

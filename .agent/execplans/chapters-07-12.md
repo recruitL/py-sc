@@ -1,14 +1,14 @@
 # ExecPlan：第 7—12 章连续建设
 
 状态：in_progress
-最后更新时间：2026-06-19T11:19:35+08:00
+最后更新时间：2026-06-19T12:12:45+08:00
 当前分支：codex/chapters-07-12
 基准 commit：83c69e160f81e0d6d16ecb866a8b68928eb88bd8
-最后安全 commit：f20338c
+最后安全 commit：ac6bb40
 当前章节：第12章
-当前小节：12.3 椭圆型偏微分方程
-当前原子任务：12.3 自检通过，准备创建 checkpoint commit。
-下一项具体动作：过滤暂存第12章 12.3 文件、命令日志和 README/包入口更新，创建 `checkpoint(ch12): add elliptic Poisson SOR methods`。
+当前小节：章节级自检
+当前原子任务：第12章章节级自检通过，准备创建最终章节提交。
+下一项具体动作：过滤暂存第12章最终修正、命令日志、README 状态和持久进度文件，创建 `Add chapter 12 numerical methods for PDEs`。
 阻塞问题：无
 
 ## 总体进度
@@ -20,7 +20,7 @@
 | 第9章 | done | 章节级自检完成 | 通过 | 4d85607 |
 | 第10章 | done | 章节级自检完成 | 通过 | 6532e3c |
 | 第11章 | done | 章节级自检完成 | 通过 | 53080ac |
-| 第12章 | verifying | 12.3 椭圆型偏微分方程 | 12.1/12.2/12.3 通过 | f20338c |
+| 第12章 | verifying | 章节级自检完成 | 通过 | ac6bb40 |
 
 ## 当前断点
 
@@ -78,10 +78,12 @@
 * 完成第12章 12.2 Notebook、脚本更新、一维热方程 FTCS、隐式 Euler、Crank-Nicolson 和对应测试。
 * 创建第12章 12.2 checkpoint commit `f20338c`。
 * 完成第12章 12.3 Notebook、脚本更新、二维 Laplace/Poisson SOR、离散残差、Poisson 五点差分矩阵和对应测试。
+* 创建第12章 12.3 checkpoint commit `ac6bb40`。
+* 第12章章节级自检通过：修复第7章/第12章 `poisson_2d_dirichlet_matrix` 包入口重名冲突，第12章 PDE 矩阵函数在包入口改用 `pde_poisson_2d_dirichlet_matrix` 别名；相关测试、全仓库测试和索引临时树测试通过。
 
 ### 正在处理
 
-* 第12章 12.3 checkpoint 提交。
+* 第12章最终章节提交。
 
 ### 已修改但尚未验证
 
@@ -255,10 +257,18 @@
 * Notebook 结构检查：第12章三个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
 * `git diff --check`：通过。
 * `git status --short` 已记录；显示外部第6章工作树修改和 `docs/README.md` 仍未提交，本任务提交继续过滤。
+* 第12章最终 `python -m py_compile src/py_sc/__init__.py src/py_sc/pde.py tests/test_pde.py tests/test_iterative_linear.py`：通过。
+* 第12章最终 `python -m pytest tests/test_pde.py tests/test_iterative_linear.py`：31 passed。
+* 第12章最终 `python -m pytest`：127 passed；其中包含外部第6章工作树中的 `tests/test_direct_linear.py`，仅作为环境状态验证，不纳入本任务提交。
+* 第12章三个 Notebook 重新全量执行并清空输出：通过。
+* Notebook 结构检查：第12章三个 Notebook 均无缺失 cell id、无输出、无执行 metadata。
+* `git diff --check`：通过。
+* `git status --short` 和 `git diff --stat` 已记录；显示外部第6章工作树修改和 `docs/README.md` 仍未提交，本任务提交继续过滤。
+* 从当前索引导出临时树后运行 `python -m pytest`：120 passed，确认即将提交的内容不依赖外部第6章工作树文件。
 
 ### 失败或未执行的检查
 
-* 全仓库测试尚未运行，按第8章章节自检和最终检查阶段运行。
+* 第12章最终全仓库 `python -m pytest` 首次失败：第12章从包入口导出 `poisson_2d_dirichlet_matrix` 覆盖了第7章同名函数，导致 `tests/test_iterative_linear.py` 调用到错误签名；已改为第12章包入口别名 `pde_poisson_2d_dirichlet_matrix` 并重跑通过。
 
 ### 已知问题
 
@@ -268,10 +278,10 @@
 
 ### 下一项具体动作
 
-1. 暂存第12章 12.3 文件、命令日志和过滤后的 README/`src/py_sc/__init__.py`。
-2. 创建 `checkpoint(ch12): add elliptic Poisson SOR methods`。
-3. 记录 commit hash。
-4. 运行第12章章节级自检。
+1. 暂存第12章最终修正、命令日志和过滤后的 README/`src/py_sc/__init__.py`/RUN_LOG。
+2. 确认暂存区不含第6章外部文件、`docs/README.md` 或 direct-linear 变更。
+3. 创建 `Add chapter 12 numerical methods for PDEs`。
+4. 记录 commit hash，进入第7—12章综合收尾检查。
 
 ### 恢复时应首先执行的命令
 

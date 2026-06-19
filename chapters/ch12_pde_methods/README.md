@@ -64,7 +64,7 @@ src/py_sc/pde.py
 * `solve_heat_1d_ftcs`
 * `solve_heat_1d_implicit_euler`
 * `solve_heat_1d_crank_nicolson`
-* `poisson_2d_dirichlet_matrix`
+* `poisson_2d_dirichlet_matrix`，在包入口导出为 `pde_poisson_2d_dirichlet_matrix` 以避免覆盖第七章同名函数
 * `solve_laplace_2d_sor`
 * `solve_poisson_2d_sor`
 * `poisson_2d_residual`

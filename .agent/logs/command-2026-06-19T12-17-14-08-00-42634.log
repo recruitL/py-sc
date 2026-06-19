@@ -1,0 +1,29 @@
+timestamp: 2026-06-19T12:17:14+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: bash -lc set -euo pipefail
+tree=$(git write-tree)
+tmp=$(mktemp -d)
+git archive "$tree" | tar -x -C "$tmp"
+cd "$tmp"
+python -m pytest
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /private/var/folders/_8/bv4nbfb13qqfmlkbg023v9bm0000gn/T/tmp.i4twDQ3yLk
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.2.0
+collected 120 items
+
+tests/test_approximation.py .....                                        [  4%]
+tests/test_differentiation.py ..........                                 [ 12%]
+tests/test_eigenvalues.py ............                                   [ 22%]
+tests/test_integration.py ........                                       [ 29%]
+tests/test_interpolation.py .............                                [ 40%]
+tests/test_iterative_linear.py ..............                            [ 51%]
+tests/test_nonlinear_roots.py ....................                       [ 68%]
+tests/test_nonlinear_systems.py ........                                 [ 75%]
+tests/test_ode_ivp.py .............                                      [ 85%]
+tests/test_pde.py .................                                      [100%]
+
+============================= 120 passed in 0.34s ==============================

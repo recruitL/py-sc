@@ -1493,3 +1493,119 @@ Notebook 结构检查
 退出码：0
 日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-19-22-08-00-28925.log`
 摘要：命令执行成功。
+
+[2026-06-19T11:21:47+08:00] [CH12] [CHECKPOINT]
+创建第12章 12.3 checkpoint commit `ac6bb40c4c00722e2b270a5579d4ceb2f6c86ded`：二维 Laplace/Poisson SOR、离散残差、Poisson 五点差分矩阵、第三个 Notebook 和测试已落盘。
+
+[2026-06-19T11:21:47+08:00] [CH12] [VERIFY]
+开始第12章章节级最终自检：脚本、单章测试、相关 `py_compile`、全仓库 `pytest`、三个 Notebook 执行/清空、Notebook 结构、Git 空白和状态检查。
+
+[2026-06-19T11:22:33+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/pde.py chapters/ch12_pde_methods/scripts/pde_methods.py tests/test_pde.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-22-33-08-00-33193.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:22:33+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch12_pde_methods/scripts/pde_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-22-33-08-00-33194.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:22:33+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_pde.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-22-33-08-00-33198.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:22:39+08:00] [COMMAND] [EXIT 1]
+命令：`python -m pytest`
+退出码：1
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-22-39-08-00-33703.log`
+摘要：命令执行失败，需查看日志并修复。
+
+[2026-06-19T11:38:55+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/__init__.py src/py_sc/pde.py tests/test_pde.py tests/test_iterative_linear.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-38-55-08-00-35697.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:38:55+08:00] [COMMAND] [EXIT 1]
+命令：`python -m pytest tests/test_pde.py tests/test_iterative_linear.py`
+退出码：1
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-38-55-08-00-35735.log`
+摘要：命令执行失败，需查看日志并修复。
+
+[2026-06-19T11:38:56+08:00] [COMMAND] [EXIT 0]
+命令：`python chapters/ch12_pde_methods/scripts/pde_methods.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-38-56-08-00-35775.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:56:15+08:00] [COMMAND] [EXIT 0]
+命令：`python -m py_compile src/py_sc/__init__.py src/py_sc/pde.py tests/test_pde.py tests/test_iterative_linear.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-56-15-08-00-37249.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:56:15+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest tests/test_pde.py tests/test_iterative_linear.py`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-56-15-08-00-37252.log`
+摘要：命令执行成功。
+
+[2026-06-19T11:56:19+08:00] [COMMAND] [EXIT 0]
+命令：`python -m pytest`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T11-56-19-08-00-37588.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:12:07+08:00] [COMMAND] [EXIT 0]
+命令：`env MPLBACKEND=Agg PYTHONPATH=src python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-12-07-08-00-37851.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:12:21+08:00] [COMMAND] [EXIT 0]
+命令：`git status --short`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-12-21-08-00-37929.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:12:21+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --check`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-12-21-08-00-37928.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:12:21+08:00] [COMMAND] [EXIT 0]
+命令：`git diff --stat`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-12-21-08-00-37927.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:12:21+08:00] [COMMAND] [EXIT 0]
+命令：`python -`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-12-21-08-00-37937.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:12:45+08:00] [CH12] [FIX]
+第12章最终全仓库 `python -m pytest` 首次失败，原因是第12章从包入口导出 `poisson_2d_dirichlet_matrix` 覆盖了第7章同名公共函数。已将第12章 PDE 矩阵函数在包入口改为 `pde_poisson_2d_dirichlet_matrix`，第12章 Notebook 与测试同步使用该别名。
+
+[2026-06-19T12:12:45+08:00] [CH12] [VERIFY]
+第12章章节级最终自检通过：相关 `py_compile` 通过，`tests/test_pde.py tests/test_iterative_linear.py` 为 31 passed，`python -m pytest` 为 127 passed；第12章三个 Notebook 已重新执行并清空输出，Notebook 结构检查、`git diff --check`、`git status --short`、`git diff --stat` 均通过。
+
+[2026-06-19T12:17:14+08:00] [COMMAND] [EXIT 0]
+命令：`bash -lc set -euo pipefail
+tree=$(git write-tree)
+tmp=$(mktemp -d)
+git archive "$tree" | tar -x -C "$tmp"
+cd "$tmp"
+python -m pytest`
+退出码：0
+日志：`/Users/yl/Desktop/research/github_recruitL/py-sc/.agent/logs/command-2026-06-19T12-17-14-08-00-42634.log`
+摘要：命令执行成功。
+
+[2026-06-19T12:17:14+08:00] [CH12] [VERIFY]
+从当前暂存索引导出临时树后运行 `python -m pytest`，结果为 120 passed；该验证排除了工作树中未纳入本任务提交的外部第6章文件。

@@ -1,0 +1,7 @@
+timestamp: 2026-06-19T12:12:21+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -
+---- output ----
+ok chapters/ch12_pde_methods/notebooks/01_hyperbolic_advection_and_wave.ipynb
+ok chapters/ch12_pde_methods/notebooks/02_parabolic_heat_equation.ipynb
+ok chapters/ch12_pde_methods/notebooks/03_elliptic_poisson_sor.ipynb

@@ -1,0 +1,42 @@
+timestamp: 2026-06-19T11:38:55+08:00
+cwd: /Users/yl/Desktop/research/github_recruitL/py-sc
+command: python -m pytest tests/test_pde.py tests/test_iterative_linear.py
+---- output ----
+============================= test session starts ==============================
+platform darwin -- Python 3.12.7, pytest-7.4.4, pluggy-1.0.0
+rootdir: /Users/yl/Desktop/research/github_recruitL/py-sc
+configfile: pyproject.toml
+plugins: anyio-4.2.0
+collected 31 items
+
+tests/test_pde.py .............F...                                      [ 54%]
+tests/test_iterative_linear.py ...........FF.                            [100%]
+
+=================================== FAILURES ===================================
+______ test_poisson_2d_dirichlet_matrix_has_expected_five_point_structure ______
+
+    def test_poisson_2d_dirichlet_matrix_has_expected_five_point_structure() -> None:
+>       matrix = pde_poisson_2d_dirichlet_matrix(nx=2, ny=2, hx=0.5, hy=0.5)
+E       TypeError: poisson_2d_dirichlet_matrix() got an unexpected keyword argument 'nx'
+
+tests/test_pde.py:157: TypeError
+______________________ test_poisson_matrix_matches_matvec ______________________
+
+    def test_poisson_matrix_matches_matvec() -> None:
+>       A, _ = poisson_2d_dirichlet_matrix(4)
+E       TypeError: poisson_2d_dirichlet_matrix() missing 3 required positional arguments: 'ny', 'hx', and 'hy'
+
+tests/test_iterative_linear.py:183: TypeError
+__________________ test_poisson_manufactured_solution_with_cg __________________
+
+    def test_poisson_manufactured_solution_with_cg() -> None:
+        n = 8
+>       A, _ = poisson_2d_dirichlet_matrix(n)
+E       TypeError: poisson_2d_dirichlet_matrix() missing 3 required positional arguments: 'ny', 'hx', and 'hy'
+
+tests/test_iterative_linear.py:191: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_pde.py::test_poisson_2d_dirichlet_matrix_has_expected_five_point_structure
+FAILED tests/test_iterative_linear.py::test_poisson_matrix_matches_matvec - T...
+FAILED tests/test_iterative_linear.py::test_poisson_manufactured_solution_with_cg
+========================= 3 failed, 28 passed in 0.13s =========================
